@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b294fb4ed0df00f4d8211f4228b25444, type: 3}
   m_Name: Character
   m_EditorClassIdentifier: 
-  characterName: 
+  characterName: Character Name
   maxHP: 3000
   characterType: 0
   characterWidth: 1
   movementSpeed: 5
   longJumpForce: 5
-  backFlipJumpForceX: 15
-  backFlipJumpForceY: 15
+  backFlipJumpForceX: -2
+  backFlipJumpForceY: 10
   angleChangeSpeed: 20
   sweetSpotAngleMin: 0
   sweetSpotAngleMax: 0
