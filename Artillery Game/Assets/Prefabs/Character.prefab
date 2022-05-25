@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 788594369470081869}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ShootingAxis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,8 +42,8 @@ GameObject:
   m_Component:
   - component: {fileID: 788594370262337451}
   - component: {fileID: 788594370262337450}
-  m_Layer: 0
-  m_Name: ShotSpawn
+  m_Layer: 7
+  m_Name: Reticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104,7 +104,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -130,9 +130,12 @@ GameObject:
   - component: {fileID: 788594370757262396}
   - component: {fileID: 788594370757262384}
   - component: {fileID: 788594370757262397}
-  m_Layer: 0
+  - component: {fileID: 8950755441048609070}
+  - component: {fileID: 2066065041}
+  - component: {fileID: 7920328740634251295}
+  m_Layer: 7
   m_Name: Character
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -254,6 +257,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c073ac596e327b49aafd0fbb0c00293, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isMyTurn: 0
+  debug: 0
   charInfo: {fileID: 11400000, guid: 567386854f0fe844cbe5e29d9dffcc4f, type: 2}
   OnLongJumpPress:
     m_PersistentCalls:
@@ -261,10 +266,34 @@ MonoBehaviour:
   OnBackFlipPress:
     m_PersistentCalls:
       m_Calls: []
-  OnMovementValueChanged:
+  MovementInputValue:
     m_PersistentCalls:
       m_Calls: []
-  OnFirePress:
+  PowerInputValue:
+    m_PersistentCalls:
+      m_Calls: []
+  PowerInputPress:
+    m_PersistentCalls:
+      m_Calls: []
+  PowerInputHeld:
+    m_PersistentCalls:
+      m_Calls: []
+  PowerInputCanceled:
+    m_PersistentCalls:
+      m_Calls: []
+  AimInputValue:
+    m_PersistentCalls:
+      m_Calls: []
+  AimInputPress:
+    m_PersistentCalls:
+      m_Calls: []
+  AimInputHeld:
+    m_PersistentCalls:
+      m_Calls: []
+  AimInputCanceled:
+    m_PersistentCalls:
+      m_Calls: []
+  FirePress:
     m_PersistentCalls:
       m_Calls: []
   StartTurn:
@@ -273,7 +302,6 @@ MonoBehaviour:
   EndTurn:
     m_PersistentCalls:
       m_Calls: []
-  debug: 1
 --- !u!114 &788594370757262397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,6 +316,59 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   horizontalInput: 0
   canMove: 0
-  isMyTurn: 1
   debugCol: {fileID: 788594370757262387}
   debug: 0
+--- !u!114 &8950755441048609070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 788594370757262398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48fd6ea584d5cfb42af278fe81c5e893, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shootingAxis: {fileID: 788594369470081869}
+  power: 50
+  powerInput: 0
+  powerInputHold: 0
+  pwrAcc: 1
+  aim: 135
+  aimInput: 0
+  aimInputHold: 0
+  aimAcc: 1
+  debug: 0
+--- !u!114 &2066065041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 788594370757262398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c828832b38bc72d4faa8c8f03edb950c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnOffset: 2
+  weapons: []
+  currentWeapon: {fileID: 0}
+  index: 0
+--- !u!114 &7920328740634251295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 788594370757262398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3dcde0610ac98d469a481db7ffea7dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 3000
+  currentHealth: 0
+  offset: 1
+  healthBarGO: {fileID: 1753014845959435348, guid: e666b9eda63b3fa4e9befac832b4916c, type: 3}

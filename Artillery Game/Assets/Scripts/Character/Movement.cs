@@ -3,9 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+
+[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(CharManager))]
+[RequireComponent(typeof(CircleCollider2D))]
+
 public class Movement : MonoBehaviour
 {
-    CharController charController = null;
+    CharManager charManager = null;
     CharSO charInfo = null;
     Rigidbody2D rb = null;
     CircleCollider2D col = null;
@@ -13,7 +18,6 @@ public class Movement : MonoBehaviour
 
     [SerializeField] float horizontalInput = 0f;
     [SerializeField] bool canMove = false;
-    [SerializeField] bool isMyTurn = true;
 
     [Header("Debug")]
     [SerializeField] CircleCollider2D debugCol = null;
@@ -21,49 +25,42 @@ public class Movement : MonoBehaviour
 
     private void Awake() 
     {
-        charController = this.GetComponent<CharController>();
-        charInfo = charController.charInfo;
+        charManager = this.GetComponent<CharManager>();
+        charInfo = charManager.charInfo;
 
         rb = this.GetComponent<Rigidbody2D>();
         col = this.GetComponent<CircleCollider2D>();
  
     }
     
-    // void OnEnable()
-    // {
-    //     charController?.OnLongJumpPress.AddListener(LongJump);
-    //     charController?.OnBackFlipPress.AddListener(BackflipJump);
-    //     charController?.OnMovementValueChanged.AddListener(GetInputValue);
-    //     charController?.EndTurn.AddListener(EndTurn);
-    //     charController?.StartTurn.AddListener(StartTurn);
-    // }
+    void OnEnable()
+    {
+        charManager?.OnLongJumpPress.AddListener(LongJump);
+        charManager?.OnBackFlipPress.AddListener(BackflipJump);
+        charManager?.MovementInputValue.AddListener(GetInputValue);
+        charManager?.EndTurn.AddListener(EndTurn);
+        charManager?.StartTurn.AddListener(StartTurn);
+    }
 
-    // void OnDisable()
-    // {
-    //     charController.OnLongJumpPress.RemoveListener(LongJump);
-    //     charController.OnBackFlipPress.RemoveListener(BackflipJump);
-    //     charController.OnMovementValueChanged.RemoveListener(GetInputValue);
-    //     charController?.EndTurn.RemoveListener(EndTurn);
-    //     charController?.StartTurn.RemoveListener(StartTurn);
-    // }
+    void OnDisable()
+    {
+        charManager?.OnLongJumpPress.RemoveListener(LongJump);
+        charManager?.OnBackFlipPress.RemoveListener(BackflipJump);
+        charManager?.MovementInputValue.RemoveListener(GetInputValue);
+        charManager?.EndTurn.RemoveListener(EndTurn);
+        charManager?.StartTurn.RemoveListener(StartTurn);
+    }
 
     private void FixedUpdate() 
-    {
-        if (isMyTurn == false)
-        {
+    {        
+        CharacterTilt(GetDesiredUpLerp());
+
+        if (charManager.isMyTurn == false)
             return;
-        }
 
         GetCanMove();
         MoveHorizontally(horizontalInput);
 
-        if (transform.position == lastPos)
-        {
-            canMove = true;
-            return;
-        }
-
-        CharacterTilt();
         lastPos = transform.position;
     }
 
@@ -95,33 +92,60 @@ public class Movement : MonoBehaviour
             transform.localScale = new Vector3 (inputValue, 1f, 1f);
     }
 
-    public void CharacterTilt() 
+    public Vector3 GetDesiredUpLerp() 
     {   
-        if (canMove == false)
+        if (transform.position == lastPos || canMove == false)
         {
-            return;
+            return transform.up;
         }
 
-        Vector3 _rayLeftPosition = new Vector3 (transform.position.x - col.radius, transform.position.y , transform.position.z);
-        Vector3 _rayRightPosition = new Vector3 (transform.position.x + col.radius, transform.position.y , transform.position.z);
+        Vector3 _rayLeftPosition = new Vector3 (transform.position.x - (col.radius * 0.95f), transform.position.y , transform.position.z);
+        Vector3 _rayRightPosition = new Vector3 (transform.position.x + (col.radius * 0.95f), transform.position.y , transform.position.z);
         
         //Cast Raycasts
         RaycastHit2D _rayLeft = Physics2D.Raycast ( _rayLeftPosition , -Vector3.up , 5f, LayerMask.GetMask("Terrain"));
         RaycastHit2D _rayRight = Physics2D.Raycast (_rayRightPosition , -Vector3.up, 5f, LayerMask.GetMask("Terrain"));
 
+        if (debug)
+        {
+            Debug.Log("CharacterTilt was called");
+        }
+
         //Rotate player according to terrain
-        transform.up = Vector2.Lerp (_rayLeft.normal , _rayRight.normal , 0.5f);
+        Vector2 lerp = Vector2.Lerp (_rayLeft.normal , _rayRight.normal , 0.5f);
+
+        return Vector2.Lerp (lerp , GetDesiredUp(), 0.5f);
+    }
+
+    public Vector3 GetDesiredUp() 
+    {   
+        if (transform.position == lastPos || canMove == false)
+        {
+            return transform.up;
+        }
+
+        Vector3 _rayPosition = new Vector3 (transform.position.x , transform.position.y , transform.position.z);
+        
+        //Cast Raycasts
+        RaycastHit2D _ray = Physics2D.Raycast ( _rayPosition , -Vector3.up , 5f, LayerMask.GetMask("Terrain"));
 
         if (debug)
         {
             Debug.Log("CharacterTilt was called");
         }
+
+        //Rotate player according to terrain
+        return _ray.normal;
     }
 
+    void CharacterTilt(Vector3 desiredUp)
+    {
+        float acc = 20f;
+        transform.up += (desiredUp - transform.up) * Time.deltaTime * acc;
+    }
 
     public void LongJump()
     {
-        canMove = false;
         rb.velocity = new Vector2 (transform.localScale.x * charInfo.longJumpForce, charInfo.longJumpForce);
 
         if (debug)
@@ -132,7 +156,6 @@ public class Movement : MonoBehaviour
 
     public void BackflipJump()
     {    
-        canMove = false;
         rb.velocity = new Vector2 (transform.localScale.x * charInfo.backFlipJumpForceX, charInfo.backFlipJumpForceY);
         StartCoroutine("BackFlip");
     }
@@ -158,6 +181,7 @@ public class Movement : MonoBehaviour
 {
     bool isGrounded = false;
     bool isJumping = false;
+    
     float _rayDistance = col.radius * 1.4f;
     Vector3 _rayLeftPosition = new Vector3 (transform.position.x - col.radius, transform.position.y , transform.position.z);
     Vector3 _rayRightPosition = new Vector3 (transform.position.x + col.radius, transform.position.y , transform.position.z);
@@ -196,12 +220,12 @@ public class Movement : MonoBehaviour
 }
     public void StartTurn()
     {
-        isMyTurn = true;
+
     }
 
     public void EndTurn()
     {
-        isMyTurn = false;
+
     }
 
 
