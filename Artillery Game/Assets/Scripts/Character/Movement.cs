@@ -53,7 +53,7 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate() 
     {        
-        CharacterTilt(GetDesiredUpLerp());
+        CharacterTilt(GetDesiredUpOutter());
 
         if (charManager.isMyTurn == false)
             return;
@@ -92,13 +92,13 @@ public class Movement : MonoBehaviour
             transform.localScale = new Vector3 (inputValue, 1f, 1f);
     }
 
-    public Vector3 GetDesiredUpLerp() 
+    public Vector3 GetDesiredUpOutter() 
     {   
         if (transform.position == lastPos || canMove == false)
         {
             return transform.up;
         }
-
+        
         Vector3 _rayLeftPosition = new Vector3 (transform.position.x - (col.radius * 0.95f), transform.position.y , transform.position.z);
         Vector3 _rayRightPosition = new Vector3 (transform.position.x + (col.radius * 0.95f), transform.position.y , transform.position.z);
         
@@ -111,36 +111,32 @@ public class Movement : MonoBehaviour
             Debug.Log("CharacterTilt was called");
         }
 
-        //Rotate player according to terrain
+        //Lerp extremities
         Vector2 lerp = Vector2.Lerp (_rayLeft.normal , _rayRight.normal , 0.5f);
 
-        return Vector2.Lerp (lerp , GetDesiredUp(), 0.5f);
+        //Lerp extremities with middle raycast
+        return Vector2.Lerp (lerp , GetDesiredUpInner(), 0.75f);
     }
 
-    public Vector3 GetDesiredUp() 
+    public Vector3 GetDesiredUpInner() 
     {   
         if (transform.position == lastPos || canMove == false)
         {
             return transform.up;
         }
-
-        Vector3 _rayPosition = new Vector3 (transform.position.x , transform.position.y , transform.position.z);
         
+        Vector3 _rayPosition = new Vector3 (transform.position.x, transform.position.y , transform.position.z);
         //Cast Raycasts
-        RaycastHit2D _ray = Physics2D.Raycast ( _rayPosition , -Vector3.up , 5f, LayerMask.GetMask("Terrain"));
+        RaycastHit2D _raySelf = Physics2D.Raycast ( _rayPosition , -transform.up , 5f, LayerMask.GetMask("Terrain"));
+        RaycastHit2D _rayWorld = Physics2D.Raycast (_rayPosition , -Vector3.up, 5f, LayerMask.GetMask("Terrain"));
 
-        if (debug)
-        {
-            Debug.Log("CharacterTilt was called");
-        }
-
-        //Rotate player according to terrain
-        return _ray.normal;
+        //Lerp slowly
+        return Vector2.Lerp (_rayWorld.normal , _raySelf.normal , 0.75f);
     }
 
     void CharacterTilt(Vector3 desiredUp)
     {
-        float acc = 20f;
+        float acc = 10f;
         transform.up += (desiredUp - transform.up) * Time.deltaTime * acc;
     }
 

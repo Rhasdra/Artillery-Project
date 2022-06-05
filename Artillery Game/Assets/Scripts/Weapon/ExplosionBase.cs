@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Destructible2D.Examples;
 
 public class ExplosionBase : MonoBehaviour, IExplosion
 {
@@ -11,6 +12,7 @@ public class ExplosionBase : MonoBehaviour, IExplosion
 
     CircleCollider2D myCollider;
     SpriteRenderer mySR;
+    D2dExplosion d2d;
 
     bool debug = false;
 
@@ -18,6 +20,7 @@ public class ExplosionBase : MonoBehaviour, IExplosion
     {
         myCollider = GetComponent<CircleCollider2D>();
         mySR = GetComponent<SpriteRenderer>();
+        d2d = GetComponent<D2dExplosion>();
         transform.localScale = new Vector3 (baseRadius, baseRadius, 1f);
     }
 
@@ -28,6 +31,7 @@ public class ExplosionBase : MonoBehaviour, IExplosion
 
         myCollider.enabled = true;
         mySR.enabled = true;
+        d2d.enabled = true;
 
         StartCoroutine("ExplosionCoroutine");
     }

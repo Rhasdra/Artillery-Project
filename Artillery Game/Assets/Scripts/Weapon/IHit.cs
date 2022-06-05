@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface IHit
 {
-    void GetDamage();
+    // void GetDamage();
     void Hit(Collider2D col, float damage);
 }

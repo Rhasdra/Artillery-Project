@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class HitMissile : MonoBehaviour, IHit
 {
-    Collider2D col;
+    [SerializeField] Collider2D col;
+    Collider2D otherCol;
     GameObject explosion;
     ProjectileBase projBase;
 
-    RaycastHit2D[] raycastHit;
+    // RaycastHit2D[] raycastHit;
     public float hitAngle;
     public Vector3 hitPosition;
-    public float damage;
 
     [Header("Debug")]
     [SerializeField] bool debugDmg = true;
-    [SerializeField] bool debugHit = false;
+    [SerializeField] bool debugHit = true;
 
     private void OnEnable() 
     {
@@ -24,36 +24,36 @@ public class HitMissile : MonoBehaviour, IHit
         explosion = projBase.explosion;
     }
 
-    private void Update() 
+    public float Damage(Collider2D other)
     {
-        GetDamage();
-    }
+        float damage = 0f;
+        Ray2D ray = new Ray2D(transform.position, transform.right);
+        RaycastHit2D[] results = new RaycastHit2D[5];
 
-    public void GetDamage()
-    {
-        //int mask =~ LayerMask.GetMask("Projectiles"); // ~ inverts the mask, so it hit anything but this one
-        raycastHit = Physics2D.RaycastAll (transform.position, transform.right, 0.3f);
+        col.Raycast(transform.right, results, 1f);
 
         Debug.DrawRay(transform.position, transform.right, Color.black);
 
-        for (int i = 0; i < raycastHit.Length; i++)
+        // chech for the OnTriggerEnterCollider
+        for (int i = 0; i < results.Length; i++)
         {
-            var damageable = raycastHit[i].collider.GetComponent<IDamageable>();
+            if ( results[i].collider == other)
+            {
+                //Returns hitAngle=0 on 90degrees full hit   
+                hitAngle = Vector2.Angle(results[i].normal, -transform.right);
+                hitPosition = results[i].point;
 
-            //Returns hitAngle=0 on 90degrees full hit
-            if(damageable != null)
-            {    
-            hitAngle = Vector2.Angle(raycastHit[i].normal, -transform.right);
-            hitPosition = raycastHit[i].point;
-            damage = Mathf.RoundToInt((projBase.baseDamage * Mathf.Lerp(1f, 0f, hitAngle/90f)) + projBase.forgiveness);
-            
-            if(damage > projBase.baseDamage)
-                damage = projBase.baseDamage;
+                damage = Mathf.RoundToInt((projBase.baseDamage * Mathf.Lerp(1f, 0f, hitAngle/90f)) + projBase.forgiveness);
 
-            if(debugHit)
-            Debug.Log(raycastHit[i].collider + " " + hitAngle + " " + hitPosition);
+                if(damage > projBase.baseDamage)
+                    damage = projBase.baseDamage;
+
+                if(debugHit)
+                Debug.Log("Normal: " + results[i].normal + " Angle: " + (90 - hitAngle) + " and Position: " + hitPosition);
+            }
         }
-        }
+
+        return damage;
     }
 
     private void OnTriggerEnter2D(Collider2D other) 
@@ -61,7 +61,8 @@ public class HitMissile : MonoBehaviour, IHit
         var damageable = other.GetComponent<IDamageable>();
         if(damageable != null)
         {
-            Hit(other, damage);
+            otherCol = other;
+            Hit(other, Damage(other));
         }
            
 
@@ -92,5 +93,11 @@ public class HitMissile : MonoBehaviour, IHit
 
         Explode(explosion, expRadius);
         Object.Destroy(this.gameObject); 
+    }
+
+    public void D2Hit()
+    {
+        Hit(otherCol, Damage(otherCol));
+        Destroy(this);
     }
 }
