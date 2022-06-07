@@ -6,21 +6,20 @@ using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CharManager))]
-[RequireComponent(typeof(CircleCollider2D))]
+[RequireComponent(typeof(CapsuleCollider2D))]
 
 public class Movement : MonoBehaviour
 {
     CharManager charManager = null;
     CharSO charInfo = null;
     Rigidbody2D rb = null;
-    CircleCollider2D col = null;
+    CapsuleCollider2D col = null;
     Vector3 lastPos;
 
     [SerializeField] float horizontalInput = 0f;
     [SerializeField] bool canMove = false;
 
     [Header("Debug")]
-    [SerializeField] CircleCollider2D debugCol = null;
     [SerializeField] bool debug = false;
 
     private void Awake() 
@@ -29,7 +28,7 @@ public class Movement : MonoBehaviour
         charInfo = charManager.charInfo;
 
         rb = this.GetComponent<Rigidbody2D>();
-        col = this.GetComponent<CircleCollider2D>();
+        col = this.GetComponent<CapsuleCollider2D>();
  
     }
     
@@ -60,8 +59,6 @@ public class Movement : MonoBehaviour
 
         GetCanMove();
         MoveHorizontally(horizontalInput);
-
-        lastPos = transform.position;
     }
 
 
@@ -99,8 +96,8 @@ public class Movement : MonoBehaviour
             return transform.up;
         }
         
-        Vector3 _rayLeftPosition = new Vector3 (transform.position.x - (col.radius * 0.95f), transform.position.y , transform.position.z);
-        Vector3 _rayRightPosition = new Vector3 (transform.position.x + (col.radius * 0.95f), transform.position.y , transform.position.z);
+        Vector3 _rayLeftPosition = new Vector3 (transform.position.x - ((col.size.x/2) * 0.95f), transform.position.y , transform.position.z);
+        Vector3 _rayRightPosition = new Vector3 (transform.position.x + ((col.size.x/2) * 0.95f), transform.position.y , transform.position.z);
         
         //Cast Raycasts
         RaycastHit2D _rayLeft = Physics2D.Raycast ( _rayLeftPosition , -Vector3.up , 5f, LayerMask.GetMask("Terrain"));
@@ -125,10 +122,11 @@ public class Movement : MonoBehaviour
             return transform.up;
         }
         
-        Vector3 _rayPosition = new Vector3 (transform.position.x, transform.position.y , transform.position.z);
+        Vector3 _rayCenter = new Vector3 (transform.position.x, transform.position.y , transform.position.z);
+        Vector3 _rayTop = new Vector3 (transform.position.x, transform.position.y + (col.size.y/2), transform.position.z);
         //Cast Raycasts
-        RaycastHit2D _raySelf = Physics2D.Raycast ( _rayPosition , -transform.up , 5f, LayerMask.GetMask("Terrain"));
-        RaycastHit2D _rayWorld = Physics2D.Raycast (_rayPosition , -Vector3.up, 5f, LayerMask.GetMask("Terrain"));
+        RaycastHit2D _raySelf = Physics2D.Raycast ( _rayCenter , -transform.up , (col.size.y/2)*1.2f, LayerMask.GetMask("Terrain"));
+        RaycastHit2D _rayWorld = Physics2D.Raycast (_rayTop , -Vector3.up, (col.size.y*1.2f), LayerMask.GetMask("Terrain"));
 
         //Lerp slowly
         return Vector2.Lerp (_rayWorld.normal , _raySelf.normal , 0.75f);
@@ -142,6 +140,9 @@ public class Movement : MonoBehaviour
 
     public void LongJump()
     {
+        if ( canMove == false )
+            { return; }
+
         rb.velocity = new Vector2 (transform.localScale.x * charInfo.longJumpForce, charInfo.longJumpForce);
 
         if (debug)
@@ -152,6 +153,9 @@ public class Movement : MonoBehaviour
 
     public void BackflipJump()
     {    
+        if ( canMove == false )
+            { return; }
+            
         rb.velocity = new Vector2 (transform.localScale.x * charInfo.backFlipJumpForceX, charInfo.backFlipJumpForceY);
         StartCoroutine("BackFlip");
     }
@@ -160,60 +164,74 @@ public class Movement : MonoBehaviour
     {
         float startRotation = transform.rotation.eulerAngles.z;
     
-    for (int i = 0; i <= 60f; i++)
-    {
-        transform.rotation = Quaternion.Euler ( 0f, 0f, startRotation + (i * 6f * transform.localScale.x));
-
-        if(rb.velocity.y < 0 && canMove)
+        for (int i = 0; i <= 60f; i++)
         {
-            StopCoroutine("BackFlip");
-        }
+            transform.rotation = Quaternion.Euler ( 0f, 0f, startRotation + (i * 6f * transform.localScale.x));
 
-        yield return new WaitForSeconds(1f/60f);
-    }
+            if(rb.velocity.y < 0 && canMove)
+            {
+                transform.rotation = Quaternion.identity;
+                StopCoroutine("BackFlip");
+            }
+
+            yield return new WaitForSeconds(1f/60f);
+        }
     }
 
     public void GetCanMove()
-{
-    bool isGrounded = false;
-    bool isJumping = false;
+    {
+        bool isGrounded = false;
+        bool isJumping = false;
+        
+        float _rayHeight = (col.size.y/2) * 1.4f;
+        float _rayRadius = (col.size.x/2) * 1.2f;
+        float rays = 10f;
+
+        // cast down raycasts along the radius until one of them returns true, then isGrounded == true
+        for (int i = 0; i < (rays + 1); i++)
+        {
+            float x = Mathf.Lerp(transform.position.x - _rayRadius, transform.position.x + _rayRadius, i / rays);
+            Vector3 position = new Vector3(x, transform.position.y, transform.position.z);
+            bool hit = Physics2D.Raycast (position, -transform.up, _rayHeight, LayerMask.GetMask("Terrain"));
+
+            if (debug)
+            {Debug.DrawRay(position, -transform.up, Color.red);
+            Debug.Log("x: " + x + " hit " + hit);}
+            
+            if(hit == true)
+            {
+            isGrounded = true;
+            break;
+            }
+        }
+
+        // if( Mathf.Abs(rb.velocity.y) < 1.5f)
+        // {
+        //     isJumping = false;
+        // }
+        // else
+        // {
+        //     isJumping = true;
+        // }
+
+
+        if(isGrounded==true && isJumping==false)
+        {
+            canMove = true;
+        }else
+        {
+            canMove = false;
+        }
+
+        Vector3 newPos = transform.position;
+        if(Mathf.Approximately(lastPos.y , newPos.y))
+        {
+            canMove = true;
+        }
+
+        lastPos = newPos;
+    }
     
-    float _rayDistance = col.radius * 1.4f;
-    Vector3 _rayLeftPosition = new Vector3 (transform.position.x - col.radius, transform.position.y , transform.position.z);
-    Vector3 _rayRightPosition = new Vector3 (transform.position.x + col.radius, transform.position.y , transform.position.z);
-
-    RaycastHit2D _rayMiddle = Physics2D.Raycast (transform.position, -Vector3.up, _rayDistance, LayerMask.GetMask("Terrain"));
-    RaycastHit2D _rayLeft = Physics2D.Raycast (_rayLeftPosition , -Vector3.up , _rayDistance, LayerMask.GetMask("Terrain"));
-    RaycastHit2D _rayRight = Physics2D.Raycast (_rayRightPosition , -Vector3.up, _rayDistance, LayerMask.GetMask("Terrain"));
-
-    if (_rayMiddle || _rayLeft || _rayRight)
-    {
-        isGrounded = true;
-    } 
-    else
-    {
-        isGrounded = false;
-    }
-
-
-    if( Mathf.Abs(rb.velocity.y) < 1.5f)
-    {
-        isJumping = false;
-    }
-    else
-    {
-        isJumping = true;
-    }
-
-
-    if(isGrounded==true && isJumping==false)
-    {
-        canMove = true;
-    }else
-    {
-        canMove = false;
-    }
-}
     public void StartTurn()
     {
 
@@ -222,21 +240,6 @@ public class Movement : MonoBehaviour
     public void EndTurn()
     {
 
-    }
-
-
-
-    private void OnDrawGizmos() 
-    {
-        if (debug)
-        {
-            Vector3 _rayLeftPosition = new Vector3 (transform.position.x - debugCol.radius, transform.position.y , transform.position.z);
-            Vector3 _rayRightPosition = new Vector3 (transform.position.x + debugCol.radius, transform.position.y , transform.position.z);
-            
-            Gizmos.color = Color.red;
-            Gizmos.DrawRay ( _rayLeftPosition , -Vector3.up );
-            Gizmos.DrawRay ( _rayRightPosition , -Vector3.up );
-        }
     }
 
 }

@@ -92,7 +92,7 @@ public class Aiming : MonoBehaviour
         if (powerInputHold == false)
         return;
 
-        power += input * 0.05f * pwrAcc;
+        power += input * 10f * pwrAcc * Time.deltaTime;
         pwrAcc = Mathf.Clamp(pwrAcc + (pwrAcc * Time.deltaTime * 1.5f) , 0, 20f);
     }
 
@@ -134,7 +134,7 @@ public class Aiming : MonoBehaviour
         if (aimInputHold == false)
         return;
 
-        aim += input * 0.05f * aimAcc;
+        aim += input * 10f * aimAcc * Time.deltaTime;
         aimAcc = Mathf.Clamp(aimAcc + (aimAcc * Time.deltaTime * 1.5f) , 0, 20f);
     }
 

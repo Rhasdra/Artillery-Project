@@ -96,6 +96,9 @@ GameObject:
   - component: {fileID: 3391465257193194956}
   - component: {fileID: 9002122819570864773}
   - component: {fileID: 4038477836451423594}
+  - component: {fileID: 4367908445514700309}
+  - component: {fileID: -262166347025118052}
+  - component: {fileID: -5565858775185877534}
   m_Layer: 8
   m_Name: Missile Blue
   m_TagString: Untagged
@@ -168,11 +171,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e24c1378d4a8694a91e20093cd47f74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  launchMode: 2
-  trajectoryMode: 1
-  hitMode: 1
   explosion: {fileID: 4518881370631371733, guid: 807288eda0e118c4a827b6b2c8d7ea39, type: 3}
-  multishotSpawn: {fileID: 3391465257193194957, guid: 984d3357314e6a84f901cc638b58f501, type: 3}
   impulse: 1000
   baseDamage: 500
   forgiveness: 450
+  ProjectileHit:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &4367908445514700309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3391465257193194957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc482919d20612242a6de7fbad11ccc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  quantity: 3
+  offset: 0.3
+--- !u!114 &-262166347025118052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3391465257193194957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bd5eb8bfa5a03b4b97e436571546a55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-5565858775185877534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3391465257193194957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf5b0e548478a8f45993aae5b5a39749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugDmg: 0
+  debugHit: 0

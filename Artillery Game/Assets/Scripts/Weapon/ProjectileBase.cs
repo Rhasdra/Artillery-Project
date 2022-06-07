@@ -1,18 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ProjectileBase : MonoBehaviour
 {
-    [SerializeField] enum LaunchMode{None, Impulse, MultiShot, LaunchRotator}
-    [SerializeField] LaunchMode launchMode;
-
-    [SerializeField] enum TrajectoryMode{None, Parabola, RotateAround}
-    [SerializeField] TrajectoryMode trajectoryMode;
-
-    [SerializeField] enum HitMode{None, Missile, Grenade}
-    [SerializeField] HitMode hitMode;
-
     public GameObject explosion;
 
     Rigidbody2D rb = null;
@@ -24,48 +16,13 @@ public class ProjectileBase : MonoBehaviour
     public ITrajectory projTrajectory;
     public IHit projHit;
 
+    public UnityEvent<Vector3, float> ProjectileHit;
+
     private void OnEnable() 
     {
         rb = GetComponent<Rigidbody2D>();
-
-        switch (launchMode)
-        {
-            case LaunchMode.Impulse:
-            gameObject.AddComponent<LaunchImpulse>();
-            break;
-
-            case LaunchMode.MultiShot:
-            gameObject.AddComponent<LaunchMultiShot>();
-            break;
-
-            case LaunchMode.LaunchRotator:
-            gameObject.AddComponent<LaunchRotator>();
-            break;
-        }
         projLaunch = GetComponent<ILaunch>();
-
-        switch (trajectoryMode)
-        {
-            case TrajectoryMode.Parabola:
-            gameObject.AddComponent<TrajectoryParabola>();
-            break;
-
-            case TrajectoryMode.RotateAround:
-            gameObject.AddComponent<TrajectoryRotateAround>();
-            break;
-        }
         projTrajectory = GetComponent<ITrajectory>();
-
-        switch (hitMode)
-        {
-            case HitMode.Missile:
-            gameObject.AddComponent<HitMissile>();
-            break;
-            
-            case HitMode.Grenade:
-            gameObject.AddComponent<HitGrenade>();
-            break;
-        }
         projHit = GetComponent<IHit>();
     }
 

@@ -116,8 +116,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseDamage: 500
-  baseRadius: 3
-  forgiveness: 5
+  baseRadius: 2
+  forgiveness: 0
 --- !u!114 &1820067741045689024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,9 +135,9 @@ MonoBehaviour:
     m_Bits: 4294967295
   Stamp: 1
   StampPaint: 0
-  StampShape: {fileID: -949900613627661759, guid: 680d8c53cd894aa4791aa07a59c9c537, type: 2}
+  StampShape: {fileID: 2800000, guid: 8febba4e506d09d4e8bd7b5b72699a59, type: 3}
   StampColor: {r: 1, g: 1, b: 1, a: 1}
-  StampSize: {x: 4, y: 4}
+  StampSize: {x: 2, y: 2}
   StampRandomDirection: 1
   Raycast: 0
   RaycastRadius: 1

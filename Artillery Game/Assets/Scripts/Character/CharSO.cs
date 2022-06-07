@@ -14,8 +14,8 @@ public class CharSO : ScriptableObject
     public float backFlipJumpForceX = -2f;
     public float backFlipJumpForceY = 10f;
 
-    public float sweetSpotAngleMin;
-    public float sweetSpotAngleMax;
+    public float sweetSpotAngleMax = 90f;
+    public float sweetSpotAngleMin = 45f;
 
     public WeaponBase[] weapons;
 }

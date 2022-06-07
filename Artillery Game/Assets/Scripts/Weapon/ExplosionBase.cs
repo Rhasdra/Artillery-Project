@@ -36,36 +36,36 @@ public class ExplosionBase : MonoBehaviour, IExplosion
         StartCoroutine("ExplosionCoroutine");
     }
 
-    private void OnTriggerEnter2D(Collider2D col) 
+    private void OnTriggerEnter2D(Collider2D other) 
     {
-        var damageable = col.GetComponent<IDamageable>();
+        var damageable = other.GetComponent<IDamageable>();
         if(damageable == null)
+        {return;}
+
+        if(other.CompareTag("Hurtbox"))
         {
-            return;
+            //get distance to collider
+            Vector2 closestPoint = other.ClosestPoint(transform.position);
+            float distance = Vector2.Distance(closestPoint , transform.position);
+                                
+            //calculate damage based on distance
+            float damage = (Mathf.Ceil(baseDamage * (-(distance - radius) / radius)) + forgiveness);
+            if(damage > baseDamage)
+            {damage = baseDamage;} 
+            
+            //apply damage
+            damageable.TakeDamage(damage);
+
+            if(debug)
+            Debug.Log("Hit " + other + " for " + damage + " Explosion Damage");
         }
-
-        //get distance to collider
-        Vector2 closestPoint = col.ClosestPoint(transform.position);
-        float distance = Vector2.Distance(closestPoint , transform.position);
-                            
-        //calculate damage based on distance
-        float damage = (Mathf.Ceil(baseDamage * (-(distance - radius) / radius)) + forgiveness);
-        if(damage > baseDamage)
-        {damage = baseDamage;} 
-        
-        //apply damage
-        damageable.TakeDamage(damage);
-
-        if(debug)
-        Debug.Log("Hit " + col + " for " + damage + " Explosion Damage");
-
     }
 
     IEnumerator ExplosionCoroutine()
     {   
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         myCollider.enabled = false;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
         Object.Destroy(this.gameObject);
     }
 }

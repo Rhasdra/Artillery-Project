@@ -94,8 +94,11 @@ GameObject:
   m_Component:
   - component: {fileID: 3391465257193194958}
   - component: {fileID: 3391465257193194956}
-  - component: {fileID: 4038477836451423594}
   - component: {fileID: 586614731977206005}
+  - component: {fileID: 4038477836451423594}
+  - component: {fileID: -680367599150928151}
+  - component: {fileID: -3133501844371747882}
+  - component: {fileID: 5900791457543689599}
   m_Layer: 8
   m_Name: Missile
   m_TagString: Untagged
@@ -140,25 +143,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &4038477836451423594
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3391465257193194957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e24c1378d4a8694a91e20093cd47f74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  launchMode: 1
-  trajectoryMode: 1
-  hitMode: 1
-  explosion: {fileID: 4518881370631371733, guid: 807288eda0e118c4a827b6b2c8d7ea39, type: 3}
-  impulse: 1000
-  baseDamage: 500
-  forgiveness: 100
 --- !u!70 &586614731977206005
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -172,6 +156,75 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.5, y: 0}
-  m_Size: {x: 1, y: 0.04}
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 2, y: 0.04}
   m_Direction: 1
+--- !u!114 &4038477836451423594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3391465257193194957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e24c1378d4a8694a91e20093cd47f74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosion: {fileID: 4518881370631371733, guid: 807288eda0e118c4a827b6b2c8d7ea39, type: 3}
+  impulse: 1000
+  baseDamage: 500
+  forgiveness: 100
+  ProjectileHit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: DamageNumbers, Assembly-CSharp
+        m_MethodName: SpawnDamageNumbers
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &-680367599150928151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3391465257193194957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8f78dfb8acb0454ebec2f6694bf3707, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-3133501844371747882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3391465257193194957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0bd5eb8bfa5a03b4b97e436571546a55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5900791457543689599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3391465257193194957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf5b0e548478a8f45993aae5b5a39749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugDmg: 0
+  debugHit: 0

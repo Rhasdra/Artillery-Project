@@ -19,8 +19,8 @@ MonoBehaviour:
   longJumpForce: 5
   backFlipJumpForceX: -2
   backFlipJumpForceY: 10
-  sweetSpotAngleMin: 45
   sweetSpotAngleMax: 90
+  sweetSpotAngleMin: 15
   weapons:
   - {fileID: 3416870237705713369, guid: 1eae5f85b39baad45a51c2566df4ce6e, type: 3}
   - {fileID: 4296199327604832853, guid: dc6213b0110632e4eb0bd98a9a0241be, type: 3}

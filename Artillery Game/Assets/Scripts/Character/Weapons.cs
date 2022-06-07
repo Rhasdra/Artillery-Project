@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Weapons : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class Weapons : MonoBehaviour
     [SerializeField] int index;
 
     [SerializeField] IFire projFire;
+
+    public UnityEvent ProjectileFired;
 
     private void Awake() 
     {
@@ -62,6 +65,8 @@ public class Weapons : MonoBehaviour
 
     public void Fire()
     {
+        ProjectileFired.Invoke();
+
         Vector3 origin = aiming.shootingAxis.position;
         float flip = aiming.shootingAxis.parent.localScale.x;
         Vector3 spawnPosition = origin + (aiming.shootingAxis.right * spawnOffset * flip);
@@ -79,5 +84,12 @@ public class Weapons : MonoBehaviour
     void PassTurn()
     {
         TurnsManager.NextTurn.Invoke();
+    }
+
+    private void OnDrawGizmos() 
+    {
+        Vector3 pos = new Vector3(transform.position.x + spawnOffset, transform.position.y, transform.position.z);
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(pos, 0.05f);    
     }
 }
