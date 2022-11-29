@@ -9,13 +9,14 @@ public class Weapons : MonoBehaviour
     Aiming aiming;
     [SerializeField] float spawnOffset = 2f;
 
-    [SerializeField] WeaponBase[] weapons;
-    [SerializeField] WeaponBase currentWeapon;
-    [SerializeField] int index;
+    public WeaponBase[] weapons;
+    public WeaponBase currentWeapon;
+    public int index;
 
     [SerializeField] IFire projFire;
 
     public UnityEvent ProjectileFired;
+    public UnityEvent<int> SwappedWeapon;
 
     private void Awake() 
     {
@@ -40,10 +41,11 @@ public class Weapons : MonoBehaviour
 
     private void Start() 
     {
-        GetWeapon(0);
+        index = 0;
+        GetWeapon();
     }
 
-    void GetWeapon(int index)
+    public void GetWeapon()
     {
         Object.Destroy(currentWeapon?.gameObject);
 
@@ -60,7 +62,9 @@ public class Weapons : MonoBehaviour
         else if(index < 0)
         index = weapons.Length -1;
  
-        GetWeapon(index);
+        GetWeapon();
+
+        SwappedWeapon.Invoke(index);
     }
 
     public void Fire()

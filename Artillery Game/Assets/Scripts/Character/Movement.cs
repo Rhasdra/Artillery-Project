@@ -15,9 +15,15 @@ public class Movement : MonoBehaviour
     Rigidbody2D rb = null;
     CapsuleCollider2D col = null;
     Vector3 lastPos;
+    Vector3 lastTiltPos;
 
+    [SerializeField] Transform raycastsPos;
     [SerializeField] float horizontalInput = 0f;
     [SerializeField] bool canMove = false;
+    [SerializeField] float tiltSpeed = 2f;
+    [SerializeField] float tiltThresholdAngle = 3f;
+
+    [SerializeField] float floorAngle;
 
     [Header("Debug")]
     [SerializeField] bool debug = false;
@@ -29,7 +35,6 @@ public class Movement : MonoBehaviour
 
         rb = this.GetComponent<Rigidbody2D>();
         col = this.GetComponent<CapsuleCollider2D>();
- 
     }
     
     void OnEnable()
@@ -50,18 +55,19 @@ public class Movement : MonoBehaviour
         charManager?.StartTurn.RemoveListener(StartTurn);
     }
 
-    private void FixedUpdate() 
+    private void LateUpdate() 
     {        
-        CharacterTilt(GetDesiredUpOutter());
+        CharacterTilt(Raycasts());
+    }
 
+    private void FixedUpdate()
+    { 
         if (charManager.isMyTurn == false)
             return;
 
         GetCanMove();
         MoveHorizontally(horizontalInput);
     }
-
-
 
     public void GetInputValue(Vector2 inputValue)
     {
@@ -70,7 +76,7 @@ public class Movement : MonoBehaviour
 
     public void MoveHorizontally(float inputValue)
     {
-        if (canMove == false)
+        if (canMove == false || inputValue == 0)
         {
             return;
         }
@@ -81,61 +87,88 @@ public class Movement : MonoBehaviour
             CharacterFlip(Mathf.RoundToInt(inputValue));
         }
 
-        transform.Translate (Vector3.right * (inputValue * charInfo.movementSpeed * Time.deltaTime));
-    }    
+        transform.Translate (Vector3.right * (inputValue * charInfo.movementSpeed * Time.deltaTime) * ClimbSlowMultiplier());
 
-    public void CharacterFlip(float inputValue) 
+        //rb.MovePosition(transform.position + (Vector3.right * (inputValue * charInfo.movementSpeed * Time.deltaTime) * ClimbSlowMultiplier()));
+    }    
+    
+    float ClimbSlowMultiplier()
+    {            
+        // Calculate floor angle
+        floorAngle = Vector3.Angle(transform.right, -Vector3.up);
+        if (transform.localScale.x < 0)
+        {
+            floorAngle = Vector3.Angle(transform.right, Vector3.up);
+        }
+        floorAngle -= 90;
+
+        if ( floorAngle <= charInfo.climbAngle * .4)
+        {
+            return 1f;
+        }
+        else if ( floorAngle >= charInfo.climbAngle)
+        {
+            return 0f;
+        }
+        else
+        {
+            return Mathf.Lerp(1, 0, floorAngle / charInfo.climbAngle);
+        }
+    }
+
+    void CharacterFlip(float inputValue) 
     {
             transform.localScale = new Vector3 (inputValue, 1f, 1f);
     }
-
-    public Vector3 GetDesiredUpOutter() 
+    
+    Vector3 Raycasts() 
     {   
         if (transform.position == lastPos || canMove == false)
         {
             return transform.up;
         }
         
-        Vector3 _rayLeftPosition = new Vector3 (transform.position.x - ((col.size.x/2) * 0.95f), transform.position.y , transform.position.z);
-        Vector3 _rayRightPosition = new Vector3 (transform.position.x + ((col.size.x/2) * 0.95f), transform.position.y , transform.position.z);
+        Vector3[] rayPos = {
+        new Vector3 (raycastsPos.position.x - ((col.size.x/2) * 0.95f), raycastsPos.position.y, transform.position.z),
+        new Vector3 (raycastsPos.position.x + ((col.size.x/2) * 0.95f), raycastsPos.position.y , transform.position.z),
+        new Vector3 (raycastsPos.position.x, raycastsPos.position.y , transform.position.z)
+        };
         
         //Cast Raycasts
-        RaycastHit2D _rayLeft = Physics2D.Raycast ( _rayLeftPosition , -Vector3.up , 5f, LayerMask.GetMask("Terrain"));
-        RaycastHit2D _rayRight = Physics2D.Raycast (_rayRightPosition , -Vector3.up, 5f, LayerMask.GetMask("Terrain"));
-
-        if (debug)
-        {
-            Debug.Log("CharacterTilt was called");
-        }
-
-        //Lerp extremities
-        Vector2 lerp = Vector2.Lerp (_rayLeft.normal , _rayRight.normal , 0.5f);
-
-        //Lerp extremities with middle raycast
-        return Vector2.Lerp (lerp , GetDesiredUpInner(), 0.75f);
-    }
-
-    public Vector3 GetDesiredUpInner() 
-    {   
-        if (transform.position == lastPos || canMove == false)
-        {
-            return transform.up;
-        }
+        Vector2[] hitNormals = new Vector2[3];
         
-        Vector3 _rayCenter = new Vector3 (transform.position.x, transform.position.y , transform.position.z);
-        Vector3 _rayTop = new Vector3 (transform.position.x, transform.position.y + (col.size.y/2), transform.position.z);
-        //Cast Raycasts
-        RaycastHit2D _raySelf = Physics2D.Raycast ( _rayCenter , -transform.up , (col.size.y/2)*1.2f, LayerMask.GetMask("Terrain"));
-        RaycastHit2D _rayWorld = Physics2D.Raycast (_rayTop , -Vector3.up, (col.size.y*1.2f), LayerMask.GetMask("Terrain"));
+        for (int i = 0; i < rayPos.Length; i++)
+        {
+            RaycastHit2D ray = Physics2D.Raycast ( rayPos[i] , -transform.up , 5f, LayerMask.GetMask("Terrain"));
+            hitNormals[i] = ray.normal;
+            Debug.DrawRay(rayPos[i] , -transform.up);
+        }
 
-        //Lerp slowly
-        return Vector2.Lerp (_rayWorld.normal , _raySelf.normal , 0.75f);
+        Vector2 average = new Vector2();
+
+        for (int i = 0; i < hitNormals.Length; i++)
+        {
+            average += hitNormals[i];
+        }
+
+        RaycastHit2D backupOnTop = Physics2D.Raycast (new Vector3( transform.position.x, transform.position.y + (col.size.y/2), transform.position.z) , -Vector3.up , 5f, LayerMask.GetMask("Terrain"));
+
+        return average + backupOnTop.normal;
     }
 
     void CharacterTilt(Vector3 desiredUp)
-    {
-        float acc = 10f;
-        transform.up += (desiredUp - transform.up) * Time.deltaTime * acc;
+    {        
+        float angle = Vector3.Angle(desiredUp, transform.up);
+        
+        if(angle >= tiltThresholdAngle)
+        {
+            transform.up += (desiredUp - transform.up) * Time.deltaTime * tiltSpeed;
+            lastTiltPos = transform.position;
+        }
+        else
+        {
+            return;
+        }
     }
 
     public void LongJump()
@@ -178,7 +211,7 @@ public class Movement : MonoBehaviour
         }
     }
 
-    public void GetCanMove()
+    void GetCanMove()
     {
         bool isGrounded = false;
         bool isJumping = false;
@@ -205,16 +238,6 @@ public class Movement : MonoBehaviour
             }
         }
 
-        // if( Mathf.Abs(rb.velocity.y) < 1.5f)
-        // {
-        //     isJumping = false;
-        // }
-        // else
-        // {
-        //     isJumping = true;
-        // }
-
-
         if(isGrounded==true && isJumping==false)
         {
             canMove = true;
@@ -231,7 +254,7 @@ public class Movement : MonoBehaviour
 
         lastPos = newPos;
     }
-    
+
     public void StartTurn()
     {
 

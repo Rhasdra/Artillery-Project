@@ -30,5 +30,4 @@ public class ProjectileBase : MonoBehaviour
     {
         projLaunch.Launch(impulse, power);
     }
-
 }

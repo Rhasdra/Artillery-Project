@@ -10,28 +10,33 @@ public class ExplosionBase : MonoBehaviour, IExplosion
     [SerializeField] float forgiveness = 5f;
     float radius;
 
+    [SerializeField] float lifeSeconds = 0.5f; 
+
     CircleCollider2D myCollider;
     SpriteRenderer mySR;
     D2dExplosion d2d;
 
-    bool debug = false;
+    [SerializeField] bool debug = false;
 
     private void OnEnable() 
     {
         myCollider = GetComponent<CircleCollider2D>();
         mySR = GetComponent<SpriteRenderer>();
         d2d = GetComponent<D2dExplosion>();
-        transform.localScale = new Vector3 (baseRadius, baseRadius, 1f);
+    }
+
+    float newRadius(float radiusMultiplier)
+    {
+        return radiusMultiplier * baseRadius;
     }
 
     public void Explode (float radiusMultiplier)
     {   
-        radius = radiusMultiplier * baseRadius;
-        transform.localScale = new Vector3 (radius, radius, 1f);
+        transform.localScale = new Vector3 (newRadius(radiusMultiplier), newRadius(radiusMultiplier), 1f);
+        d2d.StampSize = new Vector2 (newRadius(radiusMultiplier), newRadius(radiusMultiplier));
 
-        myCollider.enabled = true;
         mySR.enabled = true;
-        d2d.enabled = true;
+        myCollider.enabled = true;
 
         StartCoroutine("ExplosionCoroutine");
     }
@@ -42,14 +47,14 @@ public class ExplosionBase : MonoBehaviour, IExplosion
         if(damageable == null)
         {return;}
 
-        if(other.CompareTag("Hurtbox"))
+        if(other.gameObject.CompareTag("Hurtbox"))
         {
             //get distance to collider
             Vector2 closestPoint = other.ClosestPoint(transform.position);
             float distance = Vector2.Distance(closestPoint , transform.position);
                                 
             //calculate damage based on distance
-            float damage = (Mathf.Ceil(baseDamage * (-(distance - radius) / radius)) + forgiveness);
+            float damage = (Mathf.Ceil(baseDamage * (-((distance-1) - radius) / radius)) + forgiveness);
             if(damage > baseDamage)
             {damage = baseDamage;} 
             
@@ -63,7 +68,9 @@ public class ExplosionBase : MonoBehaviour, IExplosion
 
     IEnumerator ExplosionCoroutine()
     {   
-        yield return new WaitForSeconds(0.5f);
+        yield return
+        d2d.enabled = true;
+        yield return new WaitForSeconds(lifeSeconds);
         myCollider.enabled = false;
         yield return new WaitForSeconds(0.5f);
         Object.Destroy(this.gameObject);

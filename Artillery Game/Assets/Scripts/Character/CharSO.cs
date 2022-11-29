@@ -10,6 +10,8 @@ public class CharSO : ScriptableObject
 
     public float characterWidth = 1f;
     public float movementSpeed = 5f;
+    public float climbAngle = 30f;
+
     public float longJumpForce = 5f;
     public float backFlipJumpForceX = -2f;
     public float backFlipJumpForceY = 10f;

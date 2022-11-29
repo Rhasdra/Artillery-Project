@@ -33,7 +33,6 @@ public class LaunchMultiShot : MonoBehaviour, ILaunch
 
         for (int i = 0; i < quantity; i++)
         {
-            Debug.Log(transform.up);
             spawnY = transform.position.y + ( transform.up.y * ((offset * positive) + ((int)i/2) * offset * positive));
             spawnX = transform.position.x + (transform.up.x * ((offset * positive) + ((int)i/2) * offset * positive));
             position = new Vector3(spawnX, spawnY, 0);

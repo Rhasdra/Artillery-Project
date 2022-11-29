@@ -132,6 +132,8 @@ GameObject:
   - component: {fileID: 788594370757262397}
   - component: {fileID: 8950755441048609070}
   - component: {fileID: 2066065041}
+  - component: {fileID: 8472762337390447482}
+  - component: {fileID: 1429364205}
   m_Layer: 7
   m_Name: Character
   m_TagString: Untagged
@@ -153,7 +155,7 @@ Transform:
   m_Children:
   - {fileID: 788594369470081869}
   - {fileID: 1979663933326729407}
-  - {fileID: 7234904201187860486}
+  - {fileID: 3851158432506400860}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -173,7 +175,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 6200000, guid: fa5be245037101e468877d29665212d9, type: 2}
+  m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
@@ -187,12 +189,12 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 788594370757262398}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: fa5be245037101e468877d29665212d9, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0.01}
-  m_Size: {x: 0.56, y: 1.03}
+  m_Size: {x: 0.5, y: 1.03}
   m_Direction: 0
 --- !u!114 &788594370757262384
 MonoBehaviour:
@@ -266,8 +268,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f357d7a9e93b01644b071c95280ee275, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  raycastsPos: {fileID: 5429387992022757609}
   horizontalInput: 0
   canMove: 0
+  tiltSpeed: 2
+  tiltThresholdAngle: 3
+  floorAngle: 0
   debug: 0
 --- !u!114 &8950755441048609070
 MonoBehaviour:
@@ -300,10 +306,88 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c828832b38bc72d4faa8c8f03edb950c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnOffset: 1
+  spawnOffset: 0.75
   weapons: []
   currentWeapon: {fileID: 0}
   index: 0
+  ProjectileFired:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8233457475950189886}
+        m_TargetAssemblyTypeName: HealthPool, Assembly-CSharp
+        m_MethodName: Intangible
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  SwappedWeapon:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &8472762337390447482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 788594370757262398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37be69d8ead709e41b7a7767f618e139, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delay: 0
+--- !u!58 &1429364205
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 788594370757262398}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
+--- !u!1 &2560502488617323182
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5429387992022757609}
+  m_Layer: 7
+  m_Name: Raycasts
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5429387992022757609
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2560502488617323182}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.285, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3851158432506400860}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4900497783523874777
 GameObject:
   m_ObjectHideFlags: 0
@@ -490,13 +574,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7674076808938298645}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 788594370757262385}
-  m_RootOrder: 2
+  m_Father: {fileID: 3851158432506400860}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8233457475950189886
 MonoBehaviour:
@@ -515,7 +599,7 @@ MonoBehaviour:
   offset: 1
   healthBarPrefab: {fileID: 1753014845959435348, guid: e666b9eda63b3fa4e9befac832b4916c, type: 3}
   dmgNumbersPrefab: {fileID: 1753014845959435348, guid: 7f620e37e6342f84498add1a1b56c2b9, type: 3}
-  hb: {fileID: 0}
+  invincible: 1
   CharacterDied:
     m_PersistentCalls:
       m_Calls: []
@@ -535,3 +619,36 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!1 &9040683932503140730
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3851158432506400860}
+  m_Layer: 7
+  m_Name: Boxes
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3851158432506400860
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9040683932503140730}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7234904201187860486}
+  - {fileID: 5429387992022757609}
+  m_Father: {fileID: 788594370757262385}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

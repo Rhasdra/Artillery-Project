@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: -680367599150928151}
   - component: {fileID: -3133501844371747882}
   - component: {fileID: 5900791457543689599}
+  - component: {fileID: 1470144921458250096}
   m_Layer: 8
   m_Name: Missile
   m_TagString: Untagged
@@ -157,7 +158,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 2, y: 0.04}
+  m_Size: {x: 0.0001, y: 1}
   m_Direction: 1
 --- !u!114 &4038477836451423594
 MonoBehaviour:
@@ -174,7 +175,7 @@ MonoBehaviour:
   explosion: {fileID: 4518881370631371733, guid: 807288eda0e118c4a827b6b2c8d7ea39, type: 3}
   impulse: 1000
   baseDamage: 500
-  forgiveness: 100
+  forgiveness: 50
   ProjectileHit:
     m_PersistentCalls:
       m_Calls:
@@ -226,5 +227,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf5b0e548478a8f45993aae5b5a39749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugDmg: 0
-  debugHit: 0
+  debugDist: 0
+--- !u!114 &1470144921458250096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3391465257193194957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cdcbbd6262636543aa87f516a787aac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

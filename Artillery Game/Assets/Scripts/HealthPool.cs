@@ -14,7 +14,7 @@ public class HealthPool : MonoBehaviour, IDamageable
     [SerializeField] GameObject healthBarPrefab = null;
     Slider hb = null;
     [SerializeField] GameObject dmgNumbersPrefab = null;
-    DamageNumbers currentDmgNumbers = null;
+    public static DamageNumbers currentDmgNumbers = null;
     Collider2D hurtbox;
 
     [SerializeField] bool invincible = false;

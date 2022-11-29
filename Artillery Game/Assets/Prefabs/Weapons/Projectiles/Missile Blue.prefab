@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: 4367908445514700309}
   - component: {fileID: -262166347025118052}
   - component: {fileID: -5565858775185877534}
+  - component: {fileID: 4351532582898914420}
   m_Layer: 8
   m_Name: Missile Blue
   m_TagString: Untagged
@@ -216,5 +217,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf5b0e548478a8f45993aae5b5a39749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugDmg: 0
-  debugHit: 0
+  debugDist: 0
+--- !u!114 &4351532582898914420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3391465257193194957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cdcbbd6262636543aa87f516a787aac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

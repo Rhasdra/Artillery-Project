@@ -15,7 +15,8 @@ MonoBehaviour:
   characterName: Character Name
   maxHP: 3000
   characterWidth: 1
-  movementSpeed: 5
+  movementSpeed: 1.5
+  climbAngle: 45
   longJumpForce: 5
   backFlipJumpForceX: -2
   backFlipJumpForceY: 10
