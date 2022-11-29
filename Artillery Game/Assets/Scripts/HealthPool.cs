@@ -15,7 +15,7 @@ public class HealthPool : MonoBehaviour, IDamageable
     Slider hb = null;
     [SerializeField] GameObject dmgNumbersPrefab = null;
     public static DamageNumbers currentDmgNumbers = null;
-    Collider2D hurtbox;
+    [SerializeField] Collider2D hurtbox;
 
     [SerializeField] bool invincible = false;
 
@@ -41,9 +41,9 @@ public class HealthPool : MonoBehaviour, IDamageable
         hb.maxValue = maxHealth;
         hb.value = maxHealth;
 
-        currentHealth = maxHealth;
+        //hurtbox = GetComponent<Collider2D>();
 
-        hurtbox = GetComponent<Collider2D>();  
+        currentHealth = maxHealth;
     }
 
     public void TakeDamage(float damage)
