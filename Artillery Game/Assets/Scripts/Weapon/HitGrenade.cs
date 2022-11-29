@@ -34,7 +34,7 @@ public class HitGrenade : MonoBehaviour, IHit
         
         if(col.CompareTag("Player"))
         {
-        damageable?.TakeDamage(damage);
+        damageable?.TakeDamage(damage, transform.position);
         expRadius = 0.5f;
         }
 

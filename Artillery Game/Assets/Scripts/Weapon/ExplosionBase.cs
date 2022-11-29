@@ -6,9 +6,9 @@ using Destructible2D.Examples;
 public class ExplosionBase : MonoBehaviour, IExplosion
 {
     [SerializeField] float baseDamage = 500f;
-    [SerializeField] float baseRadius = 1f;
+    [SerializeField] float radius = 1f;
     [SerializeField] float forgiveness = 5f;
-    float radius;
+    //float radius;
 
     [SerializeField] float lifeSeconds = 0.5f; 
 
@@ -21,19 +21,19 @@ public class ExplosionBase : MonoBehaviour, IExplosion
     private void OnEnable() 
     {
         myCollider = GetComponent<CircleCollider2D>();
-        mySR = GetComponent<SpriteRenderer>();
+        mySR = GetComponentInChildren<SpriteRenderer>();
         d2d = GetComponent<D2dExplosion>();
     }
 
     float newRadius(float radiusMultiplier)
     {
-        return radiusMultiplier * baseRadius;
+        return radiusMultiplier * radius;
     }
 
     public void Explode (float radiusMultiplier)
     {   
         transform.localScale = new Vector3 (newRadius(radiusMultiplier), newRadius(radiusMultiplier), 1f);
-        d2d.StampSize = new Vector2 (newRadius(radiusMultiplier), newRadius(radiusMultiplier));
+        d2d.StampSize = new Vector2 (newRadius(radiusMultiplier)*2, newRadius(radiusMultiplier)*2);
 
         mySR.enabled = true;
         myCollider.enabled = true;
@@ -54,15 +54,16 @@ public class ExplosionBase : MonoBehaviour, IExplosion
             float distance = Vector2.Distance(closestPoint , transform.position);
                                 
             //calculate damage based on distance
-            float damage = (Mathf.Ceil(baseDamage * (-((distance-1) - radius) / radius)) + forgiveness);
+            //float damage = (Mathf.Ceil(baseDamage * (-((distance-1) - radius) / radius)) + forgiveness);
+            float damage = Mathf.Ceil((baseDamage * (radius - distance) / radius) + forgiveness);
             if(damage > baseDamage)
             {damage = baseDamage;} 
             
             //apply damage
-            damageable.TakeDamage(damage);
+            damageable.TakeDamage(damage, transform.position);
 
             if(debug)
-            Debug.Log("Hit " + other + " for " + damage + " Explosion Damage");
+            Debug.Log("Hit " + other + " for " + damage + " Explosion Damage. Distance from impact: " + distance);
         }
     }
 

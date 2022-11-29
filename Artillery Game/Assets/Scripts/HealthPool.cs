@@ -14,7 +14,7 @@ public class HealthPool : MonoBehaviour, IDamageable
     [SerializeField] GameObject healthBarPrefab = null;
     Slider hb = null;
     [SerializeField] GameObject dmgNumbersPrefab = null;
-    public static DamageNumbers currentDmgNumbers = null;
+    public static List<DamageNumbers> currentDmgNumbers = new List<DamageNumbers>();
     [SerializeField] Collider2D hurtbox;
 
     [SerializeField] bool invincible = false;
@@ -46,9 +46,9 @@ public class HealthPool : MonoBehaviour, IDamageable
         currentHealth = maxHealth;
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, Vector3 pos)
     {
-        SpawnDamageNumbers(damage);
+        SpawnDamageNumbers(damage, pos);
 
         currentHealth = Mathf.RoundToInt(currentHealth - damage);
 
@@ -63,14 +63,41 @@ public class HealthPool : MonoBehaviour, IDamageable
         }
     }
 
-    void SpawnDamageNumbers(float damage)
+    void SpawnDamageNumbers(float damage, Vector3 pos)
     {
-        if(currentDmgNumbers == null)
-        {
-            currentDmgNumbers = Instantiate(dmgNumbersPrefab, transform.position, Quaternion.identity).GetComponent<DamageNumbers>();
-        }  
+        DamageNumbers closestDmgNumber = null;
+        float closestDistance = 100;
 
-        currentDmgNumbers.UpdateDamageNumber(damage);
+        if (currentDmgNumbers.Count == 0)
+        {
+            DamageNumbers newDmgNumber = Instantiate(dmgNumbersPrefab, pos, Quaternion.identity).GetComponent<DamageNumbers>();
+            currentDmgNumbers.Add(newDmgNumber);
+            closestDmgNumber = newDmgNumber;
+            newDmgNumber.UpdateDamageNumber(damage);
+        
+        }else{
+            float distance;
+
+            foreach (var dmgNumber in currentDmgNumbers)
+            {
+                distance = Vector2.Distance(dmgNumber.transform.position, transform.position);
+
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestDmgNumber = dmgNumber;
+                }
+            }
+
+            if(closestDistance > 2f)
+            {
+                DamageNumbers newDmgNumber = Instantiate(dmgNumbersPrefab, pos, Quaternion.identity).GetComponent<DamageNumbers>();
+                currentDmgNumbers.Add(newDmgNumber);
+                newDmgNumber.UpdateDamageNumber(damage);
+            }else{
+                closestDmgNumber?.UpdateDamageNumber(damage);
+            }
+        }
     }
 
     public void Intangible()

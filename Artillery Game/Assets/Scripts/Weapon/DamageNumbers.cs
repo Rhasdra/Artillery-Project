@@ -54,6 +54,7 @@ public class DamageNumbers : MonoBehaviour
 
         if(timer < 0)
         {
+            HealthPool.currentDmgNumbers.Remove(this);
             Destroy(this.gameObject);
         }
     }

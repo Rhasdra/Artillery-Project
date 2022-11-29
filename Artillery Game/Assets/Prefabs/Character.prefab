@@ -269,7 +269,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26cc2cc8cc73dd04090731b7c0416a4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debug: 1
+  debug: 0
 --- !u!114 &788594370757262397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -630,7 +630,7 @@ MonoBehaviour:
   healthBarPrefab: {fileID: 1753014845959435348, guid: e666b9eda63b3fa4e9befac832b4916c, type: 3}
   dmgNumbersPrefab: {fileID: 1753014845959435348, guid: 7f620e37e6342f84498add1a1b56c2b9, type: 3}
   hurtbox: {fileID: 8414207038946114851}
-  invincible: 0
+  invincible: 1
   CharacterDied:
     m_PersistentCalls:
       m_Calls: []
