@@ -6,17 +6,21 @@ using UnityEngine;
 [RequireComponent(typeof(CharManager))]
 public class Aiming : MonoBehaviour
 {
-    CharManager charManager;
+    [Header("Listening To")]
+    [SerializeField] InputReader inputReader;
+
+    [Header("Broadcasting To")]
+    [SerializeField] AimingEventsChannelSO aimingEvents;
+
     CharSO charInfo;
     
+    [Header("References")]
     public Transform shootingAxis;
 
-    
     [Header("Power")]
     public float power = 50f;
     float powerInput;
     bool powerInputHold;
-    float pwrAcc = 1;
     
     [Header("Aim")]
     public float angle;
@@ -26,15 +30,17 @@ public class Aiming : MonoBehaviour
     float aim = 135f;
     float aimInput;
     bool aimInputHold;
-    float aimAcc = 1;
+
+    [Header("Configs")]
+    [SerializeField] float pwrAcceleration = 1;
+    [SerializeField] float aimAcceleration = 1;
 
     [Header("Debug")]
     [SerializeField] bool debug = false;
 
     private void Awake() 
     {
-        charManager = GetComponent<CharManager>();
-        charInfo = charManager.charInfo;
+        charInfo = GetComponent<CharManager>().charInfo;
         
         sweetSpotMax = charInfo.sweetSpotAngleMax;
         sweetSpotMin = charInfo.sweetSpotAngleMin;
@@ -42,28 +48,28 @@ public class Aiming : MonoBehaviour
 
     private void OnEnable() 
     {
-        charManager.PowerInputValue.AddListener(GetPowerInputValue);
-        charManager.PowerInputPress.AddListener(PowerInputPress);
-        charManager.PowerInputHeld.AddListener(PowerInputHeld);
-        charManager.PowerInputCanceled.AddListener(PowerInputCanceled);
+        inputReader.PowerValueEvent += GetPowerInputValue;
+        inputReader.PowerPressEvent += PowerInputPress;
+        inputReader.PowerHeldEvent += PowerInputHeld;
+        inputReader.PowerCanceledEvent += PowerInputCanceled;
 
-        charManager.AimInputValue.AddListener(GetAimInputValue);
-        charManager.AimInputPress.AddListener(AimInputPress);
-        charManager.AimInputHeld.AddListener(AimInputHeld);
-        charManager.AimInputCanceled.AddListener(AimInputCanceled);
+        inputReader.AimValueEvent += GetAimInputValue;
+        inputReader.AimPressEvent += AimInputPress;
+        inputReader.AimHeldEvent += AimInputHeld;
+        inputReader.AimCanceledEvent += AimInputCanceled;
     }
 
     private void OnDisable() 
     {
-        charManager.PowerInputValue.RemoveListener(GetPowerInputValue);
-        charManager.PowerInputPress.RemoveListener(PowerInputPress);
-        charManager.PowerInputHeld.RemoveListener(PowerInputHeld);
-        charManager.PowerInputCanceled.RemoveListener(PowerInputCanceled);
+        inputReader.PowerValueEvent -= GetPowerInputValue;
+        inputReader.PowerPressEvent -= PowerInputPress;
+        inputReader.PowerHeldEvent -= PowerInputHeld;
+        inputReader.PowerCanceledEvent -= PowerInputCanceled;
 
-        charManager.AimInputValue.RemoveListener(GetAimInputValue);
-        charManager.AimInputPress.RemoveListener(AimInputPress);
-        charManager.AimInputHeld.RemoveListener(AimInputHeld);
-        charManager.AimInputCanceled.RemoveListener(AimInputCanceled);
+        inputReader.AimValueEvent -= GetAimInputValue;
+        inputReader.AimPressEvent -= AimInputPress;
+        inputReader.AimHeldEvent -= AimInputHeld;
+        inputReader.AimCanceledEvent -= AimInputCanceled;
     }
 
     private void Update() 
@@ -92,13 +98,13 @@ public class Aiming : MonoBehaviour
         if (powerInputHold == false)
         return;
 
-        power += input * 10f * pwrAcc * Time.deltaTime;
-        pwrAcc = Mathf.Clamp(pwrAcc + (pwrAcc * Time.deltaTime * 1.5f) , 0, 20f);
+        power += input * 10f * pwrAcceleration * Time.deltaTime;
+        pwrAcceleration = Mathf.Clamp(pwrAcceleration + (pwrAcceleration * Time.deltaTime * 1.5f) , 0, 20f);
     }
 
-    private void PowerInputPress(float input)
+    private void PowerInputPress()
     {
-        power += input * ( 1 - (power % 1) );
+        power += powerInput * ( 1 - (power % 1) );
 
         if (debug)
         Debug.Log("PowerInputPress " + powerInput);
@@ -111,7 +117,7 @@ public class Aiming : MonoBehaviour
 
     private void PowerInputCanceled()
     {
-        pwrAcc = 1f;
+        pwrAcceleration = 1f;
         power = Mathf.RoundToInt(power);
         powerInputHold = false;
     }
@@ -119,6 +125,9 @@ public class Aiming : MonoBehaviour
     private void PowerClamp(float oldPower)
     {
         power = Mathf.Clamp(oldPower, 0 , 100);
+
+        //Broadcast the event
+        aimingEvents?.PowerChangeEvent.RaiseEvent((int)power);
     }
     #endregion
 
@@ -129,18 +138,18 @@ public class Aiming : MonoBehaviour
         aimInput = inputValue;
     }
 
-    private void AdjustAimValue(float input)
+    private void AdjustAimValue(float value)
     {
         if (aimInputHold == false)
         return;
 
-        aim += input * 10f * aimAcc * Time.deltaTime;
-        aimAcc = Mathf.Clamp(aimAcc + (aimAcc * Time.deltaTime * 1.5f) , 0, 20f);
+        aim += value * 10f * aimAcceleration * Time.deltaTime;
+        aimAcceleration = Mathf.Clamp(aimAcceleration + (aimAcceleration * Time.deltaTime * 1.5f) , 0, 20f);
     }
 
-    private void AimInputPress(float input)
+    private void AimInputPress()
     {
-        aim += input * ( 1 - (power % 1) );
+        aim += aimInput * ( 1 - (power % 1) );
 
         if (debug)
         Debug.Log("PowerInputPress " + powerInput);
@@ -153,7 +162,7 @@ public class Aiming : MonoBehaviour
     
     private void AimInputCanceled()
     {
-        aimAcc = 1f;
+        aimAcceleration = 1f;
         aim = Mathf.RoundToInt(aim);
         aimInputHold = false;
     }
@@ -161,6 +170,9 @@ public class Aiming : MonoBehaviour
     private void AimClamp(float oldAim)
     {
         aim = Mathf.Clamp(oldAim, 0 , 180);
+
+        //Broadcast the event
+        aimingEvents?.PowerChangeEvent.RaiseEvent((int)aim);
     }
 
     private void GetAngle()
@@ -179,10 +191,14 @@ public class Aiming : MonoBehaviour
     private void GetSweetSpot()
     {
         float ssAim = aim - 90;
+
         if ( ssAim >= sweetSpotMin && ssAim <= sweetSpotMax)
         sweetSpot = true;
         else
         sweetSpot = false;
+
+        //Broadcast the event
+        aimingEvents?.SweetSpotEvent.RaiseEvent(sweetSpot);
     }
     #endregion
 

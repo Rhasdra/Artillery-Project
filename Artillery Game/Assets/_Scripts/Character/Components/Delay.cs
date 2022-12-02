@@ -8,7 +8,7 @@ public class Delay : MonoBehaviour
 
     private void OnEnable() 
     {
-        GetComponent<Weapons>().ProjectileFired.AddListener(RandomizeDelay);
+        
     }
 
     void RandomizeDelay()

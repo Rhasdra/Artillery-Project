@@ -66,7 +66,9 @@ public class HitMissile : MonoBehaviour, IHit
         if(other.gameObject.CompareTag("Hurtbox"))
         {
             damageable?.TakeDamage(damage, transform.position);
-            projBase.ProjectileHit.Invoke(hitPosition, damage);
+
+            //Broadcast the Event
+            GetComponent<Projectile>().projectileEvents.HitEvent.OnEventRaised(transform.position, (int)damage, damageable);
 
             if(debugDist)
             Debug.Log("Hit " + other + " for " + damage + " Missile Damage");

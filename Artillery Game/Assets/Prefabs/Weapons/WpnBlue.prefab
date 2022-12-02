@@ -44,7 +44,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64dc217118792f244bfd8a9c1a176981, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponEvents: {fileID: 11400000, guid: 5e2910cb98071624088dcaa0a03fb388, type: 2}
   fireMode: 1
+  fireRate: 0.3
   projectiles:
   - {fileID: 4038477836451423594, guid: b0e87ba44da15b34fb076d53552e630f, type: 3}
-  fireRate: 0.3
+  selectedFireMode: {fileID: 0}

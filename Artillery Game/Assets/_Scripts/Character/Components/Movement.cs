@@ -10,19 +10,26 @@ using UnityEngine.Events;
 
 public class Movement : MonoBehaviour
 {
-    CharManager charManager = null;
+    [Header("Listening To")]
+    [SerializeField] InputReader inputReader;
+
+    [Header("Broadcasting To")]
+    [SerializeField] MovementEventsChannelSO movementEvents;
+
     CharSO charInfo = null;
     Rigidbody2D rb = null;
     CapsuleCollider2D col = null;
     Vector3 lastPos;
     Vector3 lastTiltPos;
 
+    [Header("References")]
     [SerializeField] Transform raycastsPos;
+
+    [Header("Information and Configs")]
     [SerializeField] float horizontalInput = 0f;
     [SerializeField] bool canMove = false;
     [SerializeField] float tiltSpeed = 2f;
     [SerializeField] float tiltThresholdAngle = 3f;
-
     [SerializeField] float floorAngle;
 
     [Header("Debug")]
@@ -30,8 +37,7 @@ public class Movement : MonoBehaviour
 
     private void Awake() 
     {
-        charManager = this.GetComponent<CharManager>();
-        charInfo = charManager.charInfo;
+        charInfo = this.GetComponent<CharManager>().charInfo;
 
         rb = this.GetComponent<Rigidbody2D>();
         col = this.GetComponent<CapsuleCollider2D>();
@@ -39,20 +45,16 @@ public class Movement : MonoBehaviour
     
     void OnEnable()
     {
-        charManager?.OnLongJumpPress.AddListener(LongJump);
-        charManager?.OnBackFlipPress.AddListener(BackflipJump);
-        charManager?.MovementInputValue.AddListener(GetInputValue);
-        charManager?.EndTurn.AddListener(EndTurn);
-        charManager?.StartTurn.AddListener(StartTurn);
+        inputReader.LongJumpEvent += LongJump;
+        inputReader.BackFlipEvent += BackflipJump;
+        inputReader.MoveEvent += GetInputValue;
     }
 
     void OnDisable()
     {
-        charManager?.OnLongJumpPress.RemoveListener(LongJump);
-        charManager?.OnBackFlipPress.RemoveListener(BackflipJump);
-        charManager?.MovementInputValue.RemoveListener(GetInputValue);
-        charManager?.EndTurn.RemoveListener(EndTurn);
-        charManager?.StartTurn.RemoveListener(StartTurn);
+        inputReader.LongJumpEvent -= LongJump;
+        inputReader.BackFlipEvent -= BackflipJump;
+        inputReader.MoveEvent -= GetInputValue;
     }
 
     private void LateUpdate() 
@@ -62,9 +64,6 @@ public class Movement : MonoBehaviour
 
     private void FixedUpdate()
     { 
-        if (charManager.isMyTurn == false)
-            return;
-
         GetCanMove();
         MoveHorizontally(horizontalInput);
     }
@@ -81,6 +80,8 @@ public class Movement : MonoBehaviour
             return;
         }
 
+        movementEvents.MoveStartEvent.RaiseEvent(this.transform);
+
         //Flip player if going left
         if (inputValue != 0)
         {
@@ -88,8 +89,6 @@ public class Movement : MonoBehaviour
         }
 
         transform.Translate (Vector3.right * (inputValue * charInfo.movementSpeed * Time.deltaTime) * ClimbSlowMultiplier());
-
-        //rb.MovePosition(transform.position + (Vector3.right * (inputValue * charInfo.movementSpeed * Time.deltaTime) * ClimbSlowMultiplier()));
     }    
     
     float ClimbSlowMultiplier()
@@ -175,6 +174,9 @@ public class Movement : MonoBehaviour
     {
         if ( canMove == false )
             { return; }
+            
+        //Broadcast the event
+        movementEvents.LongJumpEvent.RaiseEvent(this.transform);
 
         rb.velocity = new Vector2 (transform.localScale.x * charInfo.longJumpForce, charInfo.longJumpForce);
 
@@ -188,6 +190,9 @@ public class Movement : MonoBehaviour
     {    
         if ( canMove == false )
             { return; }
+
+        //Broadcast the event
+        movementEvents.BackFlipJumpEvent.RaiseEvent(this.transform);
             
         rb.velocity = new Vector2 (transform.localScale.x * charInfo.backFlipJumpForceX, charInfo.backFlipJumpForceY);
         StartCoroutine("BackFlip");
@@ -233,8 +238,11 @@ public class Movement : MonoBehaviour
             
             if(hit == true)
             {
-            isGrounded = true;
-            break;
+                //Broadcast the event
+                movementEvents.LandingEvent.RaiseEvent(transform.position);
+                
+                isGrounded = true;
+                break;
             }
         }
 
@@ -254,15 +262,4 @@ public class Movement : MonoBehaviour
 
         lastPos = newPos;
     }
-
-    public void StartTurn()
-    {
-
-    }
-
-    public void EndTurn()
-    {
-
-    }
-
 }

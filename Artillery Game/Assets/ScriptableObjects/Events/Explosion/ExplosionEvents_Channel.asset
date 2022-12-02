@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a9bb2bc0c2042f4d9455f910b6aec04, type: 3}
+  m_Name: ExplosionEvents_Channel
+  m_EditorClassIdentifier: 
+  SpawnEvent: {fileID: 11400000, guid: cb2014fe47525dd4ca355a1781093972, type: 2}
+  ResizeEvent: {fileID: 11400000, guid: 44256b0e267d4914fb5dbb37c88504f8, type: 2}
+  HitEvent: {fileID: 11400000, guid: 70d4dc4086ac266449ac86bedaaa0edc, type: 2}
+  DespawnEvent: {fileID: 11400000, guid: da233d97a55ac4b42a22ac57ef67fc6a, type: 2}

@@ -141,7 +141,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!58 &9002122819570864773
 CircleCollider2D:
@@ -171,13 +171,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e24c1378d4a8694a91e20093cd47f74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosion: {fileID: 4518881370631371733, guid: 807288eda0e118c4a827b6b2c8d7ea39, type: 3}
+  projectileEvents: {fileID: 11400000, guid: f388093435d5b8448a87a1ec47d166ee, type: 2}
   impulse: 1000
   baseDamage: 150
   forgiveness: 450
-  ProjectileHit:
-    m_PersistentCalls:
-      m_Calls: []
+  explosion: {fileID: 4518881370631371733, guid: 807288eda0e118c4a827b6b2c8d7ea39, type: 3}
 --- !u!114 &-181067699127189068
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,6 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 058bc5d6c4de4db40914d4eb07b4c1c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rb: {fileID: 0}
   quantity: 2
   offset: 0.5
 --- !u!114 &8666365220977454313

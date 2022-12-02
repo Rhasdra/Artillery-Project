@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f2854323cf5e984eaa70727638c4a12, type: 3}
+  m_Name: MovementEvents_Channel
+  m_EditorClassIdentifier: 
+  MoveStartEvent: {fileID: 11400000, guid: 2b8c4e5b8b0fb5e43b5a480f22607ba2, type: 2}
+  MoveStopEvent: {fileID: 11400000, guid: e6f131f107b8c8c478a7541b3827e082, type: 2}
+  LongJumpEvent: {fileID: 11400000, guid: 2df4fb85b4813864fa60a9b2dc08e578, type: 2}
+  BackFlipJumpEvent: {fileID: 11400000, guid: a73fb37da18558f45a91e5a6231465ee, type: 2}
+  LandingEvent: {fileID: 11400000, guid: 61e783f8e4473624a9ffa4f752998e23, type: 2}

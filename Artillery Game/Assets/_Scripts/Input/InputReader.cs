@@ -16,16 +16,18 @@ public class InputReader : ScriptableObject, GameInputActions.IGameplayActions, 
     public event UnityAction LongJumpEvent = delegate { };
     public event UnityAction BackFlipEvent = delegate { };
 
-    public event UnityAction<int> PowerPressEvent = delegate { };
+    public event UnityAction<float> PowerValueEvent = delegate { };
+    public event UnityAction PowerPressEvent = delegate { };
     public event UnityAction PowerHeldEvent = delegate { };
     public event UnityAction PowerCanceledEvent = delegate { };
 
-    public event UnityAction<int> AimPressEvent = delegate { };
+    public event UnityAction<float> AimValueEvent = delegate { };
+    public event UnityAction AimPressEvent = delegate { };
     public event UnityAction AimHeldEvent = delegate { };
     public event UnityAction AimCanceledEvent = delegate { };
 
-    public event UnityAction<int> ScrollWeaponEvent = delegate { };
-    public event UnityAction<int> WeaponNumberEvent = delegate { };
+    public event UnityAction<float> ScrollWeaponEvent = delegate { };
+    public event UnityAction<float> WeaponNumberEvent = delegate { };
 
     //Menu
 
@@ -78,16 +80,19 @@ public class InputReader : ScriptableObject, GameInputActions.IGameplayActions, 
 
     public void OnShoot(InputAction.CallbackContext context)
     {
+        if(context.phase == InputActionPhase.Performed)
         ShootEvent.Invoke();
     }
 
     public void OnLongJump(InputAction.CallbackContext context)
     {
+        if(context.phase == InputActionPhase.Performed)
         LongJumpEvent.Invoke();
     }
 
     public void OnBackFlip(InputAction.CallbackContext context)
     {
+        if(context.phase == InputActionPhase.Performed)
         BackFlipEvent.Invoke();
     }
 
@@ -96,7 +101,8 @@ public class InputReader : ScriptableObject, GameInputActions.IGameplayActions, 
         switch (context.phase)
         {
             case InputActionPhase.Started:
-                PowerPressEvent.Invoke(context.ReadValue<int>());
+                PowerValueEvent.Invoke(context.ReadValue<float>());
+                PowerPressEvent.Invoke();
                 break;
             case InputActionPhase.Performed:
                 PowerHeldEvent.Invoke();
@@ -112,7 +118,8 @@ public class InputReader : ScriptableObject, GameInputActions.IGameplayActions, 
         switch (context.phase)
         {
             case InputActionPhase.Started:
-                AimPressEvent.Invoke(context.ReadValue<int>());
+                AimValueEvent.Invoke(context.ReadValue<float>());
+                AimPressEvent.Invoke();
                 break;
             case InputActionPhase.Performed:
                 AimHeldEvent.Invoke();
@@ -125,12 +132,14 @@ public class InputReader : ScriptableObject, GameInputActions.IGameplayActions, 
 
     public void OnScrollWeapon(InputAction.CallbackContext context)
     {
-        ScrollWeaponEvent.Invoke(context.ReadValue<int>());
+        if(context.phase == InputActionPhase.Performed)
+        ScrollWeaponEvent.Invoke(context.ReadValue<float>());
     }
 
     public void OnWeaponNumber(InputAction.CallbackContext context)
     {
-        WeaponNumberEvent.Invoke(context.ReadValue<int>());
+        if(context.phase == InputActionPhase.Performed)
+        WeaponNumberEvent.Invoke(context.ReadValue<float>());
     }
     #endregion
 

@@ -5,38 +5,41 @@ using UnityEngine.Events;
 
 public class Weapons : MonoBehaviour
 {
-    CharManager charManager;
+    [Header("Listening To")]
+    [SerializeField] InputReader inputReader;
+
+    [Header("Broadcasting To")]
+    [SerializeField] WeaponEventsChannelSO weaponEvents;
+
     Aiming aiming;
+
     [SerializeField] float spawnOffset = 2f;
 
     public WeaponBase[] weapons;
     public WeaponBase currentWeapon;
     public int index;
 
-    [SerializeField] IFire projFire;
-
-    public UnityEvent ProjectileFired;
-    public UnityEvent<int> SwappedWeapon;
+    [SerializeField] IShoot projFire;
 
     private void Awake() 
     {
-        charManager = GetComponent<CharManager>();
         aiming = GetComponent<Aiming>();
-        weapons = charManager.charInfo.weapons;
+        weapons = GetComponent<CharManager>().charInfo.weapons;
 
-        weapons[0].projFire = GetComponent<FireMissile>();
-        projFire = weapons[0].projFire;
+        weapons[0].selectedFireMode = GetComponent<FireModeMissile>();
+        projFire = weapons[0].selectedFireMode;
     }
 
     private void OnEnable() 
     {
-        charManager.FirePress.AddListener(Fire);
-        charManager.ScrollWeaponPress.AddListener(ScrollWeapon);
+        inputReader.ShootEvent += Shoot;
+        inputReader.ScrollWeaponEvent += ScrollWeapon;
     }
 
     private void OnDisable()
     {
-        charManager.FirePress.RemoveListener(Fire);
+        inputReader.ShootEvent -= Shoot;
+        inputReader.ScrollWeaponEvent -= ScrollWeapon;
     }
 
     private void Start() 
@@ -64,13 +67,12 @@ public class Weapons : MonoBehaviour
  
         GetWeapon();
 
-        SwappedWeapon.Invoke(index);
+        //Broadcast the event
+        weaponEvents.WeaponChangeEvent.OnEventRaised(currentWeapon.gameObject);
     }
 
-    public void Fire()
+    public void Shoot()
     {
-        ProjectileFired.Invoke();
-
         Vector3 origin = aiming.shootingAxis.position;
         float flip = aiming.shootingAxis.parent.localScale.x;
         Vector3 spawnPosition = origin + (aiming.shootingAxis.right * spawnOffset * flip);
@@ -81,7 +83,7 @@ public class Weapons : MonoBehaviour
         rotation = Quaternion.Euler(0, 0, rotation.eulerAngles.z + 180f);
         }
 
-        currentWeapon.Fire(spawnPosition, rotation, aiming.power);
+        currentWeapon.Shoot(spawnPosition, rotation, aiming.power);
         PassTurn();
     }
 

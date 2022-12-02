@@ -51,15 +51,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "PowerChange",
-                    "type": "Value",
-                    "id": "213b8746-ad18-4af9-bef1-14f9475920e0",
-                    "expectedControlType": "Integer",
-                    "processors": "",
-                    "interactions": "Hold",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "Aim",
                     "type": "Value",
                     "id": "3067de91-a67d-454d-9b78-6a76327f10c1",
@@ -69,10 +60,19 @@
                     "initialStateCheck": true
                 },
                 {
+                    "name": "PowerChange",
+                    "type": "Value",
+                    "id": "5bdd8fa5-20c2-47f8-a069-5198fe69a628",
+                    "expectedControlType": "Integer",
+                    "processors": "",
+                    "interactions": "Hold",
+                    "initialStateCheck": true
+                },
+                {
                     "name": "ScrollWeapon",
                     "type": "Value",
                     "id": "543d85ba-b5c5-4a4c-8183-5291a9f0c7a2",
-                    "expectedControlType": "Integer",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -287,39 +287,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "0e1f01c0-da1c-4290-86af-64f737525e53",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "PowerChange",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "Negative",
-                    "id": "732d8408-61fa-4872-b291-ee40e5a1fbe1",
-                    "path": "<Keyboard>/q",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "PowerChange",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "Positive",
-                    "id": "5aadf971-7d96-409a-8fb3-cf2185addfe0",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "PowerChange",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "1D Axis",
                     "id": "493e92c9-a6eb-469e-bd39-7199bef23660",
                     "path": "1DAxis",
@@ -426,6 +393,39 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "ScrollWeapon",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "1D Axis",
+                    "id": "33f28d5f-3b64-43f8-ba5c-2be3f9d7f011",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PowerChange",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "f3a379b2-f06d-41e3-8ea3-8f478eaa693f",
+                    "path": "<Keyboard>/q",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "PowerChange",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "f351aa1c-8ef0-44fb-bc6f-8af4a4a01f9f",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "PowerChange",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }

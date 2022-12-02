@@ -73,15 +73,6 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""PowerChange"",
-                    ""type"": ""Value"",
-                    ""id"": ""213b8746-ad18-4af9-bef1-14f9475920e0"",
-                    ""expectedControlType"": ""Integer"",
-                    ""processors"": """",
-                    ""interactions"": ""Hold"",
-                    ""initialStateCheck"": true
-                },
-                {
                     ""name"": ""Aim"",
                     ""type"": ""Value"",
                     ""id"": ""3067de91-a67d-454d-9b78-6a76327f10c1"",
@@ -91,10 +82,19 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": true
                 },
                 {
+                    ""name"": ""PowerChange"",
+                    ""type"": ""Value"",
+                    ""id"": ""5bdd8fa5-20c2-47f8-a069-5198fe69a628"",
+                    ""expectedControlType"": ""Integer"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": true
+                },
+                {
                     ""name"": ""ScrollWeapon"",
                     ""type"": ""Value"",
                     ""id"": ""543d85ba-b5c5-4a4c-8183-5291a9f0c7a2"",
-                    ""expectedControlType"": ""Integer"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -309,39 +309,6 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""0e1f01c0-da1c-4290-86af-64f737525e53"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""PowerChange"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""Negative"",
-                    ""id"": ""732d8408-61fa-4872-b291-ee40e5a1fbe1"",
-                    ""path"": ""<Keyboard>/q"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""PowerChange"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Positive"",
-                    ""id"": ""5aadf971-7d96-409a-8fb3-cf2185addfe0"",
-                    ""path"": ""<Keyboard>/e"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""PowerChange"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
                     ""name"": ""1D Axis"",
                     ""id"": ""493e92c9-a6eb-469e-bd39-7199bef23660"",
                     ""path"": ""1DAxis"",
@@ -448,6 +415,39 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Keyboard&Mouse"",
                     ""action"": ""ScrollWeapon"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""33f28d5f-3b64-43f8-ba5c-2be3f9d7f011"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PowerChange"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""f3a379b2-f06d-41e3-8ea3-8f478eaa693f"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""PowerChange"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""f351aa1c-8ef0-44fb-bc6f-8af4a4a01f9f"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""PowerChange"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
                 }
@@ -1040,8 +1040,8 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
         m_Gameplay_Shoot = m_Gameplay.FindAction("Shoot", throwIfNotFound: true);
         m_Gameplay_LongJump = m_Gameplay.FindAction("LongJump", throwIfNotFound: true);
         m_Gameplay_BackFlip = m_Gameplay.FindAction("BackFlip", throwIfNotFound: true);
-        m_Gameplay_PowerChange = m_Gameplay.FindAction("PowerChange", throwIfNotFound: true);
         m_Gameplay_Aim = m_Gameplay.FindAction("Aim", throwIfNotFound: true);
+        m_Gameplay_PowerChange = m_Gameplay.FindAction("PowerChange", throwIfNotFound: true);
         m_Gameplay_ScrollWeapon = m_Gameplay.FindAction("ScrollWeapon", throwIfNotFound: true);
         m_Gameplay_WeaponNumber = m_Gameplay.FindAction("WeaponNumber", throwIfNotFound: true);
         // Menu
@@ -1120,8 +1120,8 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Shoot;
     private readonly InputAction m_Gameplay_LongJump;
     private readonly InputAction m_Gameplay_BackFlip;
-    private readonly InputAction m_Gameplay_PowerChange;
     private readonly InputAction m_Gameplay_Aim;
+    private readonly InputAction m_Gameplay_PowerChange;
     private readonly InputAction m_Gameplay_ScrollWeapon;
     private readonly InputAction m_Gameplay_WeaponNumber;
     public struct GameplayActions
@@ -1133,8 +1133,8 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
         public InputAction @Shoot => m_Wrapper.m_Gameplay_Shoot;
         public InputAction @LongJump => m_Wrapper.m_Gameplay_LongJump;
         public InputAction @BackFlip => m_Wrapper.m_Gameplay_BackFlip;
-        public InputAction @PowerChange => m_Wrapper.m_Gameplay_PowerChange;
         public InputAction @Aim => m_Wrapper.m_Gameplay_Aim;
+        public InputAction @PowerChange => m_Wrapper.m_Gameplay_PowerChange;
         public InputAction @ScrollWeapon => m_Wrapper.m_Gameplay_ScrollWeapon;
         public InputAction @WeaponNumber => m_Wrapper.m_Gameplay_WeaponNumber;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
@@ -1161,12 +1161,12 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
                 @BackFlip.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBackFlip;
                 @BackFlip.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBackFlip;
                 @BackFlip.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBackFlip;
-                @PowerChange.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPowerChange;
-                @PowerChange.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPowerChange;
-                @PowerChange.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPowerChange;
                 @Aim.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAim;
                 @Aim.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAim;
                 @Aim.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAim;
+                @PowerChange.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPowerChange;
+                @PowerChange.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPowerChange;
+                @PowerChange.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPowerChange;
                 @ScrollWeapon.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnScrollWeapon;
                 @ScrollWeapon.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnScrollWeapon;
                 @ScrollWeapon.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnScrollWeapon;
@@ -1192,12 +1192,12 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
                 @BackFlip.started += instance.OnBackFlip;
                 @BackFlip.performed += instance.OnBackFlip;
                 @BackFlip.canceled += instance.OnBackFlip;
-                @PowerChange.started += instance.OnPowerChange;
-                @PowerChange.performed += instance.OnPowerChange;
-                @PowerChange.canceled += instance.OnPowerChange;
                 @Aim.started += instance.OnAim;
                 @Aim.performed += instance.OnAim;
                 @Aim.canceled += instance.OnAim;
+                @PowerChange.started += instance.OnPowerChange;
+                @PowerChange.performed += instance.OnPowerChange;
+                @PowerChange.canceled += instance.OnPowerChange;
                 @ScrollWeapon.started += instance.OnScrollWeapon;
                 @ScrollWeapon.performed += instance.OnScrollWeapon;
                 @ScrollWeapon.canceled += instance.OnScrollWeapon;
@@ -1365,8 +1365,8 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
         void OnShoot(InputAction.CallbackContext context);
         void OnLongJump(InputAction.CallbackContext context);
         void OnBackFlip(InputAction.CallbackContext context);
-        void OnPowerChange(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+        void OnPowerChange(InputAction.CallbackContext context);
         void OnScrollWeapon(InputAction.CallbackContext context);
         void OnWeaponNumber(InputAction.CallbackContext context);
     }

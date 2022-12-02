@@ -37,7 +37,6 @@ public class UI_ShotSelect : MonoBehaviour
     void GetCurrentChar()
     {
         currentChar = TurnsManager.currentChar.GetComponent<Weapons>();
-        currentChar.SwappedWeapon.AddListener(SwapWeapon); //MIGHT HAVE TO UNSUBSCRIBE AT SOME POINT
     }
 
     public void SwapWeapon(int i) {

@@ -27,6 +27,9 @@ public class TrajectoryParabola : MonoBehaviour , ITrajectory
 
         transform.localRotation = Quaternion.AngleAxis(projectileAngle,transform.forward);
         }
+
+        //Broadcast the Event
+        GetComponent<Projectile>().projectileEvents.TrajectoryEvent.OnEventRaised(transform.position);
     }
 
 }

@@ -43,12 +43,17 @@ public class Explosive : MonoBehaviour, IExplosive
         exp.Explode(radiusMultiplier);
         
         explosions--;
+
+        //Broadcast the Event
+        GetComponent<Projectile>().projectileEvents.ExplodeEvent.OnEventRaised(explosionGO, transform.position, transform.rotation);
         }
         else
         {
             return;
         }
 
+        //Broadcast the Event
+        GetComponent<Projectile>().projectileEvents.DespawnEvent.OnEventRaised(this.gameObject);
         Destroy(this.gameObject);
     }
 }

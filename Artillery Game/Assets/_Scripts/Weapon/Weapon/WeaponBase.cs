@@ -4,35 +4,41 @@ using UnityEngine;
 
 public class WeaponBase : MonoBehaviour
 {
-    [SerializeField] enum FireMode{ None, Missile }
-    [SerializeField] FireMode fireMode;
-    
-    public Projectile[] projectiles;
-    public IFire projFire;
+    [Header("Broadcasting To")]
+    [SerializeField] WeaponEventsChannelSO weaponEvents;
 
+    [SerializeField] enum FireMode{ None, Missile }
+
+    [Header("Weapon Settings")] 
+    [SerializeField] FireMode fireMode;
     public float fireRate = 0.3f;
+    
+    [Header("Projectiles")]
+    public Projectile[] projectiles;
+    public FireModeMissile selectedFireMode;
 
 
     private void OnEnable() 
     {
         switch (fireMode)
         {
-            case FireMode.None:
-            gameObject.AddComponent<FireNone>();
-            break;
+            // case FireMode.None:
+            // gameObject.AddComponent<FireNone>();
+            // break;
             
             case FireMode.Missile:
-            gameObject.AddComponent<FireMissile>();
+            gameObject.AddComponent<FireModeMissile>();
             break;
         }
 
-        projFire = GetComponent<IFire>();
+        selectedFireMode = GetComponent<FireModeMissile>();
+        selectedFireMode.weaponEvents = weaponEvents;
     }   
 
 
-    public void Fire(Vector3 position, Quaternion rotation, float power)
-    {
-        projFire.Fire(projectiles, position, rotation, power, fireRate);
+    public void Shoot(Vector3 position, Quaternion rotation, float power)
+    {      
+        selectedFireMode.Shoot(projectiles, position, rotation, power, fireRate);
     }
 
 }

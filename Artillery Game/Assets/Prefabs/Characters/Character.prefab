@@ -282,6 +282,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f357d7a9e93b01644b071c95280ee275, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputReader: {fileID: 11400000, guid: 83dd3ab174bac9647be70ccf60d4d076, type: 2}
+  movementEvents: {fileID: 11400000, guid: 35658f02b6ab49d469b6928178fb1c32, type: 2}
   raycastsPos: {fileID: 5429387992022757609}
   horizontalInput: 0
   canMove: 0
@@ -301,12 +303,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48fd6ea584d5cfb42af278fe81c5e893, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputReader: {fileID: 11400000, guid: 83dd3ab174bac9647be70ccf60d4d076, type: 2}
+  aimingEvents: {fileID: 11400000, guid: d6f45b56830da3f4c8e7eca276c92eea, type: 2}
   shootingAxis: {fileID: 788594369470081869}
   power: 50
   angle: 0
   sweetSpotMax: 0
   sweetSpotMin: 0
   sweetSpot: 0
+  pwrAcceleration: 1
+  aimAcceleration: 1
   debug: 0
 --- !u!114 &2066065041
 MonoBehaviour:
@@ -320,6 +326,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c828832b38bc72d4faa8c8f03edb950c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputReader: {fileID: 11400000, guid: 83dd3ab174bac9647be70ccf60d4d076, type: 2}
+  weaponEvents: {fileID: 11400000, guid: 5e2910cb98071624088dcaa0a03fb388, type: 2}
   spawnOffset: 0.75
   weapons: []
   currentWeapon: {fileID: 0}
