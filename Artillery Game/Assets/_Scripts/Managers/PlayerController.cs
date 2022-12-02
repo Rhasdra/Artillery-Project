@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    PlayerInputActions playerControls;
+    /* PlayerInputActions playerControls;
 
     InputAction movement;
     InputAction power;
@@ -152,5 +152,5 @@ public class PlayerController : MonoBehaviour
     private void ScrollWeaponPress(InputAction.CallbackContext obj)
     {
         TurnsManager.currentChar?.ScrollWeaponPress.Invoke(scrollWeapon.ReadValue<float>());
-    }
+    } */
 }

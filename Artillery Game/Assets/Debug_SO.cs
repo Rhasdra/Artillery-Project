@@ -8,17 +8,18 @@ public class Debug_SO : MonoBehaviour
     [SerializeField] InputReader inputReader;
 
     private void OnEnable() {
-        inputReader.MovementInputValueEvent += DebugSO;
-        inputReader.FirePressEvent += DebugFire;
+        inputReader.MoveEvent += DebugInput;
+        inputReader.ShootEvent += DebugInput;
+        inputReader.LongJumpEvent += DebugInput;
     }
 
-    public void DebugSO(Vector2 v)
+    void DebugInput(Vector2 v)
     {
-        Debug.Log("SHIT MOVED " + v);
+        Debug.Log(v);
     }
 
-    public void DebugFire()
+    void DebugInput()
     {
-        Debug.Log("FIre");
+        Debug.Log("Event called");
     }
 }

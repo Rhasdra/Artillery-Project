@@ -5,109 +5,184 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 [CreateAssetMenu(fileName = "InputReader", menuName = "Game/Input Reader")]
-public class InputReader : ScriptableObject, PlayerInputActions.IPlayerActions
+public class InputReader : ScriptableObject, GameInputActions.IGameplayActions, GameInputActions.IMenuActions
 {
-    PlayerInputActions playerInput;
+    GameInputActions playerInput;
 
     // Gameplay
-    public event UnityAction<Vector2> MovementInputValueEvent = delegate { };
-    public event UnityAction OnLongJumpPressEvent = delegate { };
-    public event UnityAction OnBackFlipPressEvent = delegate { };
+    public event UnityAction<Vector2> MoveEvent = delegate { };
+    public event UnityAction<Vector2> LookEvent = delegate { };
+    public event UnityAction ShootEvent = delegate { };
+    public event UnityAction LongJumpEvent = delegate { };
+    public event UnityAction BackFlipEvent = delegate { };
 
-    public event UnityAction<int> PowerInputValueEvent = delegate { };
-    public event UnityAction<int> PowerInputPressEvent = delegate { };
-    public event UnityAction PowerInputHeldEvent = delegate { };
-    public event UnityAction PowerInputCanceledEvent = delegate { };
+    public event UnityAction<int> PowerPressEvent = delegate { };
+    public event UnityAction PowerHeldEvent = delegate { };
+    public event UnityAction PowerCanceledEvent = delegate { };
 
-    public event UnityAction<int> AimInputValueEvent = delegate { };
-    public event UnityAction<int> AimInputPressEvent = delegate { };
-    public event UnityAction AimInputHeldEvent = delegate { };
-    public event UnityAction AimInputCanceledEvent = delegate { };
+    public event UnityAction<int> AimPressEvent = delegate { };
+    public event UnityAction AimHeldEvent = delegate { };
+    public event UnityAction AimCanceledEvent = delegate { };
 
-    public event UnityAction FirePressEvent = delegate { };
-    public event UnityAction<int> ScrollWeaponPressEvent = delegate { };
+    public event UnityAction<int> ScrollWeaponEvent = delegate { };
+    public event UnityAction<int> WeaponNumberEvent = delegate { };
+
+    //Menu
+
 
     private void OnEnable() 
     {
         if (playerInput == null)
         {
-        	playerInput = new PlayerInputActions();   
-            playerInput.Player.SetCallbacks(this);
+        	playerInput = new GameInputActions();   
+            playerInput.Gameplay.SetCallbacks(this);
+            playerInput.Menu.SetCallbacks(this);
         }
 
         EnablePlayerInput();
-        playerInput.Player.Move.Enable();
     }
-    
-    public void OnMove(InputAction.CallbackContext context)
-    {
-        Debug.Log("OnMove Called!" + context.ReadValue<Vector2>());
-
-        if (MovementInputValueEvent != null)
-        {
-            MovementInputValueEvent.Invoke(context.ReadValue<Vector2>());
-        }else{
-            Debug.Log("OnMove is null");
-        }
-    }
-
-    public void OnLook(InputAction.CallbackContext context)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnFire(InputAction.CallbackContext context)
-    {
-        if (FirePressEvent != null)
-        {
-            FirePressEvent.Invoke();
-        }
-    }
-
-    public void OnLongJump(InputAction.CallbackContext context)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnBackFlip(InputAction.CallbackContext context)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnPowerChange(InputAction.CallbackContext context)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnAim(InputAction.CallbackContext context)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnScrollWeapon(InputAction.CallbackContext context)
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void OnWeaponNumber(InputAction.CallbackContext context)
-    {
-        throw new System.NotImplementedException();
-    } 
     
     private void OnDisable() 
     {
-        //DisableAllInput();
+        DisableAllInput();
     }
 
     public void EnablePlayerInput()
     {
-        playerInput.UI.Disable();
-        playerInput.Player.Enable();        
+        playerInput.Menu.Disable();
+        playerInput.Gameplay.Enable();        
     }
 
-    public void EnableUIInput()
+    public void EnableMenuInput()
     {
-        playerInput.Player.Disable();        
-        playerInput.UI.Enable();
+        playerInput.Gameplay.Disable();        
+        playerInput.Menu.Enable();
     }
+
+    public void DisableAllInput()
+    {
+        playerInput.Gameplay.Disable();        
+        playerInput.Menu.Disable();
+    }
+
+    #region Gameplay
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        MoveEvent.Invoke(context.ReadValue<Vector2>());
+    }
+
+    public void OnLook(InputAction.CallbackContext context)
+    {
+        LookEvent.Invoke(context.ReadValue<Vector2>());
+    }
+
+    public void OnShoot(InputAction.CallbackContext context)
+    {
+        ShootEvent.Invoke();
+    }
+
+    public void OnLongJump(InputAction.CallbackContext context)
+    {
+        LongJumpEvent.Invoke();
+    }
+
+    public void OnBackFlip(InputAction.CallbackContext context)
+    {
+        BackFlipEvent.Invoke();
+    }
+
+    public void OnPowerChange(InputAction.CallbackContext context)
+    {
+        switch (context.phase)
+        {
+            case InputActionPhase.Started:
+                PowerPressEvent.Invoke(context.ReadValue<int>());
+                break;
+            case InputActionPhase.Performed:
+                PowerHeldEvent.Invoke();
+                break;
+            case InputActionPhase.Canceled:
+                PowerCanceledEvent.Invoke();
+                break;
+        }
+    }
+
+    public void OnAim(InputAction.CallbackContext context)
+    {
+        switch (context.phase)
+        {
+            case InputActionPhase.Started:
+                AimPressEvent.Invoke(context.ReadValue<int>());
+                break;
+            case InputActionPhase.Performed:
+                AimHeldEvent.Invoke();
+                break;
+            case InputActionPhase.Canceled:
+                AimCanceledEvent.Invoke();
+                break;
+        }
+    }
+
+    public void OnScrollWeapon(InputAction.CallbackContext context)
+    {
+        ScrollWeaponEvent.Invoke(context.ReadValue<int>());
+    }
+
+    public void OnWeaponNumber(InputAction.CallbackContext context)
+    {
+        WeaponNumberEvent.Invoke(context.ReadValue<int>());
+    }
+    #endregion
+
+    #region Menu
+    public void OnNavigate(InputAction.CallbackContext context)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnSubmit(InputAction.CallbackContext context)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnCancel(InputAction.CallbackContext context)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnPoint(InputAction.CallbackContext context)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnClick(InputAction.CallbackContext context)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnScrollWheel(InputAction.CallbackContext context)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnMiddleClick(InputAction.CallbackContext context)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnRightClick(InputAction.CallbackContext context)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnTrackedDevicePosition(InputAction.CallbackContext context)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnTrackedDeviceOrientation(InputAction.CallbackContext context)
+    {
+        throw new System.NotImplementedException();
+    }
+    #endregion
 }
