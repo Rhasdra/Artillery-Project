@@ -56,7 +56,7 @@ public class DamageNumbers : MonoBehaviour
     void TickTimer()
     {
         timer -= Time.deltaTime;
-        Debug.Log(timer);
+        //Debug.Log(timer);
 
         if(timer < 0)
         {

@@ -1,0 +1,24 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+
+public class Debug_SO : MonoBehaviour
+{
+    [SerializeField] InputReader inputReader;
+
+    private void OnEnable() {
+        inputReader.MovementInputValueEvent += DebugSO;
+        inputReader.FirePressEvent += DebugFire;
+    }
+
+    public void DebugSO(Vector2 v)
+    {
+        Debug.Log("SHIT MOVED " + v);
+    }
+
+    public void DebugFire()
+    {
+        Debug.Log("FIre");
+    }
+}
