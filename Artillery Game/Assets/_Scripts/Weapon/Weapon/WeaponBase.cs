@@ -12,20 +12,16 @@ public class WeaponBase : MonoBehaviour
     [Header("Weapon Settings")] 
     [SerializeField] FireMode fireMode;
     public float fireRate = 0.3f;
+    public FireModeMissile selectedFireMode;
     
     [Header("Projectiles")]
     public Projectile[] projectiles;
-    public FireModeMissile selectedFireMode;
 
 
     private void OnEnable() 
     {
         switch (fireMode)
-        {
-            // case FireMode.None:
-            // gameObject.AddComponent<FireNone>();
-            // break;
-            
+        {          
             case FireMode.Missile:
             gameObject.AddComponent<FireModeMissile>();
             break;

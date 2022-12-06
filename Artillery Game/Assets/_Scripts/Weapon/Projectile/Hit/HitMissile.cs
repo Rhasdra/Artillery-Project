@@ -10,12 +10,8 @@ public class HitMissile : MonoBehaviour, IHit
 
     IExplosive explosive;
 
-    // RaycastHit2D[] raycastHit;
     float hitAngle;
     Vector3 hitPosition;
-
-    [Header("Debug")]
-    [SerializeField] bool debugDist = false;
 
     RaycastHit2D[] results = new RaycastHit2D[1];
 
@@ -28,24 +24,30 @@ public class HitMissile : MonoBehaviour, IHit
 
     private void Update() 
     {
-        col.Raycast(transform.right, results, 1f);
+        col.Raycast(transform.right, results, 0.3f);
     }
 
     public float Damage(Collider2D other)
     {
-        float damage = 0;
+        float damageCalc = 0;
 
         // Returns hitAngle=0 on 90degrees full hit   
         hitAngle = Vector2.Angle(results[0].normal, -transform.right);
         hitPosition = results[0].point;
 
-        damage = Mathf.RoundToInt((projBase.baseDamage * Mathf.Lerp(1f, 0f, hitAngle/90f)) + projBase.forgiveness);
+        //It also returns 0 when raycast hits nothing, so this if statement solves that
+        if(hitAngle == 0)
+        {
+            damageCalc = projBase.forgiveness;
+        }else{
+            damageCalc = Mathf.RoundToInt((projBase.baseDamage * Mathf.Lerp(1f, 0f, hitAngle/90f)) + projBase.forgiveness);
+        }
 
         // clamps damage to max damage
-        if(damage > projBase.baseDamage)
-            damage = projBase.baseDamage;
+        if(damageCalc > projBase.baseDamage)
+            damageCalc = projBase.baseDamage;
 
-        return damage;
+        return damageCalc;
     }
 
     private void OnTriggerEnter2D(Collider2D other) 
@@ -66,12 +68,9 @@ public class HitMissile : MonoBehaviour, IHit
         if(other.gameObject.CompareTag("Hurtbox"))
         {
             damageable?.TakeDamage(damage, transform.position);
-
-            //Broadcast the Event
-            GetComponent<Projectile>().projectileEvents.HitEvent.OnEventRaised(transform.position, (int)damage, damageable);
-
-            if(debugDist)
-            Debug.Log("Hit " + other + " for " + damage + " Missile Damage");
         }
+
+        //Broadcast the Event
+        GetComponent<Projectile>().projectileEvents.HitEvent.OnEventRaised(transform.position, (int)damage, damageable);
     }
 }

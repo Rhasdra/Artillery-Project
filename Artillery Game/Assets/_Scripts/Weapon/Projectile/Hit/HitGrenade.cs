@@ -38,6 +38,9 @@ public class HitGrenade : MonoBehaviour, IHit
         expRadius = 0.5f;
         }
 
+        //Broadcast the Event
+        GetComponent<Projectile>().projectileEvents.HitEvent.OnEventRaised(transform.position, (int)damage, damageable);
+
         Explode(explosion, expRadius);
         Object.Destroy(this.gameObject);
     }

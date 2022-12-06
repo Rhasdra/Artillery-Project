@@ -21,8 +21,6 @@ public class Character_StateMachine : StateMachine
 
     private void OnEnable() 
     {
-        charManager?.StartTurn.AddListener(StartTurn);
-        charManager?.EndTurn.AddListener(EndTurn);
         GetComponentInChildren<HealthPool>()?.CharacterDied.AddListener(Death);
     }
 

@@ -10,7 +10,6 @@ public class Weapons : MonoBehaviour
 
     [Header("Broadcasting To")]
     [SerializeField] WeaponEventsChannelSO weaponEvents;
-
     Aiming aiming;
 
     [SerializeField] float spawnOffset = 2f;
@@ -84,12 +83,6 @@ public class Weapons : MonoBehaviour
         }
 
         currentWeapon.Shoot(spawnPosition, rotation, aiming.power);
-        PassTurn();
-    }
-
-    void PassTurn()
-    {
-        TurnsManager.NextTurn.Invoke();
     }
 
     private void OnDrawGizmos() 

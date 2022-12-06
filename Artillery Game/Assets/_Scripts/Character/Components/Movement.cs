@@ -16,21 +16,23 @@ public class Movement : MonoBehaviour
     [Header("Broadcasting To")]
     [SerializeField] MovementEventsChannelSO movementEvents;
 
+    [Header("References")]
+        [Tooltip("A character should have a empty GO at their feet, from where the raycasts will originate and rotate around.")]
+    [SerializeField] Transform raycastsPos;
     CharSO charInfo = null;
     Rigidbody2D rb = null;
     CapsuleCollider2D col = null;
     Vector3 lastPos;
     Vector3 lastTiltPos;
 
-    [Header("References")]
-    [SerializeField] Transform raycastsPos;
-
-    [Header("Information and Configs")]
-    [SerializeField] float horizontalInput = 0f;
-    [SerializeField] bool canMove = false;
-    [SerializeField] float tiltSpeed = 2f;
+    [Header("Configs")]
+        [Tooltip("Character will only rotate if the ground has an angle difference of X or greater.")]
     [SerializeField] float tiltThresholdAngle = 3f;
-    [SerializeField] float floorAngle;
+        [Tooltip("How fast the character will rotate to match the ground. Smaller = slower.")]
+    [SerializeField] float tiltSpeed = 2f;
+    float horizontalInput = 0f;
+    bool canMove = false;
+    float floorAngle;
 
     [Header("Debug")]
     [SerializeField] bool debug = false;

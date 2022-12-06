@@ -6,6 +6,9 @@ using TMPro;
 
 public class UI_AngleDisplay : MonoBehaviour
 {
+    [Header("Listening to")]
+    [SerializeField] TurnsManagerEventsChannelSO turnsManagerEvents;
+
     Aiming currentChar;
     TextMeshProUGUI text;
 
@@ -16,7 +19,12 @@ public class UI_AngleDisplay : MonoBehaviour
 
     private void OnEnable() 
     {
-        TurnsManager.StartTurn.AddListener(GetCurrentChar);
+        turnsManagerEvents.StartTurn.OnEventRaised += GetCurrentChar;
+    }
+
+    private void OnDisable() 
+    {
+        turnsManagerEvents.StartTurn.OnEventRaised -= GetCurrentChar;
     }
 
     private void Update() 

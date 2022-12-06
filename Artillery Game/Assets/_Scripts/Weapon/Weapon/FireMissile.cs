@@ -9,6 +9,9 @@ public class FireModeMissile : MonoBehaviour , IShoot
     public void Shoot(Projectile[] proj, Vector3 position, Quaternion rotation, float power, float fireRate)
     {
         StartCoroutine(SpawnProjectile(proj, position, rotation, power, fireRate));
+        
+        //Broadcast the event
+        weaponEvents.ShootEvent.OnEventRaised.Invoke(); 
     }
 
     IEnumerator SpawnProjectile(Projectile[] proj, Vector3 position, Quaternion rotation, float power, float fireRate)
@@ -18,11 +21,7 @@ public class FireModeMissile : MonoBehaviour , IShoot
             Projectile newProj = Instantiate(proj[i], position, rotation);
             newProj.ProjLaunch(power);
 
-            //Broadcast the event
-            weaponEvents.ShootEvent.OnEventRaised(proj[i].gameObject, position, rotation);
-
             yield return new WaitForSeconds(fireRate);
-        }
-        
+        }       
     }
 }

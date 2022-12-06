@@ -129,7 +129,6 @@ GameObject:
   - component: {fileID: 788594370757262396}
   - component: {fileID: 8139752565694145401}
   - component: {fileID: 788594370757262384}
-  - component: {fileID: 7081566971522077267}
   - component: {fileID: 788594370757262397}
   - component: {fileID: 8950755441048609070}
   - component: {fileID: 2066065041}
@@ -209,67 +208,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c073ac596e327b49aafd0fbb0c00293, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isMyTurn: 0
-  debug: 0
   charInfo: {fileID: 11400000, guid: 567386854f0fe844cbe5e29d9dffcc4f, type: 2}
-  OnLongJumpPress:
-    m_PersistentCalls:
-      m_Calls: []
-  OnBackFlipPress:
-    m_PersistentCalls:
-      m_Calls: []
-  MovementInputValue:
-    m_PersistentCalls:
-      m_Calls: []
-  PowerInputValue:
-    m_PersistentCalls:
-      m_Calls: []
-  PowerInputPress:
-    m_PersistentCalls:
-      m_Calls: []
-  PowerInputHeld:
-    m_PersistentCalls:
-      m_Calls: []
-  PowerInputCanceled:
-    m_PersistentCalls:
-      m_Calls: []
-  AimInputValue:
-    m_PersistentCalls:
-      m_Calls: []
-  AimInputPress:
-    m_PersistentCalls:
-      m_Calls: []
-  AimInputHeld:
-    m_PersistentCalls:
-      m_Calls: []
-  AimInputCanceled:
-    m_PersistentCalls:
-      m_Calls: []
-  FirePress:
-    m_PersistentCalls:
-      m_Calls: []
-  ScrollWeaponPress:
-    m_PersistentCalls:
-      m_Calls: []
-  StartTurn:
-    m_PersistentCalls:
-      m_Calls: []
-  EndTurn:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &7081566971522077267
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 788594370757262398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26cc2cc8cc73dd04090731b7c0416a4c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  debug: 0
+  turnsManagerEvents: {fileID: 11400000, guid: 64cf3b8764240194195ab927b547189a, type: 2}
+  weaponEvents: {fileID: 11400000, guid: 5e2910cb98071624088dcaa0a03fb388, type: 2}
+  charManagerEvents: {fileID: 11400000, guid: d301404e377897445acbbae71f33efd6, type: 2}
+  sweetSpotUI: {fileID: 5519301699949885261}
+  movement: {fileID: 0}
+  aiming: {fileID: 0}
+  weapons: {fileID: 0}
 --- !u!114 &788594370757262397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,7 +223,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 788594370757262398}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f357d7a9e93b01644b071c95280ee275, type: 3}
   m_Name: 
@@ -298,7 +244,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 788594370757262398}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 48fd6ea584d5cfb42af278fe81c5e893, type: 3}
   m_Name: 
@@ -321,7 +267,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 788594370757262398}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c828832b38bc72d4faa8c8f03edb950c, type: 3}
   m_Name: 
@@ -332,24 +278,6 @@ MonoBehaviour:
   weapons: []
   currentWeapon: {fileID: 0}
   index: 0
-  ProjectileFired:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: HealthPool, Assembly-CSharp
-        m_MethodName: Intangible
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  SwappedWeapon:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &8472762337390447482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -539,6 +467,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ssPrefab: {fileID: 1753014845959435348, guid: f463ac052256d41428ba223667d3a5fc, type: 3}
+  charManager: {fileID: 0}
+  ssManager: {fileID: 0}
 --- !u!1 &7439182928072370479
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,6 +6,9 @@ using UnityEngine.Events;
 
 public class UI_TurnsDisplayer : MonoBehaviour
 {
+    [Header("Listening to")]
+    [SerializeField] TurnsManagerEventsChannelSO turnsManagerEvents;
+
     [SerializeField] TurnsManager turnsManager;
     [SerializeField] TextMeshProUGUI turnsCounter;
     [SerializeField] TextMeshProUGUI charQueue;
@@ -19,13 +22,19 @@ public class UI_TurnsDisplayer : MonoBehaviour
 
     private void OnEnable() 
     {
-        TurnsManager.StartTurn.AddListener(UpdateTurnsCounter);
-        TurnsManager.StartTurn.AddListener(UpdateCharQueue);
+        turnsManagerEvents.StartTurn.OnEventRaised += UpdateTurnsCounter;
+        turnsManagerEvents.StartTurn.OnEventRaised += UpdateCharQueue;
+    }
+
+    private void OnDisaable() 
+    {
+        turnsManagerEvents.StartTurn.OnEventRaised -= UpdateTurnsCounter;
+        turnsManagerEvents.StartTurn.OnEventRaised -= UpdateCharQueue;
     }
 
     void UpdateTurnsCounter()
     {
-        turnsCounter.text = (turnsManager.macroTurnsCounter.ToString() + " : " + turnsManager.turnsCounter.ToString());
+        turnsCounter.text = (turnsManager.cyclesCounter.ToString() + " : " + turnsManager.turnsCounter.ToString());
     }
 
     void UpdateCharQueue ()

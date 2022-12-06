@@ -6,60 +6,70 @@ using UnityEngine.Events;
 
 public class CharManager : MonoBehaviour
 {
-    public bool isMyTurn = false;
-    [SerializeField] bool debug = false;
     public CharSO charInfo;
 
-    public UnityEvent OnLongJumpPress;
-    public UnityEvent OnBackFlipPress;
-    public UnityEvent<Vector2> MovementInputValue;
+    [Header("Listening to")]
+    [SerializeField] TurnsManagerEventsChannelSO turnsManagerEvents;
+    [SerializeField] WeaponEventsChannelSO weaponEvents;
 
-    public UnityEvent<float> PowerInputValue;
-    public UnityEvent<float> PowerInputPress;
-    public UnityEvent PowerInputHeld;
-    public UnityEvent PowerInputCanceled;
+    [Header("Broadcasting to")]
+    [SerializeField] CharManagerEventsChannelSO charManagerEvents;
 
-    public UnityEvent<float> AimInputValue;
-    public UnityEvent<float> AimInputPress;
-    public UnityEvent AimInputHeld;
-    public UnityEvent AimInputCanceled;
-
-    public UnityEvent FirePress;
-    public UnityEvent<float> ScrollWeaponPress;
-
-    public UnityEvent StartTurn;
-    public UnityEvent EndTurn;
+    [Header("Toggle Components Between Turns")]
+    [SerializeField] SweetSpotDisplay sweetSpotUI;
+    [SerializeField] Movement movement;
+    [SerializeField] Aiming aiming;
+    [SerializeField] Weapons weapons;
 
     private void Awake() 
-    {
+    {   
+        movement = GetComponent<Movement>();
+        aiming = GetComponent<Aiming>();
+        weapons = GetComponent<Weapons>();
+        sweetSpotUI = GetComponentInChildren<SweetSpotDisplay>();
     }
 
-    private void OnEnable() 
+    public void StartListening()
     {
-        StartTurn.AddListener(SetIsMyTurnOn);
-        EndTurn.AddListener(SetIsMyTurnOff);
+        turnsManagerEvents.StartTurn.OnEventRaised += StartTurn;
+        turnsManagerEvents.EndTurn.OnEventRaised += EndTurn;
+
+        weaponEvents.ShootEvent.OnEventRaised += RequestEndTurn;
     }
 
-    private void OnDisable() 
+    public void StopListening()
     {
-        StartTurn.RemoveListener(SetIsMyTurnOn);
-        EndTurn.RemoveListener(SetIsMyTurnOff);
+        turnsManagerEvents.StartTurn.OnEventRaised -= StartTurn;
+        turnsManagerEvents.EndTurn.OnEventRaised -= EndTurn;
+
+        weaponEvents.ShootEvent.OnEventRaised -= RequestEndTurn;
     }
 
-    void SetIsMyTurnOn()
-    {
-        isMyTurn = true;
 
-        if(debug)
-        Debug.Log("SetIsMyTurnOn");
+    public void StartTurn()
+    {
+        movement.enabled = true;
+        aiming.enabled = true;
+        weapons.enabled = true;
+        sweetSpotUI.Display(true);
     }
 
-    void SetIsMyTurnOff()
+    public void EndTurn()
     {
-        isMyTurn = false;
+        movement.enabled = false;
+        aiming.enabled = false;
+        weapons.enabled = false;
+        sweetSpotUI.Display(false);
 
-        if(debug)
-        Debug.Log("SetIsMyTurnOff");
+        StopListening();
     }
 
+    public void RequestEndTurn()
+    {
+        //TODO
+        //Check if all projectiles are destroyed
+        //If yes, call the end turn event
+
+        charManagerEvents.EndTurn.OnEventRaised.Invoke();
+    }
 }

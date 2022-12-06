@@ -7,7 +7,8 @@ using TMPro;
 public class DamageNumbers : MonoBehaviour
 {
     public float currentDamage = 0f;
-    public float timer = 1;
+    public float timerSeconds = 1;
+    float timer = 1;
     public TextMeshProUGUI text = null;
 
     [SerializeField] GameObject dmgSmall = null;
@@ -23,6 +24,7 @@ public class DamageNumbers : MonoBehaviour
         startingScale = transform.localScale.x;
         startingPos = transform.position;
         transform.position = new Vector3(transform.position.x, transform.position.y + offset, 0f);
+        timer = timerSeconds;
     }
 
     private void Update() 
@@ -34,6 +36,7 @@ public class DamageNumbers : MonoBehaviour
     virtual public void UpdateDamageNumber(float damage)
     {
         currentDamage += damage;
+        timer = timerSeconds;
         text.text = currentDamage.ToString();
         text.color = Color.white;
 

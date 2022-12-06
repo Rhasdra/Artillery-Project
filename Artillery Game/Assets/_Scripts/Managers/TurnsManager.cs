@@ -6,64 +6,58 @@ using Cinemachine;
 
 public class TurnsManager : MonoBehaviour
 {
-    // public CinemachineVirtualCamera cam;
-    public static CharManager currentChar;
+    [Header("Listening to")]
+    [SerializeField] CharManagerEventsChannelSO charManagerEvents;
+
+    [Header("Broadcasting to")]
+    [SerializeField] TurnsManagerEventsChannelSO eventsChannel;
+
+    [Header("Infos being tracked")]
+        [Tooltip("The character which is currently taking their turn.")]
+    public static CharManager currentChar; //Should be a ScriptableObject
     public float turnsCounter = 0;
-     public float macroTurnsCounter = 0;
-    [SerializeField] int index = 0;
+        [Tooltip("In a Cycle, every character in the queue has to take their turn once. Then a new Cycle begins.")]
+    public float cyclesCounter = 0;
 
+    [Header("Lists")]
     public List<CharManager> charManagers;
-
-    public static UnityEvent NextTurn = new UnityEvent();
-    public static UnityEvent NextMacroTurn = new UnityEvent();
-    public static UnityEvent StartTurn = new UnityEvent();
+    int index = 0; //tracks which character from the list is the currentChar
 
     private void OnEnable() 
     {
-        NextTurn.AddListener(NextCharacter);
+        charManagerEvents.EndTurn.OnEventRaised += NextCharacter;
     }
 
     private void OnDisable() 
     {
-        NextTurn.RemoveListener(NextCharacter);
+        charManagerEvents.EndTurn.OnEventRaised -= NextCharacter;
     }
 
     private void Start() 
     {
         currentChar = charManagers[index];
-        StartTurnFunc();
+        currentChar.StartListening();
+        eventsChannel.StartTurn.OnEventRaised.Invoke();
     }
     
     public void NextCharacter()
     {
-        currentChar?.EndTurn.Invoke();
+        eventsChannel.EndTurn.OnEventRaised.Invoke();
 
         if ( index < charManagers.Count -1)
         {
             index++;
-            // currentChar = charControllers[index];
-            // currentChar?.StartTurn.Invoke();
             // return;
         } else {
         index = 0;
         }
 
         IncreaseTurnsCounter();
+
         currentChar = charManagers[index];
+        currentChar.StartListening();
 
-        StartTurnFunc();
-    }
-
-    void StartTurnFunc()
-    {
-        currentChar?.StartTurn.Invoke();
-        
-        // if(cam != null)
-        // {
-        //     cam.Follow = currentChar.transform;
-        // }
-        
-        StartTurn.Invoke();
+        eventsChannel.StartTurn.OnEventRaised.Invoke();
     }
 
     void SortQueueByDelay(List<CharManager> unsorted)
@@ -115,10 +109,9 @@ public class TurnsManager : MonoBehaviour
         
         if (turnsCounter % charManagers.Count == 0f)
         {
-            macroTurnsCounter ++;
+            cyclesCounter ++;
             SortQueueByDelay(charManagers);
-            NextMacroTurn.Invoke();
-            //NextMacroTurnEvent();
+            eventsChannel.NewCycle.OnEventRaised.Invoke();
         }
     }
 }

@@ -10,11 +10,13 @@ public class CameraScript : MonoBehaviour
     [SerializeField] WeaponEventsChannelSO weaponEventsChannel;
     [SerializeField] ProjectileEventsChannelSO projectileEventsChannel; 
 
-
-    [SerializeField] GameObject tempGO;
-    public CinemachineVirtualCamera cam;
+    CinemachineVirtualCamera cam;
     CinemachineFramingTransposer transposer;
-    GameObject currentChar = null;
+    bool canSwitchTarget = true;
+
+    [Header("Settings")]
+    [Tooltip("Events that the player doesn't control have a cooldown timer before triggering a camera transition.")]
+    [SerializeField] float switchTimerSeconds = 0.5f;
 
     private void Awake() 
     {
@@ -24,8 +26,6 @@ public class CameraScript : MonoBehaviour
 
     private void OnEnable() 
     {
-        //TurnsManager.StartTurn.AddListener(GetCurrentChar);
-
         moveEventsChannel.MoveStartEvent.OnEventRaised += GetNewTarget;
         moveEventsChannel.MoveStartEvent.OnEventRaised += FrameLower;
 
@@ -40,45 +40,47 @@ public class CameraScript : MonoBehaviour
         projectileEventsChannel.HitEvent.OnEventRaised += GetNewTarget;
     }
 
-    // void GetCurrentChar()
-    // {
-    //     RemoveOldChar();
-    //     currentChar = TurnsManager.currentChar.gameObject;
-
-    //     GetNewTarget(currentChar.transform);
-    // }
-
-    // void RemoveOldChar()
-    // {
-        
-    // }
+    void SwitchTarget(Transform target)
+    {
+        if(target.transform != cam.Follow)
+        {
+            StartCoroutine(TickTimer());
+            cam.Follow = target.transform;
+        }
+    }
 
     public void GetNewTarget (Transform target)
     {
-        cam.Follow = target.transform;
+        SwitchTarget(target);
     }
     public void GetNewTarget (GameObject target)
     {
-        cam.Follow = target.transform;
+        SwitchTarget(target.transform);
     }
     public void GetNewTarget (GameObject target, Vector3 pos, Quaternion rotation)
     {
-        cam.Follow = target.transform;
+        SwitchTarget(target.transform);
     }
     public void GetNewTarget (Vector3 pos, int damage, IDamageable damageable)
     {
-        GameObject temp = Instantiate(tempGO, pos, Quaternion.identity);
-        cam.Follow = temp.transform;
-        FrameCenter();
-        Destroy(temp, 3f);
+        if(canSwitchTarget == true)
+        {
+            StartCoroutine(TickTimer());
+
+            GameObject temp = new GameObject();
+            temp.transform.position = pos;
+            cam.Follow = temp.transform;
+            FrameCenter();
+            Destroy(temp, 2f);
+        }
     }
 
-    void FrameLower(Transform target)
+    void FrameLower(Transform target) //Position target at the bottom of screen
     {
         transposer.m_ScreenY = 0.65f;
     }
 
-    void FrameCenter(GameObject target, Vector3 pos, Quaternion rotation)
+    void FrameCenter(GameObject target, Vector3 pos, Quaternion rotation) //Position target at the center of screen
     {
         transposer.m_ScreenY = 0.5f;
     }
@@ -86,5 +88,12 @@ public class CameraScript : MonoBehaviour
     void FrameCenter()
     {
         transposer.m_ScreenY = 0.5f;
+    }
+
+    IEnumerator TickTimer() //Timer should be only used for events that the player doesn't control
+    {
+        canSwitchTarget = false;
+        yield return new WaitForSeconds(switchTimerSeconds);
+        canSwitchTarget = true;
     }
 }

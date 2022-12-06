@@ -23,16 +23,20 @@ public class Aiming : MonoBehaviour
     bool powerInputHold;
     
     [Header("Aim")]
+        [Tooltip("Current global angle. Handles the numbers shown in the UI.")]
     public float angle;
-    [SerializeField] float sweetSpotMax = 0f;
-    [SerializeField] float sweetSpotMin = 0f;
+        [Tooltip("Current localAngle that the character is aiming at. Inspector value -90 is the starting angle.")]
+    [SerializeField] float aim = 135f;
+    float sweetSpotMax = 0f;
+    float sweetSpotMin = 0f;
     public bool sweetSpot = false;
-    float aim = 135f;
     float aimInput;
     bool aimInputHold;
 
     [Header("Configs")]
+        [Tooltip("How fast the power changes when input is held.")]
     [SerializeField] float pwrAcceleration = 1;
+        [Tooltip("How fast the aim changes when input is held.")]
     [SerializeField] float aimAcceleration = 1;
 
     [Header("Debug")]
@@ -88,12 +92,12 @@ public class Aiming : MonoBehaviour
 
 
     #region Power
-    private void GetPowerInputValue(float inputValue)
+    private void GetPowerInputValue(float inputValue) //Reads and stores the input value from the inputReader. Maybe it can be deleted or transformed from void into float.
     {
         powerInput = inputValue;
     }
 
-    private void AdjustPowerValue(float input)
+    private void AdjustPowerValue(float input) //Math to change the power value when HOLDING the button
     {
         if (powerInputHold == false)
         return;
@@ -102,7 +106,7 @@ public class Aiming : MonoBehaviour
         pwrAcceleration = Mathf.Clamp(pwrAcceleration + (pwrAcceleration * Time.deltaTime * 1.5f) , 0, 20f);
     }
 
-    private void PowerInputPress()
+    private void PowerInputPress() //Math to change the power value when TAPPING the button. Should always increase by one each tap
     {
         power += powerInput * ( 1 - (power % 1) );
 
@@ -110,19 +114,19 @@ public class Aiming : MonoBehaviour
         Debug.Log("PowerInputPress " + powerInput);
     }
 
-    private void PowerInputHeld()
+    private void PowerInputHeld() //Maybe it can be cut. Right now AdjustPowerValue is triggering on Update(), should be able to remove this if it's triggering on the InputReader event.
     {
         powerInputHold = true;
     }
 
-    private void PowerInputCanceled()
+    private void PowerInputCanceled() //Rounds the number and resets the acceleration multiplier when releasing the button
     {
         pwrAcceleration = 1f;
         power = Mathf.RoundToInt(power);
         powerInputHold = false;
     }
 
-    private void PowerClamp(float oldPower)
+    private void PowerClamp(float oldPower) //Insures the values won't go out of bounds. It also broadcasts the value after clamping
     {
         power = Mathf.Clamp(oldPower, 0 , 100);
 
@@ -133,12 +137,12 @@ public class Aiming : MonoBehaviour
 
 
     #region Aim
-    private void GetAimInputValue(float inputValue)
+    private void GetAimInputValue(float inputValue) //Reads and stores the input value from the inputReader. Maybe it can be deleted or transformed from void into float.
     {
         aimInput = inputValue;
     }
 
-    private void AdjustAimValue(float value)
+    private void AdjustAimValue(float value) //Math to change the aim value when HOLDING the button
     {
         if (aimInputHold == false)
         return;
@@ -147,7 +151,7 @@ public class Aiming : MonoBehaviour
         aimAcceleration = Mathf.Clamp(aimAcceleration + (aimAcceleration * Time.deltaTime * 1.5f) , 0, 20f);
     }
 
-    private void AimInputPress()
+    private void AimInputPress() //Math to change the aim value when TAPPING the button. Should always increase by one each tap
     {
         aim += aimInput * ( 1 - (power % 1) );
 
@@ -155,19 +159,19 @@ public class Aiming : MonoBehaviour
         Debug.Log("PowerInputPress " + powerInput);
     }
 
-    private void AimInputHeld()
+    private void AimInputHeld() //Maybe it can be cut. Right now AdjustPowerValue is triggering on Update(), should be able to remove this if it's triggering on the InputReader event.
     {
         aimInputHold = true;
     }
     
-    private void AimInputCanceled()
+    private void AimInputCanceled() //Rounds the number and resets the acceleration multiplier when releasing the button
     {
         aimAcceleration = 1f;
         aim = Mathf.RoundToInt(aim);
         aimInputHold = false;
     }
 
-    private void AimClamp(float oldAim)
+    private void AimClamp(float oldAim) //Insures the values won't go out of bounds. It also broadcasts the value after clamping
     {
         aim = Mathf.Clamp(oldAim, 0 , 180);
 
@@ -175,7 +179,7 @@ public class Aiming : MonoBehaviour
         aimingEvents?.PowerChangeEvent.RaiseEvent((int)aim);
     }
 
-    private void GetAngle()
+    private void GetAngle() //Calculates the aim value in relation to the world. Gets the value that is displayed by the UI
     {
         angle = Mathf.RoundToInt(Vector2.Angle(shootingAxis.up, Vector2.up));
         
@@ -188,7 +192,7 @@ public class Aiming : MonoBehaviour
         angle = angle * transform.localScale.x;        
     }
 
-    private void GetSweetSpot()
+    private void GetSweetSpot() //Is the current aim inside the sweetspot range? THIS ONE SHOULD NOT BE ON UPDATE(), MUST REWRITE
     {
         float ssAim = aim - 90;
 
@@ -205,7 +209,7 @@ public class Aiming : MonoBehaviour
     ///// SHOOTING AXIS /////
     void RotateShootAxis (float angle)
     {
-        shootingAxis.localRotation = Quaternion.Euler (0f, 0f, (Mathf.RoundToInt(aim - 90f)));
+        shootingAxis.localRotation = Quaternion.Euler (0f, 0f, (aim - 90f));
     }
 
 }

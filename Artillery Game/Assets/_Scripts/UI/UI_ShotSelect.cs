@@ -7,6 +7,9 @@ using UnityEngine.EventSystems;
 
 public class UI_ShotSelect : MonoBehaviour
 {
+    [Header("Listening to")]
+    [SerializeField] TurnsManagerEventsChannelSO turnsManagerEvents;
+    
     [SerializeField] GameObject togglePrefab;
     [SerializeField] Toggle[] toggles;
     [SerializeField] Weapons currentChar;
@@ -21,7 +24,12 @@ public class UI_ShotSelect : MonoBehaviour
 
     private void OnEnable() 
     {
-        TurnsManager.StartTurn.AddListener(GetCurrentChar);
+        turnsManagerEvents.StartTurn.OnEventRaised += GetCurrentChar;
+    }
+
+    private void OnDisable() 
+    {
+        turnsManagerEvents.StartTurn.OnEventRaised -= GetCurrentChar;
     }
 
     private void Start() 

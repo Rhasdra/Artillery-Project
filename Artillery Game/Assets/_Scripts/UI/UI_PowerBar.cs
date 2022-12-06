@@ -6,6 +6,9 @@ using TMPro;
 
 public class UI_PowerBar : MonoBehaviour
 {
+    [Header("Listening to")]
+    [SerializeField] TurnsManagerEventsChannelSO turnsManagerEvents;
+    
     Aiming currentChar;
     Slider slider;
     TextMeshProUGUI text;
@@ -20,7 +23,12 @@ public class UI_PowerBar : MonoBehaviour
 
     private void OnEnable() 
     {
-        TurnsManager.StartTurn.AddListener(GetCurrentChar);
+        turnsManagerEvents.StartTurn.OnEventRaised += GetCurrentChar;
+    }
+
+    private void OnDisable() 
+    {
+        turnsManagerEvents.StartTurn.OnEventRaised -= GetCurrentChar;
     }
 
     private void Update() 
