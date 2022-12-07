@@ -10,23 +10,46 @@ public class CharManager : MonoBehaviour
 
     [Header("Listening to")]
     [SerializeField] TurnsManagerEventsChannelSO turnsManagerEvents;
+    [SerializeField] MovementEventsChannelSO movementEvents;
+    [SerializeField] AimingEventsChannelSO aimingEvents;
     [SerializeField] WeaponEventsChannelSO weaponEvents;
 
     [Header("Broadcasting to")]
     [SerializeField] CharManagerEventsChannelSO charManagerEvents;
 
-    [Header("Toggle Components Between Turns")]
-    [SerializeField] SweetSpotDisplay sweetSpotUI;
-    [SerializeField] Movement movement;
-    [SerializeField] Aiming aiming;
-    [SerializeField] Weapons weapons;
+    //Toggles these Components in Between Turns
+    SweetSpotDisplay sweetSpotUI;
+    Movement movement;
+    Aiming aiming;
+    WeaponsManager weapons;
+
+    [Header("Information Summary")]
+    public int health;
+    public float power;
+    public float angle;
+    public int weaponIndex;
+    public int delay;
+
+    [Header("Show Debug Info")]
+    [SerializeField] bool showDebugInfo;
+    [SerializeField] GameObject debugTextPrefab;
+    GameObject debugTextInstance;
 
     private void Awake() 
     {   
         movement = GetComponent<Movement>();
         aiming = GetComponent<Aiming>();
-        weapons = GetComponent<Weapons>();
+        weapons = GetComponent<WeaponsManager>();
         sweetSpotUI = GetComponentInChildren<SweetSpotDisplay>();
+    }
+
+    private void Start() 
+    {
+        if(showDebugInfo)
+        {
+            debugTextInstance = Instantiate(debugTextPrefab, transform.position, Quaternion.identity);
+            debugTextInstance.GetComponent<DebugText>().Setup(this);
+        }
     }
 
     public void StartListening()
@@ -35,6 +58,15 @@ public class CharManager : MonoBehaviour
         turnsManagerEvents.EndTurn.OnEventRaised += EndTurn;
 
         weaponEvents.ShootEvent.OnEventRaised += RequestEndTurn;
+
+        //Info events
+        weaponEvents.WeaponChangeEvent.OnEventRaised += GetInfo;
+        aimingEvents.AngleChangeEvent.OnEventRaised += GetAngleInfo;
+        aimingEvents.PowerChangeEvent.OnEventRaised += GetPowerInfo;
+
+        //Delay events
+        movementEvents.ThresholdCrossedEvent.OnEventRaised += AddMovementDelay;
+        weaponEvents.ShootDelayEvent.OnEventRaised += AddWeaponDelay;
     }
 
     public void StopListening()
@@ -43,6 +75,15 @@ public class CharManager : MonoBehaviour
         turnsManagerEvents.EndTurn.OnEventRaised -= EndTurn;
 
         weaponEvents.ShootEvent.OnEventRaised -= RequestEndTurn;
+
+        //Info events
+        weaponEvents.WeaponChangeEvent.OnEventRaised -= GetInfo;
+        aimingEvents.AngleChangeEvent.OnEventRaised -= GetAngleInfo;
+        aimingEvents.PowerChangeEvent.OnEventRaised -= GetPowerInfo;
+
+        //Delay events
+        movementEvents.ThresholdCrossedEvent.OnEventRaised -= AddMovementDelay;
+        weaponEvents.ShootDelayEvent.OnEventRaised -= AddWeaponDelay;
     }
 
 
@@ -52,6 +93,8 @@ public class CharManager : MonoBehaviour
         aiming.enabled = true;
         weapons.enabled = true;
         sweetSpotUI.Display(true);
+
+        delay = 0;
     }
 
     public void EndTurn()
@@ -61,6 +104,7 @@ public class CharManager : MonoBehaviour
         weapons.enabled = false;
         sweetSpotUI.Display(false);
 
+        GetInfo();
         StopListening();
     }
 
@@ -71,5 +115,37 @@ public class CharManager : MonoBehaviour
         //If yes, call the end turn event
 
         charManagerEvents.EndTurn.OnEventRaised.Invoke();
+    }
+
+    void GetInfo()
+    {
+        power = aiming.power;
+        angle = aiming.angle;
+        weaponIndex = weapons.index;
+    }
+
+    void GetWeaponIndexInfo(int value)
+    {
+        weaponIndex = value;
+    }
+
+    void GetAngleInfo(int value)
+    {
+        angle = value;
+    }
+
+    void GetPowerInfo(int value)
+    {
+        power = value;
+    }
+
+    void AddWeaponDelay(int value)
+    {
+        delay += value;
+    }
+
+    void AddMovementDelay()
+    {
+        delay += movement.moveDelay;
     }
 }

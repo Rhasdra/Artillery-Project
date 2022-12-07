@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class Delay : MonoBehaviour
 {
-    public int delay;
+    [Header("Listening to")]
+    WeaponEventsChannelSO weaponEvents;
 
-    private void OnEnable() 
-    {
-        
-    }
+    public int delay;
 
     void RandomizeDelay()
     {

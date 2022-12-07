@@ -29,6 +29,8 @@ public class InputReader : ScriptableObject, GameInputActions.IGameplayActions, 
     public event UnityAction<float> ScrollWeaponEvent = delegate { };
     public event UnityAction<float> WeaponNumberEvent = delegate { };
 
+    public event UnityAction<Vector2> ZoomEvent = delegate { };
+
     //Menu
 
 
@@ -140,6 +142,11 @@ public class InputReader : ScriptableObject, GameInputActions.IGameplayActions, 
     {
         if(context.phase == InputActionPhase.Performed)
         WeaponNumberEvent.Invoke(context.ReadValue<float>());
+    }
+
+    public void OnZoom(InputAction.CallbackContext context)
+    {
+        ZoomEvent.Invoke(context.ReadValue<Vector2>());
     }
     #endregion
 

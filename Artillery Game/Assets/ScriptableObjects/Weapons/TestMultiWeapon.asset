@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fe2b749aef56c147adcad7706f6fcf7, type: 3}
+  m_Name: TestMultiWeapon
+  m_EditorClassIdentifier: 
+  fireMode: 1
+  delayEnum: 1
+  fireRate: 0.3
+  delay: 4
+  projectiles:
+  - {fileID: 3391465257193194957, guid: b0e87ba44da15b34fb076d53552e630f, type: 3}

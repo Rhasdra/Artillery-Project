@@ -15,7 +15,7 @@ public class WeaponBase : MonoBehaviour
     public FireModeMissile selectedFireMode;
     
     [Header("Projectiles")]
-    public Projectile[] projectiles;
+    public GameObject[] projectiles;
 
 
     private void OnEnable() 
@@ -28,7 +28,7 @@ public class WeaponBase : MonoBehaviour
         }
 
         selectedFireMode = GetComponent<FireModeMissile>();
-        selectedFireMode.weaponEvents = weaponEvents;
+        //selectedFireMode.weaponEvents = weaponEvents;
     }   
 
 

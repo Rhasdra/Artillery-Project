@@ -6,6 +6,7 @@ using Cinemachine;
 public class CameraScript : MonoBehaviour
 {
     [Header("Listening To")]
+    [SerializeField] InputReader inputReader;
     [SerializeField] MovementEventsChannelSO moveEventsChannel;
     [SerializeField] WeaponEventsChannelSO weaponEventsChannel;
     [SerializeField] ProjectileEventsChannelSO projectileEventsChannel; 
@@ -17,6 +18,7 @@ public class CameraScript : MonoBehaviour
     [Header("Settings")]
     [Tooltip("Events that the player doesn't control have a cooldown timer before triggering a camera transition.")]
     [SerializeField] float switchTimerSeconds = 0.5f;
+    [SerializeField] float zoomSpeed = 0.05f;
 
     private void Awake() 
     {
@@ -26,6 +28,7 @@ public class CameraScript : MonoBehaviour
 
     private void OnEnable() 
     {
+        //Movement
         moveEventsChannel.MoveStartEvent.OnEventRaised += GetNewTarget;
         moveEventsChannel.MoveStartEvent.OnEventRaised += FrameLower;
 
@@ -34,10 +37,15 @@ public class CameraScript : MonoBehaviour
         moveEventsChannel.BackFlipJumpEvent.OnEventRaised += GetNewTarget;
         moveEventsChannel.BackFlipJumpEvent.OnEventRaised += FrameLower;
 
+        //Projectiles
         projectileEventsChannel.SpawnEvent.OnEventRaised += GetNewTarget;
         projectileEventsChannel.SpawnEvent.OnEventRaised += FrameCenter;
 
+        //Hits
         projectileEventsChannel.HitEvent.OnEventRaised += GetNewTarget;
+
+        //Zoom
+        inputReader.ZoomEvent += Zoom;
     }
 
     void SwitchTarget(Transform target)
@@ -95,5 +103,24 @@ public class CameraScript : MonoBehaviour
         canSwitchTarget = false;
         yield return new WaitForSeconds(switchTimerSeconds);
         canSwitchTarget = true;
+    }
+
+    void Zoom(Vector2 input)
+    {
+        float zoom = cam.m_Lens.OrthographicSize;
+
+        if(input.y < 0f)
+        {
+            if(zoom <= 4f)
+            zoom += zoomSpeed;
+        }
+        else if (input.y > 0f)
+        {
+            if(zoom >= 1f)
+            zoom -= zoomSpeed;
+        }
+
+        zoom = Mathf.Clamp(zoom, 1f, 4f);
+        cam.m_Lens.OrthographicSize = zoom;
     }
 }

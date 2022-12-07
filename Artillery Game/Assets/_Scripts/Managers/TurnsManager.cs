@@ -21,11 +21,14 @@ public class TurnsManager : MonoBehaviour
 
     [Header("Lists")]
     public List<CharManager> charManagers;
+    public static List<CharManager> playersList;
     int index = 0; //tracks which character from the list is the currentChar
 
     private void OnEnable() 
     {
         charManagerEvents.EndTurn.OnEventRaised += NextCharacter;
+
+        playersList = charManagers;
     }
 
     private void OnDisable() 
@@ -35,7 +38,8 @@ public class TurnsManager : MonoBehaviour
 
     private void Start() 
     {
-        currentChar = charManagers[index];
+        currentChar = playersList[index];
+        eventsChannel.currentChar = currentChar;
         currentChar.StartListening();
         eventsChannel.StartTurn.OnEventRaised.Invoke();
     }
@@ -44,7 +48,7 @@ public class TurnsManager : MonoBehaviour
     {
         eventsChannel.EndTurn.OnEventRaised.Invoke();
 
-        if ( index < charManagers.Count -1)
+        if ( index < playersList.Count -1)
         {
             index++;
             // return;
@@ -54,7 +58,7 @@ public class TurnsManager : MonoBehaviour
 
         IncreaseTurnsCounter();
 
-        currentChar = charManagers[index];
+        currentChar = playersList[index];
         currentChar.StartListening();
 
         eventsChannel.StartTurn.OnEventRaised.Invoke();
@@ -71,9 +75,16 @@ public class TurnsManager : MonoBehaviour
 
             for (int j = i + 1; j < unsorted.Count; j++)
             {
-                if (unsorted[j].gameObject.GetComponent<Delay>().delay < unsorted[min].gameObject.GetComponent<Delay>().delay)
+                if (unsorted[j].delay < unsorted[min].delay)
                 {
                     min = j;
+                }
+                else if (unsorted[j].delay == unsorted[min].delay) //Speed tie
+                {
+                    if(Random.value >= 0.5)
+                    {
+                        min = j;
+                    }
                 }
             }
 
@@ -86,20 +97,20 @@ public class TurnsManager : MonoBehaviour
         }
     }
 
-	void Shuffle(List<CharManager> a)
+	void Shuffle(List<CharManager> charList)
 	{
 		// Loops through array
-		for (int i = a.Count-1; i > 0; i--)
+		for (int i = charList.Count-1; i > 0; i--)
 		{
 			// Randomize a number between 0 and i (so that the range decreases each time)
 			int rnd = Random.Range(0,i);
 			
 			// Save the value of the current i, otherwise it'll overright when we swap the values
-			CharManager temp = a[i];
+			CharManager temp = charList[i];
 			
 			// Swap the new and old values
-			a[i] = a[rnd];
-			a[rnd] = temp;
+			charList[i] = charList[rnd];
+			charList[rnd] = temp;
 		}
 	}
 
@@ -107,10 +118,10 @@ public class TurnsManager : MonoBehaviour
     {
         turnsCounter ++;
         
-        if (turnsCounter % charManagers.Count == 0f)
+        if (turnsCounter % playersList.Count == 0f)
         {
             cyclesCounter ++;
-            SortQueueByDelay(charManagers);
+            SortQueueByDelay(playersList);
             eventsChannel.NewCycle.OnEventRaised.Invoke();
         }
     }

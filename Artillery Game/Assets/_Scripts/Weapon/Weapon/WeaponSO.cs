@@ -5,35 +5,37 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "NewWeapon", menuName = "Character/Weapon")]
 public class WeaponSO : ScriptableObject
 {
-    [Header("Broadcasting To")]
-    [SerializeField] WeaponEventsChannelSO weaponEvents;
-
-    [SerializeField] enum FireMode{ None, Missile }
-
     [Header("Weapon Settings")] 
-    [SerializeField] FireMode fireMode;
+    public FireMode fireMode;
+    public Delay delayEnum;
     public float fireRate = 0.3f;
-    public FireModeMissile selectedFireMode;
+    [HideInInspector] public int delay = 3;
+    
+    public enum FireMode{ None, Missile }
+    public enum Delay{ weak, strong, SS }
     
     [Header("Projectiles")]
-    public Projectile[] projectiles;
+    public GameObject[] projectiles;
 
-
+    [Header("Trail")]
+    public GameObject trail;
+    
     private void OnEnable() 
     {
-        switch (fireMode)
-        {          
-            case FireMode.Missile:
-            selectedFireMode = new FireModeMissile();
-            break;
-        }
-        
-        selectedFireMode.weaponEvents = weaponEvents;
-    }   
+        switch (delayEnum)
+            {
+                case Delay.weak:
+                delay = 3;
+                break;
 
+                case Delay.strong:
+                delay = 4;
+                break;
 
-    public void Shoot(Vector3 position, Quaternion rotation, float power)
-    {      
-        selectedFireMode.Shoot(projectiles, position, rotation, power, fireRate);
+                case Delay.SS:
+                delay = 7;
+                break;
+            }
     }
+ 
 }

@@ -9,4 +9,6 @@ public class TurnsManagerEventsChannelSO : ScriptableObject
     public VoidEventChannelSO StartTurn;
     public VoidEventChannelSO EndTurn;
     public VoidEventChannelSO NewCycle;
+
+    public CharManager currentChar;
 }

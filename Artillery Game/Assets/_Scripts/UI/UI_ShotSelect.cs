@@ -12,7 +12,7 @@ public class UI_ShotSelect : MonoBehaviour
     
     [SerializeField] GameObject togglePrefab;
     [SerializeField] Toggle[] toggles;
-    [SerializeField] Weapons currentChar;
+    [SerializeField] WeaponsManager currentChar;
     [SerializeField] ToggleGroup group;
 
     int lastIndex;
@@ -44,7 +44,7 @@ public class UI_ShotSelect : MonoBehaviour
 
     void GetCurrentChar()
     {
-        currentChar = TurnsManager.currentChar.GetComponent<Weapons>();
+        currentChar = TurnsManager.currentChar.GetComponent<WeaponsManager>();
     }
 
     public void SwapWeapon(int i) {

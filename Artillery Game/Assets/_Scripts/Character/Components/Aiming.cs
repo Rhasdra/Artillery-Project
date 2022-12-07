@@ -74,6 +74,13 @@ public class Aiming : MonoBehaviour
         inputReader.AimPressEvent -= AimInputPress;
         inputReader.AimHeldEvent -= AimInputHeld;
         inputReader.AimCanceledEvent -= AimInputCanceled;
+
+        //If ending turn with button held it does not reset
+        //Manual reset:
+        aimInput = 0;
+        aimInputHold = false;
+        powerInput = 0;
+        powerInputHold = false;
     }
 
     private void Update() 
@@ -176,7 +183,7 @@ public class Aiming : MonoBehaviour
         aim = Mathf.Clamp(oldAim, 0 , 180);
 
         //Broadcast the event
-        aimingEvents?.PowerChangeEvent.RaiseEvent((int)aim);
+        aimingEvents?.AngleChangeEvent.RaiseEvent((int)aim);
     }
 
     private void GetAngle() //Calculates the aim value in relation to the world. Gets the value that is displayed by the UI

@@ -13,4 +13,6 @@ MonoBehaviour:
   m_Name: WeaponEvents_Channel
   m_EditorClassIdentifier: 
   ShootEvent: {fileID: 11400000, guid: 38f46f1206f039542b6584a10d1284df, type: 2}
+  ShootDelayEvent: {fileID: 11400000, guid: ab1b46826221da744926589d5cd67872, type: 2}
   WeaponChangeEvent: {fileID: 11400000, guid: ec2b23971d20a594b9897579b9eb7920, type: 2}
+  WeaponChangeIndexEvent: {fileID: 11400000, guid: abfddc1d5c382fc499c02c58758b8245, type: 2}

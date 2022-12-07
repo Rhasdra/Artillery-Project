@@ -26,7 +26,7 @@ public class UI_TurnsDisplayer : MonoBehaviour
         turnsManagerEvents.StartTurn.OnEventRaised += UpdateCharQueue;
     }
 
-    private void OnDisaable() 
+    private void OnDisable() 
     {
         turnsManagerEvents.StartTurn.OnEventRaised -= UpdateTurnsCounter;
         turnsManagerEvents.StartTurn.OnEventRaised -= UpdateCharQueue;
@@ -48,11 +48,11 @@ public class UI_TurnsDisplayer : MonoBehaviour
             listBeingDisplayed.Clear();
         }
 
-        for (int i = 0; i < turnsManager.charManagers.Count; i++)
+        for (int i = 0; i < TurnsManager.playersList.Count; i++)
         {
             //TeamSO charTeam = turnsManager.charManagers[i].GetComponent<CharManager>().charInfo.team;
-            string charName = turnsManager.charManagers[i].name.ToString();
-            int charDelay = turnsManager.charManagers[i].gameObject.GetComponent<Delay>().delay;
+            string charName = TurnsManager.playersList[i].name.ToString();
+            int charDelay = TurnsManager.playersList[i].delay;
 
             TextMeshProUGUI charTMP = Instantiate(charQueue, transform.position, Quaternion.identity);
             charTMP.transform.SetParent(gameObject.transform);
@@ -63,6 +63,5 @@ public class UI_TurnsDisplayer : MonoBehaviour
 
             listBeingDisplayed.Add(charTMP.gameObject); 
         }
-        
     }
 }

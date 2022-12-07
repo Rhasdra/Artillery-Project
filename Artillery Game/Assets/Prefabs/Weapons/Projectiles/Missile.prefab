@@ -176,6 +176,7 @@ MonoBehaviour:
   impulse: 1000
   baseDamage: 500
   forgiveness: 50
+  trailPrefab: {fileID: 1176897698941563224, guid: d003387c4d82bd14bbb4d09199e41d71, type: 3}
   explosion: {fileID: 4518881370631371733, guid: 807288eda0e118c4a827b6b2c8d7ea39, type: 3}
 --- !u!114 &-680367599150928151
 MonoBehaviour:
@@ -214,7 +215,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf5b0e548478a8f45993aae5b5a39749, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugDist: 0
 --- !u!114 &1470144921458250096
 MonoBehaviour:
   m_ObjectHideFlags: 0

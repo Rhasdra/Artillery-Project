@@ -107,6 +107,15 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Zoom"",
+                    ""type"": ""Value"",
+                    ""id"": ""5174b43a-fc2d-49c9-b872-3fe00858341a"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -450,6 +459,17 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
                     ""action"": ""PowerChange"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5ef7f3c1-0919-40c9-92cc-211d52f765e5"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard&Mouse"",
+                    ""action"": ""Zoom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -1044,6 +1064,7 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
         m_Gameplay_PowerChange = m_Gameplay.FindAction("PowerChange", throwIfNotFound: true);
         m_Gameplay_ScrollWeapon = m_Gameplay.FindAction("ScrollWeapon", throwIfNotFound: true);
         m_Gameplay_WeaponNumber = m_Gameplay.FindAction("WeaponNumber", throwIfNotFound: true);
+        m_Gameplay_Zoom = m_Gameplay.FindAction("Zoom", throwIfNotFound: true);
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_Navigate = m_Menu.FindAction("Navigate", throwIfNotFound: true);
@@ -1124,6 +1145,7 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_PowerChange;
     private readonly InputAction m_Gameplay_ScrollWeapon;
     private readonly InputAction m_Gameplay_WeaponNumber;
+    private readonly InputAction m_Gameplay_Zoom;
     public struct GameplayActions
     {
         private @GameInputActions m_Wrapper;
@@ -1137,6 +1159,7 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
         public InputAction @PowerChange => m_Wrapper.m_Gameplay_PowerChange;
         public InputAction @ScrollWeapon => m_Wrapper.m_Gameplay_ScrollWeapon;
         public InputAction @WeaponNumber => m_Wrapper.m_Gameplay_WeaponNumber;
+        public InputAction @Zoom => m_Wrapper.m_Gameplay_Zoom;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1173,6 +1196,9 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
                 @WeaponNumber.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWeaponNumber;
                 @WeaponNumber.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWeaponNumber;
                 @WeaponNumber.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnWeaponNumber;
+                @Zoom.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnZoom;
+                @Zoom.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnZoom;
+                @Zoom.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnZoom;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -1204,6 +1230,9 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
                 @WeaponNumber.started += instance.OnWeaponNumber;
                 @WeaponNumber.performed += instance.OnWeaponNumber;
                 @WeaponNumber.canceled += instance.OnWeaponNumber;
+                @Zoom.started += instance.OnZoom;
+                @Zoom.performed += instance.OnZoom;
+                @Zoom.canceled += instance.OnZoom;
             }
         }
     }
@@ -1369,6 +1398,7 @@ public partial class @GameInputActions : IInputActionCollection2, IDisposable
         void OnPowerChange(InputAction.CallbackContext context);
         void OnScrollWeapon(InputAction.CallbackContext context);
         void OnWeaponNumber(InputAction.CallbackContext context);
+        void OnZoom(InputAction.CallbackContext context);
     }
     public interface IMenuActions
     {

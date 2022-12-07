@@ -19,5 +19,5 @@ public class CharSO : ScriptableObject
     public float sweetSpotAngleMax = 90f;
     public float sweetSpotAngleMin = 45f;
 
-    public WeaponBase[] weapons;
+    public WeaponSO[] weaponsSO;
 }

@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IShoot
 {
-    void Shoot(Projectile[] proj, Vector3 position, Quaternion rotation, float power, float fireRate);
+    void Shoot(GameObject[] proj, Vector3 position, Quaternion rotation, float power, float fireRate);
 }

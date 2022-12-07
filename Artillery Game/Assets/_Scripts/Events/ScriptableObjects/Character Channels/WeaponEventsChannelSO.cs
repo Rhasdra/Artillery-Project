@@ -7,5 +7,7 @@ using UnityEngine.Events;
 public class WeaponEventsChannelSO : ScriptableObject
 {
     public VoidEventChannelSO ShootEvent;
-    public GameObjectEventChannelSO WeaponChangeEvent;
+    public IntEventChannelSO ShootDelayEvent;
+    public VoidEventChannelSO WeaponChangeEvent;
+    public IntEventChannelSO WeaponChangeIndexEvent;
 }

@@ -34,6 +34,12 @@ public class Movement : MonoBehaviour
     bool canMove = false;
     float floorAngle;
 
+    [Header("Delay")]
+    public int moveDelay = 2;
+    [SerializeField] float distThreshold = 0.5f;
+    bool hasMoved = false;
+    Vector3 startingPos;
+
     [Header("Debug")]
     [SerializeField] bool debug = false;
 
@@ -50,6 +56,9 @@ public class Movement : MonoBehaviour
         inputReader.LongJumpEvent += LongJump;
         inputReader.BackFlipEvent += BackflipJump;
         inputReader.MoveEvent += GetInputValue;
+
+        startingPos = transform.position;
+        hasMoved = false;
     }
 
     void OnDisable()
@@ -57,6 +66,9 @@ public class Movement : MonoBehaviour
         inputReader.LongJumpEvent -= LongJump;
         inputReader.BackFlipEvent -= BackflipJump;
         inputReader.MoveEvent -= GetInputValue;
+
+        //Reseting values for when ending turn with button held
+        horizontalInput = 0f;
     }
 
     private void LateUpdate() 
@@ -77,12 +89,10 @@ public class Movement : MonoBehaviour
 
     public void MoveHorizontally(float inputValue)
     {
-        if (canMove == false || inputValue == 0)
+        if (canMove == false || inputValue == 0) //Check if can move
         {
             return;
         }
-
-        movementEvents.MoveStartEvent.RaiseEvent(this.transform);
 
         //Flip player if going left
         if (inputValue != 0)
@@ -91,6 +101,26 @@ public class Movement : MonoBehaviour
         }
 
         transform.Translate (Vector3.right * (inputValue * charInfo.movementSpeed * Time.deltaTime) * ClimbSlowMultiplier());
+    
+        //Raise moveStart event
+        movementEvents.MoveStartEvent.RaiseEvent(this.transform);
+
+        //Delay check
+        ThresholdCheck();
+    }
+
+    void ThresholdCheck() //Check if character crossed the amount it can move before triggering the delay addition
+    {
+        if (hasMoved == true)
+        return;
+
+        float distWalked = Mathf.Abs(startingPos.x - transform.position.x);
+
+        if(distWalked > distThreshold)
+        {
+            movementEvents.ThresholdCrossedEvent.OnEventRaised();
+            hasMoved = true;
+        }        
     }    
     
     float ClimbSlowMultiplier()

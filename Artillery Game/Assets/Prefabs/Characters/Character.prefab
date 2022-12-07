@@ -131,8 +131,7 @@ GameObject:
   - component: {fileID: 788594370757262384}
   - component: {fileID: 788594370757262397}
   - component: {fileID: 8950755441048609070}
-  - component: {fileID: 2066065041}
-  - component: {fileID: 8472762337390447482}
+  - component: {fileID: 8688457125314654276}
   - component: {fileID: 1429364205}
   m_Layer: 7
   m_Name: Character
@@ -210,12 +209,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   charInfo: {fileID: 11400000, guid: 567386854f0fe844cbe5e29d9dffcc4f, type: 2}
   turnsManagerEvents: {fileID: 11400000, guid: 64cf3b8764240194195ab927b547189a, type: 2}
+  movementEvents: {fileID: 11400000, guid: 35658f02b6ab49d469b6928178fb1c32, type: 2}
+  aimingEvents: {fileID: 11400000, guid: d6f45b56830da3f4c8e7eca276c92eea, type: 2}
   weaponEvents: {fileID: 11400000, guid: 5e2910cb98071624088dcaa0a03fb388, type: 2}
   charManagerEvents: {fileID: 11400000, guid: d301404e377897445acbbae71f33efd6, type: 2}
-  sweetSpotUI: {fileID: 5519301699949885261}
-  movement: {fileID: 0}
-  aiming: {fileID: 0}
-  weapons: {fileID: 0}
+  health: 0
+  power: 0
+  angle: 0
+  weaponIndex: 0
+  delay: 0
+  showDebugInfo: 1
+  debugTextPrefab: {fileID: 7424030867024387154, guid: 77b9f1800e953984d9f4a2db0bf4fcf4, type: 3}
 --- !u!114 &788594370757262397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -231,11 +235,10 @@ MonoBehaviour:
   inputReader: {fileID: 11400000, guid: 83dd3ab174bac9647be70ccf60d4d076, type: 2}
   movementEvents: {fileID: 11400000, guid: 35658f02b6ab49d469b6928178fb1c32, type: 2}
   raycastsPos: {fileID: 5429387992022757609}
-  horizontalInput: 0
-  canMove: 0
-  tiltSpeed: 2
   tiltThresholdAngle: 3
-  floorAngle: 0
+  tiltSpeed: 2
+  moveDelay: 2
+  distThreshold: 0.5
   debug: 0
 --- !u!114 &8950755441048609070
 MonoBehaviour:
@@ -254,13 +257,12 @@ MonoBehaviour:
   shootingAxis: {fileID: 788594369470081869}
   power: 50
   angle: 0
-  sweetSpotMax: 0
-  sweetSpotMin: 0
+  aim: 135
   sweetSpot: 0
   pwrAcceleration: 1
   aimAcceleration: 1
   debug: 0
---- !u!114 &2066065041
+--- !u!114 &8688457125314654276
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -269,28 +271,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 788594370757262398}
   m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c828832b38bc72d4faa8c8f03edb950c, type: 3}
+  m_Script: {fileID: 11500000, guid: 579198a03dbf3544b82ce1c106084941, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   inputReader: {fileID: 11400000, guid: 83dd3ab174bac9647be70ccf60d4d076, type: 2}
+  projectileEvents: {fileID: 11400000, guid: f388093435d5b8448a87a1ec47d166ee, type: 2}
   weaponEvents: {fileID: 11400000, guid: 5e2910cb98071624088dcaa0a03fb388, type: 2}
   spawnOffset: 0.75
   weapons: []
-  currentWeapon: {fileID: 0}
+  currentWeapon: {fileID: 11400000, guid: 17ac1a6d5505ad84ba970d02079baab2, type: 2}
   index: 0
---- !u!114 &8472762337390447482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 788594370757262398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37be69d8ead709e41b7a7767f618e139, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  delay: 0
+  fireMode: {fileID: 0}
+  trailPrefab: {fileID: 1176897698941563224, guid: d003387c4d82bd14bbb4d09199e41d71, type: 3}
 --- !u!58 &1429364205
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -467,8 +459,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ssPrefab: {fileID: 1753014845959435348, guid: f463ac052256d41428ba223667d3a5fc, type: 3}
+  ssInstance: {fileID: 0}
   charManager: {fileID: 0}
-  ssManager: {fileID: 0}
 --- !u!1 &7439182928072370479
 GameObject:
   m_ObjectHideFlags: 0

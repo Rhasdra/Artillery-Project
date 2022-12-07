@@ -10,12 +10,14 @@ public class Projectile : MonoBehaviour
     [Header("Broadcasting To")]
     public ProjectileEventsChannelSO projectileEvents;
 
-
     [Header("Projectile Settings")]
     Rigidbody2D rb = null;
     [SerializeField] float impulse = 1000f;
     public float baseDamage = 500f;
     public float forgiveness = 50f;
+
+    [Header("Projectile Trail")]
+    [SerializeField] GameObject trailPrefab;
     
     public ILaunch projLaunch;
     public ITrajectory projTrajectory;
