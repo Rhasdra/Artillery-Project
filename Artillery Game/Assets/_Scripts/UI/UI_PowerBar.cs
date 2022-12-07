@@ -40,7 +40,7 @@ public class UI_PowerBar : MonoBehaviour
 
     void GetCurrentChar()
     {
-        currentChar = TurnsManager.currentChar.GetComponent<Aiming>();
+        currentChar = turnsManagerEvents.currentChar.GetComponent<Aiming>();
     }
 
     public void OnBeginDrag()

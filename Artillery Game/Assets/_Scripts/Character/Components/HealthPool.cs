@@ -89,7 +89,7 @@ public class HealthPool : MonoBehaviour, IDamageable
                 }
             }
 
-            if(closestDistance > 2f)
+            if(closestDistance > 1.5f)
             {
                 DamageNumbers newDmgNumber = Instantiate(dmgNumbersPrefab, pos, Quaternion.identity).GetComponent<DamageNumbers>();
                 currentDmgNumbers.Add(newDmgNumber);

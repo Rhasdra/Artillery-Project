@@ -9,9 +9,10 @@ public class UI_ShotSelect : MonoBehaviour
 {
     [Header("Listening to")]
     [SerializeField] TurnsManagerEventsChannelSO turnsManagerEvents;
+    [SerializeField] WeaponEventsChannelSO weaponEvents;
     
     [SerializeField] GameObject togglePrefab;
-    [SerializeField] Toggle[] toggles;
+    [SerializeField] List<Toggle> toggles;
     [SerializeField] WeaponsManager currentChar;
     [SerializeField] ToggleGroup group;
 
@@ -25,11 +26,13 @@ public class UI_ShotSelect : MonoBehaviour
     private void OnEnable() 
     {
         turnsManagerEvents.StartTurn.OnEventRaised += GetCurrentChar;
+        weaponEvents.WeaponChangeIndexEvent.OnEventRaised += SwapWeapon;
     }
 
     private void OnDisable() 
     {
         turnsManagerEvents.StartTurn.OnEventRaised -= GetCurrentChar;
+        weaponEvents.WeaponChangeIndexEvent.OnEventRaised -= SwapWeapon;
     }
 
     private void Start() 
@@ -44,7 +47,9 @@ public class UI_ShotSelect : MonoBehaviour
 
     void GetCurrentChar()
     {
-        currentChar = TurnsManager.currentChar.GetComponent<WeaponsManager>();
+        currentChar = turnsManagerEvents.currentChar.GetComponent<WeaponsManager>();
+        SpawnToggles(currentChar.weapons.Length);
+        SwapWeapon(currentChar.index);
     }
 
     public void SwapWeapon(int i) {
@@ -61,7 +66,15 @@ public class UI_ShotSelect : MonoBehaviour
 
     void SpawnToggles(int number)
     {
-        toggles = new Toggle[number];
+        if (toggles != null)
+        {
+            foreach (var item in toggles)
+            {
+                Destroy(item.gameObject);
+            }
+        }
+
+        toggles = new List<Toggle>();
         if (number > 0)
         {
             for (int i = 0; i < number; i++)
@@ -75,7 +88,7 @@ public class UI_ShotSelect : MonoBehaviour
                 newToggle.transform.position = pos;
 
                 newToggle.transform.SetParent(this.transform, true);
-                toggles[i] = newToggle.GetComponent<Toggle>();             
+                toggles.Add(newToggle.GetComponent<Toggle>());             
             }
         }
     }

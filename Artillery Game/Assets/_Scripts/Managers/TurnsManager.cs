@@ -14,7 +14,7 @@ public class TurnsManager : MonoBehaviour
 
     [Header("Infos being tracked")]
         [Tooltip("The character which is currently taking their turn.")]
-    public static CharManager currentChar; //Should be a ScriptableObject
+    public CharManager currentChar; //Should be a ScriptableObject
     public float turnsCounter = 0;
         [Tooltip("In a Cycle, every character in the queue has to take their turn once. Then a new Cycle begins.")]
     public float cyclesCounter = 0;

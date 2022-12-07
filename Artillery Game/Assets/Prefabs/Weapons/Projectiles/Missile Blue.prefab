@@ -176,6 +176,7 @@ MonoBehaviour:
   impulse: 1000
   baseDamage: 500
   forgiveness: 450
+  trailPrefab: {fileID: 0}
   explosion: {fileID: 4518881370631371733, guid: 807288eda0e118c4a827b6b2c8d7ea39, type: 3}
 --- !u!114 &4367908445514700309
 MonoBehaviour:
@@ -190,7 +191,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
-  quantity: 3
+  quantity: 15
   offset: 0.3
 --- !u!114 &-262166347025118052
 MonoBehaviour:

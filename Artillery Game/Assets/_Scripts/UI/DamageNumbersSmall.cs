@@ -20,6 +20,11 @@ public class DamageNumbersSmall : DamageNumbers
         LaunchUp();
     }
 
+    void FixedUpdate() 
+    {
+        // GetSmaller();
+    }
+
     public override void UpdateDamageNumber(float damage)
     {
         text.text = damage.ToString();
@@ -34,4 +39,9 @@ public class DamageNumbersSmall : DamageNumbers
 
         rb.AddForce(dir * 200f);
     }
+
+    // void GetSmaller()
+    // {
+    //     transform.localScale -= transform.localScale * Time.deltaTime;
+    // }
 }
