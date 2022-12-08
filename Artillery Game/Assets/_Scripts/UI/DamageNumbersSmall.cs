@@ -28,7 +28,7 @@ public class DamageNumbersSmall : DamageNumbers
     public override void UpdateDamageNumber(float damage)
     {
         text.text = damage.ToString();
-        timerSeconds = 3f;
+        Timer = TimerSeconds;
     }
 
     public void LaunchUp()

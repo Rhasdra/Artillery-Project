@@ -137,7 +137,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentDamage: 0
-  timerSeconds: 1
+  TimerSeconds: 4
+  Timer: 1
   text: {fileID: 0}
   dmgSmall: {fileID: 0}
   offset: 0

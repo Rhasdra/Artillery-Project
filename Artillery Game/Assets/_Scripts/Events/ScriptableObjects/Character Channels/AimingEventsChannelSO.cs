@@ -9,4 +9,5 @@ public class AimingEventsChannelSO : ScriptableObject
     public IntEventChannelSO AngleChangeEvent;
     public IntEventChannelSO PowerChangeEvent;
     public BoolEventChannelSO SweetSpotEvent;
+    public bool sweetSpot = false;
 }

@@ -7,8 +7,8 @@ using TMPro;
 public class DamageNumbers : MonoBehaviour
 {
     public float currentDamage = 0f;
-    public float timerSeconds = 1;
-    float timer = 1;
+    public float TimerSeconds = 1;
+    [HideInInspector] public float Timer = 1;
     public TextMeshProUGUI text = null;
 
     [SerializeField] GameObject dmgSmall = null;
@@ -24,7 +24,7 @@ public class DamageNumbers : MonoBehaviour
         startingScale = transform.localScale.x;
         startingPos = transform.position;
         transform.position = new Vector3(transform.position.x, transform.position.y + offset, 0f);
-        timer = timerSeconds;
+        Timer = TimerSeconds;
     }
 
     private void Update() 
@@ -36,7 +36,7 @@ public class DamageNumbers : MonoBehaviour
     virtual public void UpdateDamageNumber(float damage)
     {
         currentDamage += damage;
-        timer = timerSeconds;
+        Timer = TimerSeconds;
         text.text = currentDamage.ToString();
         text.color = Color.white;
 
@@ -58,10 +58,10 @@ public class DamageNumbers : MonoBehaviour
 
     void TickTimer()
     {
-        timer -= Time.deltaTime;
+        Timer -= Time.deltaTime;
         //Debug.Log(timer);
 
-        if(timer < 0)
+        if(Timer < 0)
         {
             HealthPool.currentDmgNumbers.Remove(this);
             Destroy(this.gameObject);

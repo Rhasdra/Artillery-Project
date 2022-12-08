@@ -39,7 +39,9 @@ public class HitGrenade : MonoBehaviour, IHit
         }
 
         //Broadcast the Event
-        GetComponent<Projectile>().projectileEvents.HitEvent.OnEventRaised(transform.position, (int)damage, damageable);
+        ProjectileEventsChannelSO projectileEvents = GetComponent<Projectile>().projectileEvents;
+        projectileEvents.HitEvent.OnEventRaised(transform.position, (int)damage, damageable);
+        projectileEvents.DespawnEvent.OnEventRaised(this.gameObject);
 
         Explode(explosion, expRadius);
         Object.Destroy(this.gameObject);

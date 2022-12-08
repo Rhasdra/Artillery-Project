@@ -115,7 +115,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentDamage: 0
-  timerSeconds: 1
+  TimerSeconds: 3
+  Timer: 1
   text: {fileID: 0}
   dmgSmall: {fileID: 1753014845959435348, guid: 4984a6348bcb23c4bae51ab7d53df7c7, type: 3}
   offset: 0.5

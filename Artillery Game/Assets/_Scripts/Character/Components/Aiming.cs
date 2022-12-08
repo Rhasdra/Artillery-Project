@@ -86,10 +86,8 @@ public class Aiming : MonoBehaviour
     private void Update() 
     {
         AdjustPowerValue(powerInput);
-        PowerClamp(power);
 
         AdjustAimValue(aimInput);
-        AimClamp(aim);
 
         GetSweetSpot();
         GetAngle();
@@ -111,6 +109,8 @@ public class Aiming : MonoBehaviour
 
         power += input * 10f * pwrAcceleration * Time.deltaTime;
         pwrAcceleration = Mathf.Clamp(pwrAcceleration + (pwrAcceleration * Time.deltaTime * 1.5f) , 0, 20f);
+
+        PowerClamp(power);
     }
 
     private void PowerInputPress() //Math to change the power value when TAPPING the button. Should always increase by one each tap
@@ -128,9 +128,9 @@ public class Aiming : MonoBehaviour
 
     private void PowerInputCanceled() //Rounds the number and resets the acceleration multiplier when releasing the button
     {
+        powerInputHold = false;
         pwrAcceleration = 1f;
         power = Mathf.RoundToInt(power);
-        powerInputHold = false;
     }
 
     private void PowerClamp(float oldPower) //Insures the values won't go out of bounds. It also broadcasts the value after clamping
@@ -156,6 +156,8 @@ public class Aiming : MonoBehaviour
 
         aim += value * 10f * aimAcceleration * Time.deltaTime;
         aimAcceleration = Mathf.Clamp(aimAcceleration + (aimAcceleration * Time.deltaTime * 1.5f) , 0, 20f);
+
+        AimClamp(aim);
     }
 
     private void AimInputPress() //Math to change the aim value when TAPPING the button. Should always increase by one each tap
@@ -209,7 +211,8 @@ public class Aiming : MonoBehaviour
         sweetSpot = false;
 
         //Broadcast the event
-        aimingEvents?.SweetSpotEvent.RaiseEvent(sweetSpot);
+        aimingEvents.sweetSpot = sweetSpot;
+        aimingEvents?.SweetSpotEvent.RaiseEvent(sweetSpot); 
     }
     #endregion
 

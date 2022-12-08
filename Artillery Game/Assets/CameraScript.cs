@@ -10,6 +10,7 @@ public class CameraScript : MonoBehaviour
     [SerializeField] MovementEventsChannelSO moveEventsChannel;
     [SerializeField] WeaponEventsChannelSO weaponEventsChannel;
     [SerializeField] ProjectileEventsChannelSO projectileEventsChannel; 
+    [SerializeField] TurnsManagerEventsChannelSO turnsManagerEvents; 
 
     CinemachineVirtualCamera cam;
     CinemachineFramingTransposer transposer;
@@ -44,6 +45,9 @@ public class CameraScript : MonoBehaviour
         //Hits
         projectileEventsChannel.HitEvent.OnEventRaised += GetNewTarget;
 
+        //Turns
+        turnsManagerEvents.StartTurn.OnEventRaised += GetNewTarget;
+
         //Zoom
         inputReader.ZoomEvent += Zoom;
     }
@@ -55,6 +59,11 @@ public class CameraScript : MonoBehaviour
             StartCoroutine(TickTimer());
             cam.Follow = target.transform;
         }
+    }
+
+    public void GetNewTarget()
+    {
+        SwitchTarget(turnsManagerEvents.currentChar.transform);
     }
 
     public void GetNewTarget (Transform target)
@@ -88,7 +97,7 @@ public class CameraScript : MonoBehaviour
         transposer.m_ScreenY = 0.65f;
     }
 
-    void FrameCenter(GameObject target, Vector3 pos, Quaternion rotation) //Position target at the center of screen
+    void FrameCenter(GameObject target) //Position target at the center of screen
     {
         transposer.m_ScreenY = 0.5f;
     }

@@ -9,6 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5cab0e3a4081ad448f21afca741cd71, type: 3}
+  m_Script: {fileID: 11500000, guid: aff1fc9495f82c74482a45549908242f, type: 3}
   m_Name: SpawnProjectileEvent_Channel
   m_EditorClassIdentifier: 

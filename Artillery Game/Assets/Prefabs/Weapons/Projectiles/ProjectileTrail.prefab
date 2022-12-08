@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 130734618353045812}
   - component: {fileID: 8059843795818612136}
   - component: {fileID: 4036931138317612926}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: ProjectileTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,3 +147,4 @@ MonoBehaviour:
   lineRenderer: {fileID: 0}
   lineWidth: 0.01
   trailLife: 1
+  timeOfCreation: 0

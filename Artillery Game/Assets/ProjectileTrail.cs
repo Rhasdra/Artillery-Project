@@ -12,11 +12,13 @@ public class ProjectileTrail : MonoBehaviour
     [Header("Settings:")]
     [SerializeField] float lineWidth = 0.01f;
     public float trailLife = 1;
+    public float timeOfCreation;
     int i = 0;
 
     private void Awake() 
     {
         lineRenderer = GetComponent<LineRenderer>();
+        timeOfCreation = Time.time;
     }
 
     private void OnEnable() 

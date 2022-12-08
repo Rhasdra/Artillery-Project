@@ -6,10 +6,12 @@ using UnityEngine.Events;
 
 public class CharManager : MonoBehaviour
 {
+    public TeamSO team;
     public CharSO charInfo;
 
     [Header("Listening to")]
     [SerializeField] TurnsManagerEventsChannelSO turnsManagerEvents;
+    [SerializeField] BattleManagerEventsChannelSO battleManagerEvents;
     [SerializeField] MovementEventsChannelSO movementEvents;
     [SerializeField] AimingEventsChannelSO aimingEvents;
     [SerializeField] WeaponEventsChannelSO weaponEvents;
@@ -18,10 +20,11 @@ public class CharManager : MonoBehaviour
     [SerializeField] CharManagerEventsChannelSO charManagerEvents;
 
     //Toggles these Components in Between Turns
-    SweetSpotDisplay sweetSpotUI;
     Movement movement;
     Aiming aiming;
+    SweetSpotDisplay sweetSpotUI;
     WeaponsManager weapons;
+    [SerializeField] SpriteRenderer aimReticle;
 
     [Header("Information Summary")]
     public int health;
@@ -92,6 +95,7 @@ public class CharManager : MonoBehaviour
         movement.enabled = true;
         aiming.enabled = true;
         weapons.enabled = true;
+        aimReticle.enabled = true;
         sweetSpotUI.Display(true);
 
         delay = 0;
@@ -99,21 +103,33 @@ public class CharManager : MonoBehaviour
 
     public void EndTurn()
     {
-        movement.enabled = false;
-        aiming.enabled = false;
-        weapons.enabled = false;
+        aimReticle.enabled = false;
         sweetSpotUI.Display(false);
 
         GetInfo();
         StopListening();
     }
 
-    public void RequestEndTurn()
+    public void RequestEndTurn() //Waits for all projectiles to be destroyed before ending turn
     {
-        //TODO
-        //Check if all projectiles are destroyed
-        //If yes, call the end turn event
+        battleManagerEvents.EmptyProjectileList.OnEventRaised += ConfirmEndTurn;
+       
+        movement.enabled = false;
+        aiming.enabled = false;
+        weapons.enabled = false;
+    }
 
+    void ConfirmEndTurn() //All projectiles are gone, let's trigger the end of turn
+    {
+        StartCoroutine(EndTurnCoroutine());
+    }
+
+    IEnumerator EndTurnCoroutine()
+    {
+        battleManagerEvents.EmptyProjectileList.OnEventRaised -= ConfirmEndTurn;
+    
+        yield return new WaitForSeconds(1.5f);
+    
         charManagerEvents.EndTurn.OnEventRaised.Invoke();
     }
 

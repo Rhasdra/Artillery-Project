@@ -23,6 +23,7 @@ public class SweetSpotDisplay : MonoBehaviour
         ssMax = charManager.charInfo.sweetSpotAngleMax;
 
         ssInstance = Instantiate(ssPrefab, transform.position, Quaternion.identity);
+        ssInstance.transform.localScale = new Vector3(ssInstance.transform.localScale.x*charManager.transform.localScale.x, ssInstance.transform.localScale.y*charManager.transform.localScale.y, ssInstance.transform.localScale.z);
         ssInstance.transform.SetParent(charManager.transform);
 
         SweetSpotDisplayManager ssManager;        

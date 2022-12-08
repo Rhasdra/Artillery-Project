@@ -11,6 +11,8 @@ public class HealthPool : MonoBehaviour, IDamageable
     public float currentHealth;
     [SerializeField] float offset = 1f;
 
+    [SerializeField] CharManager owner;
+
     [SerializeField] GameObject healthBarPrefab = null;
     Slider hb = null;
     [SerializeField] GameObject dmgNumbersPrefab = null;
@@ -20,6 +22,11 @@ public class HealthPool : MonoBehaviour, IDamageable
     [SerializeField] bool invincible = false;
 
     public UnityEvent CharacterDied;
+
+    void Awake() 
+    {
+        owner = GetComponentInParent<CharManager>();
+    }
 
     private void OnEnable() 
     {
@@ -41,7 +48,7 @@ public class HealthPool : MonoBehaviour, IDamageable
         hb.maxValue = maxHealth;
         hb.value = maxHealth;
 
-        //hurtbox = GetComponent<Collider2D>();
+        hbgo.GetComponent<HealthBar>().fill.color = owner.team.color;
 
         currentHealth = maxHealth;
     }

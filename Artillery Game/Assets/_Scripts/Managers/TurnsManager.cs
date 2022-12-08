@@ -8,47 +8,55 @@ public class TurnsManager : MonoBehaviour
 {
     [Header("Listening to")]
     [SerializeField] CharManagerEventsChannelSO charManagerEvents;
+    [SerializeField] BattleManagerEventsChannelSO battleManagerEvents;
 
     [Header("Broadcasting to")]
-    [SerializeField] TurnsManagerEventsChannelSO eventsChannel;
+    [SerializeField] TurnsManagerEventsChannelSO turnsManagerEvents;
 
     [Header("Infos being tracked")]
         [Tooltip("The character which is currently taking their turn.")]
-    public CharManager currentChar; //Should be a ScriptableObject
+    //public CharManager currentChar; //Should be a ScriptableObject
     public float turnsCounter = 0;
         [Tooltip("In a Cycle, every character in the queue has to take their turn once. Then a new Cycle begins.")]
     public float cyclesCounter = 0;
-
-    [Header("Lists")]
-    public List<CharManager> charManagers;
-    public static List<CharManager> playersList;
     int index = 0; //tracks which character from the list is the currentChar
+
+    private void Awake() 
+    {
+        if(turnsManagerEvents.charList.Count > 0f)
+            turnsManagerEvents.charList.Clear();
+    }
 
     private void OnEnable() 
     {
-        charManagerEvents.EndTurn.OnEventRaised += NextCharacter;
+        battleManagerEvents.CharacterSpawnEvent.OnEventRaised += AddCharacter;
+        battleManagerEvents.SetupFinishEvent.OnEventRaised += Initialize;
 
-        playersList = charManagers;
+        charManagerEvents.EndTurn.OnEventRaised += NextCharacter;
     }
 
     private void OnDisable() 
     {
+        battleManagerEvents.CharacterSpawnEvent.OnEventRaised -= AddCharacter;
+        battleManagerEvents.SetupFinishEvent.OnEventRaised -= Initialize;
+
         charManagerEvents.EndTurn.OnEventRaised -= NextCharacter;
     }
 
-    private void Start() 
+    private void Initialize() 
     {
-        currentChar = playersList[index];
-        eventsChannel.currentChar = currentChar;
-        currentChar.StartListening();
-        eventsChannel.StartTurn.OnEventRaised.Invoke();
+        Shuffle(turnsManagerEvents.charList);
+
+        turnsManagerEvents.currentChar = turnsManagerEvents.charList[index];
+        turnsManagerEvents.currentChar.StartListening();
+        turnsManagerEvents.StartTurn.OnEventRaised.Invoke();
     }
     
     public void NextCharacter()
     {
-        eventsChannel.EndTurn.OnEventRaised.Invoke();
+        turnsManagerEvents.EndTurn.OnEventRaised.Invoke();
 
-        if ( index < playersList.Count -1)
+        if ( index < turnsManagerEvents.charList.Count -1)
         {
             index++;
             // return;
@@ -58,10 +66,10 @@ public class TurnsManager : MonoBehaviour
 
         IncreaseTurnsCounter();
 
-        currentChar = playersList[index];
-        currentChar.StartListening();
+        turnsManagerEvents.currentChar = turnsManagerEvents.charList[index];
+        turnsManagerEvents.currentChar.StartListening();
 
-        eventsChannel.StartTurn.OnEventRaised.Invoke();
+        turnsManagerEvents.StartTurn.OnEventRaised.Invoke();
     }
 
     void SortQueueByDelay(List<CharManager> unsorted)
@@ -118,11 +126,16 @@ public class TurnsManager : MonoBehaviour
     {
         turnsCounter ++;
         
-        if (turnsCounter % playersList.Count == 0f)
+        if (turnsCounter % turnsManagerEvents.charList.Count == 0f)
         {
             cyclesCounter ++;
-            SortQueueByDelay(playersList);
-            eventsChannel.NewCycle.OnEventRaised.Invoke();
+            SortQueueByDelay(turnsManagerEvents.charList);
+            turnsManagerEvents.NewCycle.OnEventRaised.Invoke();
         }
+    }
+
+    void AddCharacter(GameObject character)
+    {
+        turnsManagerEvents.charList.Add(character.GetComponent<CharManager>());
     }
 }

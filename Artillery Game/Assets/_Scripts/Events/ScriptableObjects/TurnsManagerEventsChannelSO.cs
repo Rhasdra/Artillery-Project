@@ -11,4 +11,5 @@ public class TurnsManagerEventsChannelSO : ScriptableObject
     public VoidEventChannelSO NewCycle;
 
     public CharManager currentChar;
+    public List<CharManager> charList;
 }

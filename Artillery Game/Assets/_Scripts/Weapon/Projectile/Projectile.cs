@@ -34,7 +34,7 @@ public class Projectile : MonoBehaviour
         projHit = GetComponent<IHit>();
         
         //Broadcast Spawn
-        projectileEvents.SpawnEvent.OnEventRaised(this.gameObject, transform.position, transform.rotation);
+        projectileEvents.SpawnEvent.OnEventRaised(this.gameObject);
     }
 
     public void ProjLaunch(float power) 

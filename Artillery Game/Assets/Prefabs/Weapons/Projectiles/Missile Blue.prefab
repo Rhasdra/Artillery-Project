@@ -191,7 +191,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 0}
-  quantity: 15
+  quantity: 3
   offset: 0.3
 --- !u!114 &-262166347025118052
 MonoBehaviour:

@@ -6,7 +6,7 @@ using UnityEngine.Events;
 [CreateAssetMenu(menuName = "Events/Character/Projectile Events Channel")]
 public class ProjectileEventsChannelSO : ScriptableObject
 {
-    public SpawnEventChannelSO SpawnEvent;
+    public GameObjectEventChannelSO SpawnEvent;
     public Vector3EventChannelSO LaunchEvent;
     public Vector3EventChannelSO TrajectoryEvent;
     public DamageEventChannelSO HitEvent;
