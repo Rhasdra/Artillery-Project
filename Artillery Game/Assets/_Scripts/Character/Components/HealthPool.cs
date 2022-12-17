@@ -7,6 +7,10 @@ using TMPro;
 
 public class HealthPool : MonoBehaviour, IDamageable
 {
+    [Header("Broadcasting to:")]
+    [SerializeField] HealthEventsChannelSO healthEvents;
+
+    [Header("Settings")]
     [SerializeField] float maxHealth = 3000f;
     public float currentHealth;
     [SerializeField] float offset = 1f;
@@ -14,6 +18,7 @@ public class HealthPool : MonoBehaviour, IDamageable
     [SerializeField] CharManager owner;
 
     [SerializeField] GameObject healthBarPrefab = null;
+    [SerializeField] GameObject healthBarInstance = null;
     Slider hb = null;
     [SerializeField] GameObject dmgNumbersPrefab = null;
     public static List<DamageNumbers> currentDmgNumbers = new List<DamageNumbers>();
@@ -21,34 +26,28 @@ public class HealthPool : MonoBehaviour, IDamageable
 
     [SerializeField] bool invincible = false;
 
-    public UnityEvent CharacterDied;
+    public UnityEvent NoHealthLeft;
 
     void Awake() 
     {
         owner = GetComponentInParent<CharManager>();
     }
 
-    private void OnEnable() 
-    {
-        CharacterDied.AddListener(Death);
-    }
-
-    private void OnDisable()
-    {
-        CharacterDied.RemoveListener(Death);
-    }
-
     private void Start() 
     {  
-        var hbgo = Instantiate(healthBarPrefab, transform.position, Quaternion.identity);
-        Billboard billboard = hbgo.GetComponent<Billboard>();
+        healthBarInstance = Instantiate(healthBarPrefab, transform.position, Quaternion.identity);
+        Billboard billboard = healthBarInstance.GetComponent<Billboard>();
         billboard.followPoint = this.transform;
         billboard.offset = offset;
-        hb = hbgo.GetComponentInChildren<Slider>();
+        hb = healthBarInstance.GetComponentInChildren<Slider>();
         hb.maxValue = maxHealth;
         hb.value = maxHealth;
 
-        hbgo.GetComponent<HealthBar>().fill.color = owner.team.color;
+        var healthBarScript = healthBarInstance.GetComponent<HealthBar>();
+        healthBarScript.fill.color = owner.team.color;
+        healthBarScript.owner = owner;
+
+        healthBarInstance.SetActive(true);
 
         currentHealth = maxHealth;
     }
@@ -66,7 +65,7 @@ public class HealthPool : MonoBehaviour, IDamageable
 
         if(currentHealth <= 0f)
         {
-            CharacterDied.Invoke();
+            Death();
         }
     }
 
@@ -121,7 +120,7 @@ public class HealthPool : MonoBehaviour, IDamageable
 
     void Death()
     {
-        this.gameObject.SetActive(false);
-        this.transform.parent.gameObject.SetActive(false);
+        healthBarInstance.SetActive(false);
+        NoHealthLeft.Invoke();
     }
 }

@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4385533585933210708
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4385533585933210715}
+  - component: {fileID: 4385533585933210714}
+  m_Layer: 0
+  m_Name: BattleManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4385533585933210715
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4385533585933210708}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4385533585933210714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4385533585933210708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b2673b4174ffce4f88a09988f8a60bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectileEvents: {fileID: 11400000, guid: f388093435d5b8448a87a1ec47d166ee, type: 2}
+  healthEvents: {fileID: 11400000, guid: ad48e78d1d1521e40b29eb3e0fa1153e, type: 2}
+  battleManagerEvents: {fileID: 11400000, guid: a4650526850b54343928532e8491ffb7, type: 2}
+  charactersRuntimeSet: {fileID: 11400000, guid: d372b31d2006e8f4787b24f369d3918e, type: 2}
+  teams:
+  - {fileID: 11400000, guid: 9e2466f01351b174aa0916150640df0e, type: 2}
+  - {fileID: 11400000, guid: b41f056288b647f4b97646d2f06f2ea4, type: 2}
+  - {fileID: 11400000, guid: b41f056288b647f4b97646d2f06f2ea4, type: 2}
+  - {fileID: 11400000, guid: b41f056288b647f4b97646d2f06f2ea4, type: 2}
+  - {fileID: 11400000, guid: b41f056288b647f4b97646d2f06f2ea4, type: 2}
+  - {fileID: 11400000, guid: b41f056288b647f4b97646d2f06f2ea4, type: 2}
+  - {fileID: 11400000, guid: b41f056288b647f4b97646d2f06f2ea4, type: 2}
+  - {fileID: 11400000, guid: b41f056288b647f4b97646d2f06f2ea4, type: 2}
+  - {fileID: 11400000, guid: b41f056288b647f4b97646d2f06f2ea4, type: 2}
+  - {fileID: 11400000, guid: b41f056288b647f4b97646d2f06f2ea4, type: 2}
+  - {fileID: 11400000, guid: b41f056288b647f4b97646d2f06f2ea4, type: 2}
+  - {fileID: 11400000, guid: b41f056288b647f4b97646d2f06f2ea4, type: 2}
+  - {fileID: 11400000, guid: b41f056288b647f4b97646d2f06f2ea4, type: 2}
+  - {fileID: 11400000, guid: b41f056288b647f4b97646d2f06f2ea4, type: 2}
+  - {fileID: 11400000, guid: b41f056288b647f4b97646d2f06f2ea4, type: 2}
+  - {fileID: 11400000, guid: b41f056288b647f4b97646d2f06f2ea4, type: 2}
+  charLabel: {fileID: 0}
+  projLabel: {fileID: 0}
+  terrain: {fileID: 0}
+  width: 0
+  height: 5
+  winScreenPrefab: {fileID: 2158556685714814745, guid: 93d3bc9d63847294abcb669df78e5714, type: 3}

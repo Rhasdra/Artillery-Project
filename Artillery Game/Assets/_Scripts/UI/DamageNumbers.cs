@@ -4,11 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class DamageNumbers : MonoBehaviour
+public class DamageNumbers : FloatUpElement
 {
     public float currentDamage = 0f;
-    public float TimerSeconds = 1;
-    [HideInInspector] public float Timer = 1;
     public TextMeshProUGUI text = null;
 
     [SerializeField] GameObject dmgSmall = null;
@@ -27,10 +25,16 @@ public class DamageNumbers : MonoBehaviour
         Timer = TimerSeconds;
     }
 
-    private void Update() 
+    protected override void TickTimer()
     {
-        TickTimer();
-        GoUp();
+        Timer -= Time.deltaTime;
+        //Debug.Log(timer);
+
+        if(Timer < 0)
+        {
+            HealthPool.currentDmgNumbers.Remove(this);
+            Destroy(this.gameObject);
+        }
     }
 
     virtual public void UpdateDamageNumber(float damage)
@@ -54,23 +58,5 @@ public class DamageNumbers : MonoBehaviour
 
         DamageNumbersSmall miniDmg = Instantiate(dmgSmall, startingPos, Quaternion.identity).GetComponent<DamageNumbersSmall>();
         miniDmg.UpdateDamageNumber(damage);
-    }
-
-    void TickTimer()
-    {
-        Timer -= Time.deltaTime;
-        //Debug.Log(timer);
-
-        if(Timer < 0)
-        {
-            HealthPool.currentDmgNumbers.Remove(this);
-            Destroy(this.gameObject);
-        }
-    }
-
-    void GoUp()
-    {
-        transform.position = new Vector3 (transform.position.x, transform.position.y + (0.2f * Time.deltaTime), transform.position.z);
-        //transform.localScale -= transform.localScale * 0.1f * Time.deltaTime;
     }
 }

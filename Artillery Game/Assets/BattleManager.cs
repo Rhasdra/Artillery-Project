@@ -7,33 +7,57 @@ public class BattleManager : MonoBehaviour
 {
     [Header("Listening to:")]
     [SerializeField] ProjectileEventsChannelSO projectileEvents;
+    [SerializeField] HealthEventsChannelSO healthEvents;
 
     [Header("Broadcasting to")]
-    [SerializeField] BattleManagerEventsChannelSO eventsChannel;
+    [SerializeField] BattleManagerEventsChannelSO battleManagerEvents;
+
+    [Header("Runtime Sets")]
+    [SerializeField] GameObjectRuntimeSet charactersRuntimeSet;
 
     [SerializeField] List<TeamSO> teams;
+    [SerializeField] GameObject charLabel = null;
+    [SerializeField] GameObject projLabel = null;
 
     [SerializeField] GameObject terrain;
     [SerializeField] float width;
     [SerializeField] float height = 5f;
 
+    [SerializeField] GameObject winScreenPrefab;
     private void OnEnable() 
     {
-        width = terrain.GetComponentInChildren<SpriteRenderer>().bounds.size.x;
+        width = terrain.GetComponentInChildren<SpriteRenderer>().bounds.size.x * 0.8f;
 
         projectileEvents.SpawnEvent.OnEventRaised += AddProjectile;
         projectileEvents.DespawnEvent.OnEventRaised += RemoveProjectile;
+        healthEvents.CharacterDeath.OnEventRaised += CheckTeams;
+    }
+
+    void OnDisable()
+    {
+        projectileEvents.SpawnEvent.OnEventRaised -= AddProjectile;
+        projectileEvents.DespawnEvent.OnEventRaised -= RemoveProjectile;
+        healthEvents.CharacterDeath.OnEventRaised -= CheckTeams;
+
+        //Clean itself
+        battleManagerEvents.Projectiles.Clear();
     }
 
     private void Start() 
     {
+        charLabel = new GameObject();
+        charLabel.name = "------- CHARACTERS -------";
+        projLabel = new GameObject();
+        projLabel.name = "------- PROJECTILES -------";
+
         SpawnTeams();
-        eventsChannel.Projectiles.Clear();
+        battleManagerEvents.Projectiles.Clear();
     }
 
     void SpawnTeams()
     {
-        eventsChannel.Characters.Clear();
+        //battleManagerEvents.Characters.Clear();
+        charactersRuntimeSet.Clear();
 
         StartCoroutine(SpawnTeamsCoroutine());          
     }
@@ -46,10 +70,13 @@ public class BattleManager : MonoBehaviour
         while (groundCheck == false)
         {
             x = Random.Range(-(width/2) , (width/2));
-            RaycastHit2D ray = Physics2D.Raycast (new Vector2(x, height), -Vector2.up, Mathf.Infinity, LayerMask.GetMask("Terrain"));
 
-            if (ray.collider != null)
-                groundCheck = true;
+            RaycastHit2D ray = Physics2D.Raycast (new Vector2(x, height), -Vector2.up, Mathf.Infinity, LayerMask.GetMask(Layers.Terrain, Layers.Characters));
+
+            if (ray.collider != null && ray.collider.gameObject.layer != LayerMask.NameToLayer(Layers.Characters))
+                {
+                    groundCheck = true;
+                }
         }
 
         return new Vector3(x, height, 0f);
@@ -62,13 +89,12 @@ public class BattleManager : MonoBehaviour
             foreach (var character in team.characters)
             {
                 var instance = Instantiate(character, RandomLocation(), Quaternion.identity);
-                instance.GetComponent<CharManager>().team = team;
+                instance.transform.parent = charLabel.transform;
+                var instManager = instance.GetComponent<CharManager>();
+                instManager.team = team;
                 
                 if(instance.transform.position.x > 0)
                     instance.transform.localScale = new Vector3(-instance.transform.localScale.x, instance.transform.localScale.y, instance.transform.localScale.z);
-
-                eventsChannel.CharacterSpawnEvent.OnEventRaised.Invoke(instance);
-                eventsChannel.Characters.Add(instance);
 
                 yield return new WaitForSeconds(0.1f);
             }
@@ -76,19 +102,66 @@ public class BattleManager : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        eventsChannel.SetupFinishEvent.OnEventRaised.Invoke();
+        battleManagerEvents.SetupFinishEvent.OnEventRaised.Invoke();
     }
 
     void AddProjectile (GameObject proj)
     {
-        eventsChannel.Projectiles.Add(proj);
+        battleManagerEvents.Projectiles.Add(proj);
+        proj.transform.parent = projLabel.transform;
     }
 
     void RemoveProjectile (GameObject proj)
     {
-        eventsChannel.Projectiles.Remove(proj);
+        battleManagerEvents.Projectiles.Remove(proj);
 
-        if(eventsChannel.Projectiles.Count == 0)
-            eventsChannel.EmptyProjectileList.OnEventRaised.Invoke();
+        if(battleManagerEvents.Projectiles.Count == 0)
+            battleManagerEvents.EmptyProjectileList.OnEventRaised.Invoke();
+    }
+
+
+    void CheckTeams(GameObject go = null)
+    {
+        List<TeamSO> remove = new List<TeamSO>();
+
+        foreach (var team in teams)
+        {
+            int alive = 0;
+
+            foreach (var character in charactersRuntimeSet.Items)
+            {
+                if (character.GetComponent<CharManager>().team == team)
+                alive ++;
+            }
+
+            if(alive == 0)
+            {
+                remove.Add(team);
+            }
+        }
+
+        foreach (var team in remove)
+        {
+            RemoveTeam(team);
+        }
+    }
+
+    void RemoveTeam(TeamSO team)
+    {
+        teams.Remove(team);
+
+        if(teams.Count == 1)
+        {
+            EndGame(teams[0]);
+        }
+    }
+
+    void EndGame(TeamSO winner)
+    {
+        var instance = Instantiate(winScreenPrefab, Vector3.zero, Quaternion.identity);
+        var parent = GameObject.FindGameObjectWithTag("Canvas");
+        instance.transform.position = parent.transform.position;
+        instance.transform.SetParent(parent.transform);
+        battleManagerEvents.EndBattleEvent.RaiseEvent();
     }
 }

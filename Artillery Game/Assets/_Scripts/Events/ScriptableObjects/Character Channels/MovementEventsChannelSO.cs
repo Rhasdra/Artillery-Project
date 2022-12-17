@@ -12,7 +12,6 @@ public class MovementEventsChannelSO : ScriptableObject
     [Header("Jump Events")]
     public TransformEventChannelSO LongJumpEvent;
     public TransformEventChannelSO BackFlipJumpEvent;
-    public Vector3EventChannelSO LandingEvent;
     [Header("Delay Events")]
     public VoidEventChannelSO ThresholdCrossedEvent;
 }

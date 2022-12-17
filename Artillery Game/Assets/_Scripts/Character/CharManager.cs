@@ -15,9 +15,13 @@ public class CharManager : MonoBehaviour
     [SerializeField] MovementEventsChannelSO movementEvents;
     [SerializeField] AimingEventsChannelSO aimingEvents;
     [SerializeField] WeaponEventsChannelSO weaponEvents;
+    [SerializeField] HealthEventsChannelSO healthEvents;
 
     [Header("Broadcasting to")]
     [SerializeField] CharManagerEventsChannelSO charManagerEvents;
+
+    [Header("Runtime Set")]
+    [SerializeField] GameObjectRuntimeSet charactersRuntimeSet;
 
     //Toggles these Components in Between Turns
     Movement movement;
@@ -32,11 +36,14 @@ public class CharManager : MonoBehaviour
     public float angle;
     public int weaponIndex;
     public int delay;
+    bool isTakingTurn;
 
     [Header("Show Debug Info")]
     [SerializeField] bool showDebugInfo;
     [SerializeField] GameObject debugTextPrefab;
     GameObject debugTextInstance;
+
+    public UnityEvent Death;
 
     private void Awake() 
     {   
@@ -53,6 +60,11 @@ public class CharManager : MonoBehaviour
             debugTextInstance = Instantiate(debugTextPrefab, transform.position, Quaternion.identity);
             debugTextInstance.GetComponent<DebugText>().Setup(this);
         }
+    }
+
+    private void OnEnable() 
+    {
+        charactersRuntimeSet.Add(this.gameObject);
     }
 
     public void StartListening()
@@ -87,11 +99,16 @@ public class CharManager : MonoBehaviour
         //Delay events
         movementEvents.ThresholdCrossedEvent.OnEventRaised -= AddMovementDelay;
         weaponEvents.ShootDelayEvent.OnEventRaised -= AddWeaponDelay;
+
+        //Runtime Set Projectiles
+        battleManagerEvents.EmptyProjectileList.OnEventRaised -= ConfirmEndTurn;
     }
 
 
     public void StartTurn()
     {
+        isTakingTurn = true;
+
         movement.enabled = true;
         aiming.enabled = true;
         weapons.enabled = true;
@@ -103,11 +120,22 @@ public class CharManager : MonoBehaviour
 
     public void EndTurn()
     {
-        aimReticle.enabled = false;
-        sweetSpotUI.Display(false);
+        isTakingTurn = false;
+
+        DisableComponents();
 
         GetInfo();
         StopListening();
+    }
+
+    public void DisableComponents()
+    {
+        movement.enabled = false;
+        aiming.enabled = false;
+        weapons.enabled = false;
+
+        aimReticle.enabled = false;
+        sweetSpotUI.Display(false);
     }
 
     public void RequestEndTurn() //Waits for all projectiles to be destroyed before ending turn
@@ -163,5 +191,25 @@ public class CharManager : MonoBehaviour
     void AddMovementDelay()
     {
         delay += movement.moveDelay;
+    }
+
+    public void RequestDeath()
+    {
+        charManagerEvents.EndTurn.OnEventRaised += Die;
+    }
+
+    public void Die()
+    {
+        charManagerEvents.EndTurn.OnEventRaised -= Die;
+        Death.Invoke();
+        
+        if(isTakingTurn)
+        {
+            EndTurn();
+        }
+
+        charactersRuntimeSet.Remove(this.gameObject);
+        healthEvents.CharacterDeath.RaiseEvent(this.gameObject);
+        this.gameObject.SetActive(false);
     }
 }

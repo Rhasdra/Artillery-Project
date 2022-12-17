@@ -15,16 +15,20 @@ public class HitMissile : MonoBehaviour, IHit
 
     RaycastHit2D[] results = new RaycastHit2D[1];
 
+    int layerMask;
+
     private void OnEnable() 
     {
         col = GetComponent<Collider2D>();
         projBase = GetComponent<Projectile>();
         explosive = GetComponent<IExplosive>();
+
+        layerMask =~ LayerMask.GetMask("Wind");
     }
 
     private void Update() 
     {
-        col.Raycast(transform.right, results, 0.3f);
+        col.Raycast(transform.right, results, 0.3f, layerMask);
     }
 
     public float Damage(Collider2D other)

@@ -15,6 +15,6 @@ MonoBehaviour:
   Name: Red Team
   color: {r: 1, g: 0.15190282, b: 0, a: 1}
   characters:
-  - {fileID: 788594370757262398, guid: 6f9fcfe97ab519e4fb06389511958395, type: 3}
-  - {fileID: 788594370757262398, guid: 6f9fcfe97ab519e4fb06389511958395, type: 3}
-  - {fileID: 788594370757262398, guid: 6f9fcfe97ab519e4fb06389511958395, type: 3}
+  - {fileID: 788594370757262398, guid: 5767dfa320c139d45bad57019c3bf3c5, type: 3}
+  - {fileID: 788594370757262398, guid: 5767dfa320c139d45bad57019c3bf3c5, type: 3}
+  - {fileID: 788594370757262398, guid: 5767dfa320c139d45bad57019c3bf3c5, type: 3}

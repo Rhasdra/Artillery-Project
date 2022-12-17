@@ -47,7 +47,7 @@ public class UI_ShotSelect : MonoBehaviour
 
     void GetCurrentChar()
     {
-        currentChar = turnsManagerEvents.currentChar.GetComponent<WeaponsManager>();
+        currentChar = turnsManagerEvents.charTakingTurn.GetComponent<WeaponsManager>();
         SpawnToggles(currentChar.weapons.Length);
         SwapWeapon(currentChar.index);
     }
@@ -84,11 +84,15 @@ public class UI_ShotSelect : MonoBehaviour
                 newToggle.GetComponent<Toggle>().group = group;
                 newToggle.GetComponent<UI_WeaponsToggle>().index = i;
                 
-                Vector3 pos = new Vector3 ( newToggle.transform.position.x + (rect.sizeDelta.x * i * newToggle.transform.localScale.x), newToggle.transform.position.y, newToggle.transform.position.z);
+                Vector3 pos = new Vector3 ( newToggle.transform.position.x + (rect.sizeDelta.x * i * rect.localScale.x), newToggle.transform.position.y, newToggle.transform.position.z);
                 newToggle.transform.position = pos;
+                //newToggle.transform.localScale = Vector3.one;
 
                 newToggle.transform.SetParent(this.transform, true);
-                toggles.Add(newToggle.GetComponent<Toggle>());             
+                toggles.Add(newToggle.GetComponent<Toggle>());
+
+                //Text
+                newToggle.GetComponentInChildren<TextMeshProUGUI>().text = ("T" + (i+1));       
             }
         }
     }

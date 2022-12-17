@@ -13,6 +13,9 @@ public class TurnsManager : MonoBehaviour
     [Header("Broadcasting to")]
     [SerializeField] TurnsManagerEventsChannelSO turnsManagerEvents;
 
+    [Header("Runtime Set")]
+    [SerializeField] GameObjectRuntimeSet charactersRuntimeSet;
+
     [Header("Infos being tracked")]
         [Tooltip("The character which is currently taking their turn.")]
     //public CharManager currentChar; //Should be a ScriptableObject
@@ -21,42 +24,52 @@ public class TurnsManager : MonoBehaviour
     public float cyclesCounter = 0;
     int index = 0; //tracks which character from the list is the currentChar
 
-    private void Awake() 
-    {
-        if(turnsManagerEvents.charList.Count > 0f)
-            turnsManagerEvents.charList.Clear();
-    }
-
     private void OnEnable() 
     {
-        battleManagerEvents.CharacterSpawnEvent.OnEventRaised += AddCharacter;
-        battleManagerEvents.SetupFinishEvent.OnEventRaised += Initialize;
+        battleManagerEvents.SetupFinishEvent.OnEventRaised += Setup;
 
         charManagerEvents.EndTurn.OnEventRaised += NextCharacter;
+
+        battleManagerEvents.EndBattleEvent.OnEventRaised += EndBattle;
     }
 
     private void OnDisable() 
     {
-        battleManagerEvents.CharacterSpawnEvent.OnEventRaised -= AddCharacter;
-        battleManagerEvents.SetupFinishEvent.OnEventRaised -= Initialize;
+        charactersRuntimeSet.OnItemAdd.OnEventRaised -= UpdateList;
+        charactersRuntimeSet.OnItemRemove.OnEventRaised -= UpdateList;
+        battleManagerEvents.SetupFinishEvent.OnEventRaised -= Setup;
 
         charManagerEvents.EndTurn.OnEventRaised -= NextCharacter;
+
+        battleManagerEvents.EndBattleEvent.OnEventRaised -= EndBattle;
+
+        // Clear
+        if(turnsManagerEvents.charTakingTurn != null)
+            turnsManagerEvents.charTakingTurn = null;
+        if(turnsManagerEvents.charList != null)
+            turnsManagerEvents.charList.Clear();
     }
 
-    private void Initialize() 
+    private void Setup() 
     {
-        Shuffle(turnsManagerEvents.charList);
+        charactersRuntimeSet.OnItemAdd.OnEventRaised += UpdateList;
+        charactersRuntimeSet.OnItemRemove.OnEventRaised += UpdateList;
 
-        turnsManagerEvents.currentChar = turnsManagerEvents.charList[index];
-        turnsManagerEvents.currentChar.StartListening();
-        turnsManagerEvents.StartTurn.OnEventRaised.Invoke();
+        
+        Shuffle(charactersRuntimeSet.Items);
+
+
+        turnsManagerEvents.charTakingTurn = charactersRuntimeSet.Items[index].GetComponent<CharManager>();
+        turnsManagerEvents.charTakingTurn.StartListening();
+        turnsManagerEvents.SetupFinishEvent.RaiseEvent();
+        turnsManagerEvents.StartTurn.RaiseEvent();
     }
     
     public void NextCharacter()
     {
         turnsManagerEvents.EndTurn.OnEventRaised.Invoke();
 
-        if ( index < turnsManagerEvents.charList.Count -1)
+        if ( index < charactersRuntimeSet.Items.Count -1)
         {
             index++;
             // return;
@@ -66,13 +79,13 @@ public class TurnsManager : MonoBehaviour
 
         IncreaseTurnsCounter();
 
-        turnsManagerEvents.currentChar = turnsManagerEvents.charList[index];
-        turnsManagerEvents.currentChar.StartListening();
+        turnsManagerEvents.charTakingTurn = charactersRuntimeSet.Items[index].GetComponent<CharManager>();
+        turnsManagerEvents.charTakingTurn.StartListening();
 
-        turnsManagerEvents.StartTurn.OnEventRaised.Invoke();
+        turnsManagerEvents.StartTurn.RaiseEvent();
     }
 
-    void SortQueueByDelay(List<CharManager> unsorted)
+    void SortQueueByDelay(List<GameObject> unsorted)
     {
         int min;
         CharManager temp;
@@ -83,11 +96,11 @@ public class TurnsManager : MonoBehaviour
 
             for (int j = i + 1; j < unsorted.Count; j++)
             {
-                if (unsorted[j].delay < unsorted[min].delay)
+                if (unsorted[j].GetComponent<CharManager>().delay < unsorted[min].GetComponent<CharManager>().delay)
                 {
                     min = j;
                 }
-                else if (unsorted[j].delay == unsorted[min].delay) //Speed tie
+                else if (unsorted[j].GetComponent<CharManager>().delay == unsorted[min].GetComponent<CharManager>().delay) //Speed tie
                 {
                     if(Random.value >= 0.5)
                     {
@@ -98,14 +111,14 @@ public class TurnsManager : MonoBehaviour
 
             if (min != i)
             {
-                temp = unsorted[i];
+                temp = unsorted[i].GetComponent<CharManager>();
                 unsorted[i] = unsorted[min];
-                unsorted[min] = temp;
+                unsorted[min] = temp.gameObject;
             }
         }
     }
 
-	void Shuffle(List<CharManager> charList)
+	void Shuffle(List<GameObject> charList)
 	{
 		// Loops through array
 		for (int i = charList.Count-1; i > 0; i--)
@@ -114,7 +127,7 @@ public class TurnsManager : MonoBehaviour
 			int rnd = Random.Range(0,i);
 			
 			// Save the value of the current i, otherwise it'll overright when we swap the values
-			CharManager temp = charList[i];
+			GameObject temp = charList[i];
 			
 			// Swap the new and old values
 			charList[i] = charList[rnd];
@@ -126,16 +139,47 @@ public class TurnsManager : MonoBehaviour
     {
         turnsCounter ++;
         
-        if (turnsCounter % turnsManagerEvents.charList.Count == 0f)
+        if (turnsCounter % charactersRuntimeSet.Items.Count == 0f)
         {
             cyclesCounter ++;
-            SortQueueByDelay(turnsManagerEvents.charList);
-            turnsManagerEvents.NewCycle.OnEventRaised.Invoke();
+            SortQueueByDelay(charactersRuntimeSet.Items);
+            turnsManagerEvents.NewCycle.RaiseEvent();
         }
     }
 
-    void AddCharacter(GameObject character)
+    // void AddCharacter(GameObject character)
+    // {
+    //     turnsManagerEvents.charList.Add(character.GetComponent<CharManager>());
+    // }
+
+    // void RemoveCharacter(GameObject character)
+    // {
+    //     turnsManagerEvents.charList.Remove(character.GetComponent<CharManager>());
+
+    //     var manager = character.GetComponent<CharManager>();
+    //     if(manager == turnsManagerEvents.currentChar)
+    //     {
+    //         NextCharacter();
+    //     }
+    // }
+
+    void UpdateList()
     {
-        turnsManagerEvents.charList.Add(character.GetComponent<CharManager>());
+        if(!charactersRuntimeSet.Items.Contains(turnsManagerEvents.charTakingTurn.gameObject))
+        {
+            NextCharacter();
+        }
+    }
+
+    void EndBattle()
+    {
+        foreach (var item in charactersRuntimeSet.Items)
+        {
+            var character = item.GetComponent<CharManager>();
+            character.StopListening();
+            character.DisableComponents();
+        }
+
+        this.gameObject.SetActive(false);
     }
 }

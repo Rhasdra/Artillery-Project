@@ -21,7 +21,7 @@ public class Character_StateMachine : StateMachine
 
     private void OnEnable() 
     {
-        GetComponentInChildren<HealthPool>()?.CharacterDied.AddListener(Death);
+        //GetComponentInChildren<HealthPool>()?.CharacterDied.AddListener(Death);
     }
 
     private void Start() 

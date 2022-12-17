@@ -8,6 +8,9 @@ public class TrailsManager : MonoBehaviour
     [SerializeField] BattleManagerEventsChannelSO battleEvents;
     [SerializeField] TurnsManagerEventsChannelSO turnsEvents;
     [SerializeField] ProjectileEventsChannelSO projectileEvents;
+
+    [Header("Reading this Runtime Set:")]
+    [SerializeField] GameObjectRuntimeSet charactersRuntimeSet;
     
     [Header("Prefab:")]
     [SerializeField] GameObject trailPrefab;
@@ -49,7 +52,7 @@ public class TrailsManager : MonoBehaviour
         ProjectileTrail instance = Instantiate(trailPrefab, projectile.transform.position, projectile.transform.rotation).GetComponent<ProjectileTrail>();
         instance.transform.parent = this.transform;
         instance.projectile = projectile.transform;
-        instance.owner = turnsEvents.currentChar;
+        instance.owner = turnsEvents.charTakingTurn;
         
         //Set Starting Alpha
         instance.trailLife = startingAlpha;
@@ -67,7 +70,7 @@ public class TrailsManager : MonoBehaviour
         {
             if (instance.trailLife > 0)
             {
-                instance.trailLife -= (startingAlpha/2) / turnsEvents.charList.Count; //dissapears in 2 turns
+                instance.trailLife -= (startingAlpha/2) / charactersRuntimeSet.Items.Count; //dissapears in 2 turns
                 instance.lineRenderer.startColor = new Color(instance.lineRenderer.startColor.r, instance.lineRenderer.startColor.g, instance.lineRenderer.startColor.b, instance.trailLife);
                 instance.lineRenderer.endColor = new Color(instance.lineRenderer.endColor.r, instance.lineRenderer.endColor.g, instance.lineRenderer.endColor.b, instance.trailLife);
 
@@ -93,7 +96,7 @@ public class TrailsManager : MonoBehaviour
         List<ProjectileTrail> currentTrails = new List<ProjectileTrail>();
         foreach (ProjectileTrail trail in trailInstances)
         {
-            if (trail.owner == turnsEvents.currentChar)
+            if (trail.owner == turnsEvents.charTakingTurn)
             {
                 currentTrails.Add(trail);
             }

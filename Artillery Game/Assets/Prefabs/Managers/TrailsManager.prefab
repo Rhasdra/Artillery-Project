@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8088282283488572808
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8088282283488572815}
+  - component: {fileID: 8088282283488572814}
+  m_Layer: 0
+  m_Name: TrailsManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8088282283488572815
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8088282283488572808}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8088282283488572814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8088282283488572808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 413b3e38945e25f4a8bd845a13675325, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  battleEvents: {fileID: 11400000, guid: a4650526850b54343928532e8491ffb7, type: 2}
+  turnsEvents: {fileID: 11400000, guid: 64cf3b8764240194195ab927b547189a, type: 2}
+  projectileEvents: {fileID: 11400000, guid: f388093435d5b8448a87a1ec47d166ee, type: 2}
+  charactersRuntimeSet: {fileID: 11400000, guid: d372b31d2006e8f4787b24f369d3918e, type: 2}
+  trailPrefab: {fileID: 1176897698941563224, guid: d003387c4d82bd14bbb4d09199e41d71, type: 3}
+  trailInstances: []
+  startingAlpha: 0.25
+  currentTrailWidth: 0

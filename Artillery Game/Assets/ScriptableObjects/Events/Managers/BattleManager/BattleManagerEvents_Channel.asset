@@ -12,14 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f24c83d3129aef408979ee6bcbc08e3, type: 3}
   m_Name: BattleManagerEvents_Channel
   m_EditorClassIdentifier: 
-  CharacterSpawnEvent: {fileID: 11400000, guid: a073faad859e1894ea0fb39c0cfbadc5, type: 2}
   SetupFinishEvent: {fileID: 11400000, guid: ff0ef224c0a18f14bad169cb9c392316, type: 2}
-  Characters:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  EndBattleEvent: {fileID: 11400000, guid: 472e0db56c0f3914885dd3b4ca20c578, type: 2}
   Projectiles: []
   EmptyProjectileList: {fileID: 11400000, guid: c565f5cf322e7064aae0ba4729b6d2b1, type: 2}

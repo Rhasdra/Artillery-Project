@@ -37,6 +37,10 @@ public class Projectile : MonoBehaviour
         projectileEvents.SpawnEvent.OnEventRaised(this.gameObject);
     }
 
+    private void Start() {
+        
+    }
+
     public void ProjLaunch(float power) 
     {
         projLaunch.Launch(impulse, power);

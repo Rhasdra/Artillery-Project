@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6679789982714383211
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6679789982714383212}
+  - component: {fileID: 6679789982714383213}
+  m_Layer: 0
+  m_Name: CameraManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6679789982714383212
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6679789982714383211}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.21481395, y: -0.44150364, z: 0.8212386}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6679789982714383213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6679789982714383211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a20e7d48a3b901a41aa2bab28cd00134, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inputReader: {fileID: 11400000, guid: 83dd3ab174bac9647be70ccf60d4d076, type: 2}
+  moveEventsChannel: {fileID: 11400000, guid: 35658f02b6ab49d469b6928178fb1c32, type: 2}
+  weaponEventsChannel: {fileID: 11400000, guid: 5e2910cb98071624088dcaa0a03fb388, type: 2}
+  projectileEventsChannel: {fileID: 11400000, guid: f388093435d5b8448a87a1ec47d166ee, type: 2}
+  turnsManagerEvents: {fileID: 11400000, guid: 64cf3b8764240194195ab927b547189a, type: 2}
+  mousePos: {x: 0, y: 0}
+  canSwitchTarget: 1
+  isDragging: 0
+  dragStart: {x: 0, y: 0, z: 0}
+  camIndex: 0
+  mainCamPrefab: {fileID: 6919258013514350928, guid: e3ca9ff716d028a4b8b315688d491639, type: 3}
+  vCamPrefab: {fileID: 5808932875912421016, guid: 9d521c161d556a440a7833a4cdc05a62, type: 3}
+  vCams:
+  - {fileID: 0}
+  - {fileID: 0}
+  switchTimerSeconds: 0.5
+  zoomSpeed: 0.05
+  panZone: 0.02
+  panSpeed: 8
+  dragSpeed: 20
+  shakeAmplitude: 3
+  shakeFrequency: 3
+  shakeTime: 0.1

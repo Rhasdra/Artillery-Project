@@ -24,7 +24,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 94969144643858740}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.8503106, y: -0.4998191, z: -0.123907074}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -45,10 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   charManagerEvents: {fileID: 11400000, guid: d301404e377897445acbbae71f33efd6, type: 2}
-  eventsChannel: {fileID: 11400000, guid: 64cf3b8764240194195ab927b547189a, type: 2}
+  battleManagerEvents: {fileID: 11400000, guid: a4650526850b54343928532e8491ffb7, type: 2}
+  turnsManagerEvents: {fileID: 11400000, guid: 64cf3b8764240194195ab927b547189a, type: 2}
+  charactersRuntimeSet: {fileID: 11400000, guid: d372b31d2006e8f4787b24f369d3918e, type: 2}
   turnsCounter: 0
-  macroTurnsCounter: 0
-  index: 0
-  charManagers:
-  - {fileID: 0}
-  - {fileID: 0}
+  cyclesCounter: 0

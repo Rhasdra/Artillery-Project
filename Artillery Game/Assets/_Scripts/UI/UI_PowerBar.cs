@@ -9,9 +9,9 @@ public class UI_PowerBar : MonoBehaviour
     [Header("Listening to")]
     [SerializeField] TurnsManagerEventsChannelSO turnsManagerEvents;
     
-    Aiming currentChar;
-    Slider slider;
-    TextMeshProUGUI text;
+    [SerializeField] Aiming currentChar;
+    Slider slider = null;
+    TextMeshProUGUI text = null;
 
     bool isBeingDragged = false;
 
@@ -34,13 +34,19 @@ public class UI_PowerBar : MonoBehaviour
     private void Update() 
     {
         if(currentChar != null && isBeingDragged == false)
-        slider.value = currentChar.power;
-        text.text = slider.value.ToString();
+        {
+            slider.value = currentChar.power;
+            text.text = slider.value.ToString();
+        }
+        else if(currentChar == null) // In case reference gets lost
+        {
+            GetCurrentChar();
+        }
     }
 
     void GetCurrentChar()
     {
-        currentChar = turnsManagerEvents.currentChar.GetComponent<Aiming>();
+        currentChar = turnsManagerEvents.charTakingTurn.GetComponent<Aiming>();
     }
 
     public void OnBeginDrag()

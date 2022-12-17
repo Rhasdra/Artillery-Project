@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cb952c3fd18c5940ba1b5ce37661a44, type: 3}
   m_Name: TurnsManagerEvents_Channel
   m_EditorClassIdentifier: 
+  SetupFinishEvent: {fileID: 11400000, guid: 9a5fa98733318784d8353881bc1dbc07, type: 2}
   StartTurn: {fileID: 11400000, guid: ab6436806fceed347878fba2216fa966, type: 2}
   EndTurn: {fileID: 11400000, guid: 116ca8ff1ffca86428be162fe2daacd5, type: 2}
   NewCycle: {fileID: 11400000, guid: 235a78ba317305347bc05fbbdb3416b8, type: 2}
+  charTakingTurn: {fileID: 0}
+  charList: []

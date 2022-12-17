@@ -174,10 +174,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectileEvents: {fileID: 11400000, guid: f388093435d5b8448a87a1ec47d166ee, type: 2}
   impulse: 1000
-  baseDamage: 500
+  baseDamage: 100
   forgiveness: 450
   trailPrefab: {fileID: 0}
-  explosion: {fileID: 4518881370631371733, guid: 807288eda0e118c4a827b6b2c8d7ea39, type: 3}
+  explosion: {fileID: 4518881370631371733, guid: 4d7b138a4dae91f4d99f183dc38fb81f, type: 3}
 --- !u!114 &4367908445514700309
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -175,7 +175,8 @@ MonoBehaviour:
   impulse: 1000
   baseDamage: 150
   forgiveness: 450
-  explosion: {fileID: 4518881370631371733, guid: 807288eda0e118c4a827b6b2c8d7ea39, type: 3}
+  trailPrefab: {fileID: 0}
+  explosion: {fileID: 4518881370631371733, guid: fa76977ab13138e468c773723040d5e2, type: 3}
 --- !u!114 &-181067699127189068
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,7 +13,7 @@ public class Debug_SO : MonoBehaviour
         inputReader.LongJumpEvent += DebugInput;
     }
 
-    void DebugInput(Vector2 v)
+    void DebugInput(float v)
     {
         Debug.Log(v);
     }

@@ -66,6 +66,7 @@ MonoBehaviour:
   baseDamage: 500
   radius: 1
   forgiveness: 50
+  explosionForce: 5
   lifeSeconds: 0.5
   debug: 0
 --- !u!114 &1820067741045689024
@@ -166,7 +167,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 0.5102247, b: 0, a: 1}
   m_FlipX: 0

@@ -35,6 +35,6 @@ public class UI_AngleDisplay : MonoBehaviour
 
     void GetCurrentChar()
     {
-        currentChar = turnsManagerEvents.currentChar.GetComponent<Aiming>();
+        currentChar = turnsManagerEvents.charTakingTurn.GetComponent<Aiming>();
     }
 }

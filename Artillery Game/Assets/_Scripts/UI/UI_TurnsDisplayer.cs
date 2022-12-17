@@ -9,6 +9,9 @@ public class UI_TurnsDisplayer : MonoBehaviour
     [Header("Listening to")]
     [SerializeField] TurnsManagerEventsChannelSO turnsEvents;
 
+    [Header("Runtime Set:")]
+    [SerializeField] GameObjectRuntimeSet charactersRuntimeSet;
+
     [SerializeField] TurnsManager turnsManager;
     [SerializeField] TextMeshProUGUI turnsCounter;
     [SerializeField] TextMeshProUGUI charQueue;
@@ -48,15 +51,16 @@ public class UI_TurnsDisplayer : MonoBehaviour
             listBeingDisplayed.Clear();
         }
 
-        for (int i = 0; i < turnsEvents.charList.Count; i++)
+        for (int i = 0; i < charactersRuntimeSet.Items.Count; i++)
         {
-            TeamSO charTeam = turnsEvents.charList[i].team;
-            string charName = turnsEvents.charList[i].name.ToString();
-            int charDelay = turnsEvents.charList[i].delay;
+            TeamSO charTeam = charactersRuntimeSet.Items[i].GetComponent<CharManager>().team;
+            string charName = charactersRuntimeSet.Items[i].GetComponent<CharManager>().name.ToString();
+            int charDelay = charactersRuntimeSet.Items[i].GetComponent<CharManager>().delay;
 
             TextMeshProUGUI charTMP = Instantiate(charQueue, transform.position, Quaternion.identity);
             charTMP.transform.SetParent(gameObject.transform);
-            charTMP.rectTransform.anchoredPosition = new Vector2(charTMP.rectTransform.anchoredPosition.x , charTMP.rectTransform.anchoredPosition.y - (i*charTMP.fontSize*1.2f));
+            charTMP.rectTransform.anchoredPosition = new Vector2(charTMP.rectTransform.anchoredPosition.x , charTMP.rectTransform.anchoredPosition.y - (i*charTMP.fontSize*1.5f));
+            charTMP.transform.localScale = Vector3.one;
 
             charTMP.text = ( " - " + charName + " - " + charDelay + "\n");
             charTMP.color = charTeam.color;

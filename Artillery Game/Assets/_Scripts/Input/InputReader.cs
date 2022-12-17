@@ -10,7 +10,7 @@ public class InputReader : ScriptableObject, GameInputActions.IGameplayActions, 
     GameInputActions playerInput;
 
     // Gameplay
-    public event UnityAction<Vector2> MoveEvent = delegate { };
+    public event UnityAction<float> MoveEvent = delegate { };
     public event UnityAction<Vector2> LookEvent = delegate { };
     public event UnityAction ShootEvent = delegate { };
     public event UnityAction LongJumpEvent = delegate { };
@@ -29,7 +29,14 @@ public class InputReader : ScriptableObject, GameInputActions.IGameplayActions, 
     public event UnityAction<float> ScrollWeaponEvent = delegate { };
     public event UnityAction<float> WeaponNumberEvent = delegate { };
 
-    public event UnityAction<Vector2> ZoomEvent = delegate { };
+    public event UnityAction<float> ZoomEvent = delegate { };
+
+    public event UnityAction<Vector2> MousePositionEvent = delegate { };
+
+    public event UnityAction PanPressEvent = delegate { };
+    public event UnityAction PanCanceledEvent = delegate { };
+
+    public event UnityAction PauseGameEvent = delegate { };
 
     //Menu
 
@@ -72,7 +79,7 @@ public class InputReader : ScriptableObject, GameInputActions.IGameplayActions, 
     #region Gameplay
     public void OnMove(InputAction.CallbackContext context)
     {
-        MoveEvent.Invoke(context.ReadValue<Vector2>());
+        MoveEvent.Invoke(context.ReadValue<float>());
     }
 
     public void OnLook(InputAction.CallbackContext context)
@@ -146,8 +153,36 @@ public class InputReader : ScriptableObject, GameInputActions.IGameplayActions, 
 
     public void OnZoom(InputAction.CallbackContext context)
     {
-        ZoomEvent.Invoke(context.ReadValue<Vector2>());
+        ZoomEvent.Invoke(context.ReadValue<float>());
     }
+
+    public void OnMouse(InputAction.CallbackContext context)
+    {
+        MousePositionEvent.Invoke(context.ReadValue<Vector2>());
+    }
+
+    public void OnPanDrag(InputAction.CallbackContext context)
+    {
+        switch (context.phase)
+        {
+            case InputActionPhase.Started:
+                PanPressEvent.Invoke();
+                break;
+            // case InputActionPhase.Performed:
+            //     PowerHeldEvent.Invoke();
+            //     break;
+            case InputActionPhase.Canceled:
+                PanCanceledEvent.Invoke();
+                break;
+        }
+    }
+    
+    public void OnPause(InputAction.CallbackContext context)
+    {
+        if(context.phase == InputActionPhase.Performed)
+        PauseGameEvent.Invoke();    
+    }
+
     #endregion
 
     #region Menu
@@ -200,5 +235,8 @@ public class InputReader : ScriptableObject, GameInputActions.IGameplayActions, 
     {
         throw new System.NotImplementedException();
     }
+
+
+
     #endregion
 }
