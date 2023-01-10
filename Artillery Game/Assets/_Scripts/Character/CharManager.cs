@@ -7,7 +7,8 @@ using UnityEngine.Events;
 public class CharManager : MonoBehaviour
 {
     public TeamSO team;
-    public CharSO charInfo;
+    public CharDataSO charData;
+    public JobSO jobInfo;
 
     [Header("Listening to")]
     [SerializeField] TurnsManagerEventsChannelSO turnsManagerEvents;
@@ -15,13 +16,14 @@ public class CharManager : MonoBehaviour
     [SerializeField] MovementEventsChannelSO movementEvents;
     [SerializeField] AimingEventsChannelSO aimingEvents;
     [SerializeField] WeaponEventsChannelSO weaponEvents;
-    [SerializeField] HealthEventsChannelSO healthEvents;
 
     [Header("Broadcasting to")]
     [SerializeField] CharManagerEventsChannelSO charManagerEvents;
+    public UnityEvent OnInitialize;
 
     [Header("Runtime Set")]
     [SerializeField] GameObjectRuntimeSet charactersRuntimeSet;
+    [SerializeField] GameObjectRuntimeSet projectilesRuntimeSet;
 
     //Toggles these Components in Between Turns
     Movement movement;
@@ -51,15 +53,14 @@ public class CharManager : MonoBehaviour
         aiming = GetComponent<Aiming>();
         weapons = GetComponent<WeaponsManager>();
         sweetSpotUI = GetComponentInChildren<SweetSpotDisplay>();
+
     }
 
     private void Start() 
     {
-        if(showDebugInfo)
-        {
-            debugTextInstance = Instantiate(debugTextPrefab, transform.position, Quaternion.identity);
-            debugTextInstance.GetComponent<DebugText>().Setup(this);
-        }
+        jobInfo = charData.Job;
+        
+        OnInitialize.Invoke();
     }
 
     private void OnEnable() 
@@ -72,16 +73,16 @@ public class CharManager : MonoBehaviour
         turnsManagerEvents.StartTurn.OnEventRaised += StartTurn;
         turnsManagerEvents.EndTurn.OnEventRaised += EndTurn;
 
-        weaponEvents.ShootEvent.OnEventRaised += RequestEndTurn;
+        weapons.ShootEvent += RequestEndTurn;
 
         //Info events
-        weaponEvents.WeaponChangeEvent.OnEventRaised += GetInfo;
-        aimingEvents.AngleChangeEvent.OnEventRaised += GetAngleInfo;
-        aimingEvents.PowerChangeEvent.OnEventRaised += GetPowerInfo;
+        weapons.WeaponChangeEvent += GetInfo;
+        aiming.AngleChangeEvent += GetAngleInfo;
+        aiming.PowerChangeEvent += GetPowerInfo;
 
         //Delay events
-        movementEvents.ThresholdCrossedEvent.OnEventRaised += AddMovementDelay;
-        weaponEvents.ShootDelayEvent.OnEventRaised += AddWeaponDelay;
+        movement.MovementThresholdCrossedEvent += AddMovementDelay;
+        weapons.ShootDelayEvent += AddWeaponDelay;
     }
 
     public void StopListening()
@@ -89,19 +90,19 @@ public class CharManager : MonoBehaviour
         turnsManagerEvents.StartTurn.OnEventRaised -= StartTurn;
         turnsManagerEvents.EndTurn.OnEventRaised -= EndTurn;
 
-        weaponEvents.ShootEvent.OnEventRaised -= RequestEndTurn;
+        weapons.ShootEvent -= RequestEndTurn;
 
         //Info events
-        weaponEvents.WeaponChangeEvent.OnEventRaised -= GetInfo;
-        aimingEvents.AngleChangeEvent.OnEventRaised -= GetAngleInfo;
-        aimingEvents.PowerChangeEvent.OnEventRaised -= GetPowerInfo;
+        weapons.WeaponChangeEvent -= GetInfo;
+        aiming.AngleChangeEvent -= GetAngleInfo;
+        aiming.PowerChangeEvent -= GetPowerInfo;
 
         //Delay events
-        movementEvents.ThresholdCrossedEvent.OnEventRaised -= AddMovementDelay;
-        weaponEvents.ShootDelayEvent.OnEventRaised -= AddWeaponDelay;
+        movement.MovementThresholdCrossedEvent -= AddMovementDelay;
+        weapons.ShootDelayEvent -= AddWeaponDelay;
 
         //Runtime Set Projectiles
-        battleManagerEvents.EmptyProjectileList.OnEventRaised -= ConfirmEndTurn;
+        projectilesRuntimeSet.OnEmptyList.OnEventRaised -= ConfirmEndTurn;
     }
 
 
@@ -140,7 +141,7 @@ public class CharManager : MonoBehaviour
 
     public void RequestEndTurn() //Waits for all projectiles to be destroyed before ending turn
     {
-        battleManagerEvents.EmptyProjectileList.OnEventRaised += ConfirmEndTurn;
+        projectilesRuntimeSet.OnEmptyList.OnEventRaised += ConfirmEndTurn;
        
         movement.enabled = false;
         aiming.enabled = false;
@@ -154,7 +155,7 @@ public class CharManager : MonoBehaviour
 
     IEnumerator EndTurnCoroutine()
     {
-        battleManagerEvents.EmptyProjectileList.OnEventRaised -= ConfirmEndTurn;
+        projectilesRuntimeSet.OnEmptyList.OnEventRaised -= ConfirmEndTurn;
     
         yield return new WaitForSeconds(1.5f);
     
@@ -209,7 +210,7 @@ public class CharManager : MonoBehaviour
         }
 
         charactersRuntimeSet.Remove(this.gameObject);
-        healthEvents.CharacterDeath.RaiseEvent(this.gameObject);
+        charManagerEvents.CharacterDeath.RaiseEvent(this.gameObject);
         this.gameObject.SetActive(false);
     }
 }

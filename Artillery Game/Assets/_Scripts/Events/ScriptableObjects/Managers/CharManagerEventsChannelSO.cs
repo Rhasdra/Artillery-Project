@@ -7,4 +7,5 @@ using UnityEngine.Events;
 public class CharManagerEventsChannelSO : ScriptableObject
 {
     public VoidEventChannelSO EndTurn;
+    public GameObjectEventChannelSO CharacterDeath;
 }

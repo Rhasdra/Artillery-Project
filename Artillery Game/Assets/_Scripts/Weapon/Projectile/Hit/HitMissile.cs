@@ -77,4 +77,8 @@ public class HitMissile : MonoBehaviour, IHit
         //Broadcast the Event
         GetComponent<Projectile>().projectileEvents.HitEvent.OnEventRaised(transform.position, (int)damage, damageable);
     }
+
+    public void Hit(Collider2D col)
+    {
+    }
 }

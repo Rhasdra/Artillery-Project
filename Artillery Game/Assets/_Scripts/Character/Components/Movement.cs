@@ -12,14 +12,15 @@ public class Movement : MonoBehaviour
 {
     [Header("Listening To")]
     [SerializeField] InputReader inputReader;
-    [SerializeField] CharRaycastEventsChannelSO rayEvents;
+    // [SerializeField] CharRaycastEventsChannelSO rayEvents;
 
     [Header("Broadcasting To")]
     [SerializeField] MovementEventsChannelSO movementEvents;
+    public UnityAction MovementThresholdCrossedEvent = delegate{ };
 
     [Header("References")]
-        [Tooltip("A character should have a empty GO at their feet, from where the raycasts will originate and rotate around.")]
-    CharSO charInfo = null;
+    [SerializeField] HeadsUp headsUp;
+    JobSO jobInfo = null;
     Rigidbody2D rb = null;
     CapsuleCollider2D col = null;
     Vector3 lastPos;
@@ -40,12 +41,14 @@ public class Movement : MonoBehaviour
     [Header("Debug")]
     [SerializeField] bool debug = false;
 
-    private void Awake() 
+    public void Initialize() 
     {
-        charInfo = this.GetComponent<CharManager>().charInfo;
+        jobInfo = this.GetComponent<CharManager>().jobInfo;
 
         rb = this.GetComponent<Rigidbody2D>();
         col = this.GetComponent<CapsuleCollider2D>();
+        headsUp = this.GetComponent<HeadsUp>();
+        headsUp.IsGroundedEvent.AddListener(GetCanMove);
     }
     
     void OnEnable()
@@ -53,8 +56,6 @@ public class Movement : MonoBehaviour
         inputReader.LongJumpEvent += LongJump;
         inputReader.BackFlipEvent += BackflipJump;
         inputReader.MoveEvent += GetInputValue;
-
-        rayEvents.IsGroundedEvent.OnEventRaised += GetCanMove;
 
         startingPos = transform.position;
         hasMoved = false;
@@ -66,7 +67,7 @@ public class Movement : MonoBehaviour
         inputReader.BackFlipEvent -= BackflipJump;
         inputReader.MoveEvent -= GetInputValue;
 
-        rayEvents.IsGroundedEvent.OnEventRaised -= GetCanMove;
+        headsUp.IsGroundedEvent.RemoveListener(GetCanMove);
 
         //Reseting values for when ending turn with button held
         horizontalInput = 0f;
@@ -100,7 +101,7 @@ public class Movement : MonoBehaviour
             CharacterFlip(Mathf.RoundToInt(inputValue));
         }
 
-        transform.Translate (Vector3.right * (inputValue * charInfo.movementSpeed * Time.deltaTime) * ClimbSlowMultiplier());
+        transform.Translate (Vector3.right * (inputValue * jobInfo.movementSpeed * Time.deltaTime) * ClimbSlowMultiplier());
     
         //Raise moveStart event
         movementEvents.MoveStartEvent.RaiseEvent(this.transform);
@@ -119,6 +120,7 @@ public class Movement : MonoBehaviour
         if(distWalked > distThreshold)
         {
             movementEvents.ThresholdCrossedEvent.OnEventRaised();
+            MovementThresholdCrossedEvent.Invoke();
             hasMoved = true;
         }        
     }    
@@ -133,17 +135,17 @@ public class Movement : MonoBehaviour
         }
         floorAngle -= 90;
 
-        if ( floorAngle <= charInfo.climbAngle * .4)
+        if ( floorAngle <= jobInfo.climbAngle * .4)
         {
             return 1f;
         }
-        else if ( floorAngle >= charInfo.climbAngle)
+        else if ( floorAngle >= jobInfo.climbAngle)
         {
             return 0f;
         }
         else
         {
-            return Mathf.Lerp(1, 0, floorAngle / charInfo.climbAngle);
+            return Mathf.Lerp(1, 0, floorAngle / jobInfo.climbAngle);
         }
     }
 
@@ -160,7 +162,7 @@ public class Movement : MonoBehaviour
         //Broadcast the event
         movementEvents.LongJumpEvent.RaiseEvent(this.transform);
 
-        rb.velocity = new Vector2 (transform.localScale.x * charInfo.longJumpForce, charInfo.longJumpForce);
+        rb.velocity = new Vector2 (transform.localScale.x * jobInfo.longJumpForce, jobInfo.longJumpForce);
 
         if (debug)
         {
@@ -176,7 +178,7 @@ public class Movement : MonoBehaviour
         //Broadcast the event
         movementEvents.BackFlipJumpEvent.RaiseEvent(this.transform);
             
-        rb.velocity = new Vector2 (transform.localScale.x * charInfo.backFlipJumpForceX, charInfo.backFlipJumpForceY);
+        rb.velocity = new Vector2 (transform.localScale.x * jobInfo.backFlipJumpForceX, jobInfo.backFlipJumpForceY);
         StartCoroutine("BackFlip");
     }
 

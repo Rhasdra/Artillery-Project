@@ -7,6 +7,8 @@ public class RuntimeSet<T> : ScriptableObject
     public List<T> Items = new List<T>();
     public VoidEventChannelSO OnItemAdd;
     public VoidEventChannelSO OnItemRemove;
+
+    public VoidEventChannelSO OnEmptyList;
     
     public void Add (T t)
     {
@@ -24,6 +26,11 @@ public class RuntimeSet<T> : ScriptableObject
                 Items.Remove(t);
                 OnItemRemove.RaiseEvent();
             }
+
+        if(Items.Count == 0)
+        {
+            OnEmptyList.RaiseEvent();
+        }
     }
 
     public void Clear()

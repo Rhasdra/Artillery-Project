@@ -18,8 +18,8 @@ public class WindManager : MonoBehaviour
     AreaEffector2D _effector;
     
     [Header("Arrays: ")]
-    [SerializeField] int[] directions = new int[8] { 0, 45, 90, 135, 180, 225, 270, 315};
-    [SerializeField] float[] strengths = new float[5] { 0, 0.25f, 0.5f, 0.75f, 1f};
+    int[] directions = new int[4] { 0, 90, 180, 270};
+    float[] strengths = new float[3] { 0, 0.5f, 1f};
 
     [Header("Settings: ")]
     [SerializeField] float windStrength = 5f;

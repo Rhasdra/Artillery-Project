@@ -61,4 +61,8 @@ public class HitGrenade : MonoBehaviour, IHit
         explosionGO.SetActive(true);
         exp.Explode(radiusMultiplier);
     }
+
+    public void Hit(Collider2D col)
+    {
+    }
 }

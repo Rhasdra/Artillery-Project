@@ -7,9 +7,6 @@ using TMPro;
 
 public class HealthPool : MonoBehaviour, IDamageable
 {
-    [Header("Broadcasting to:")]
-    [SerializeField] HealthEventsChannelSO healthEvents;
-
     [Header("Settings")]
     [SerializeField] float maxHealth = 3000f;
     public float currentHealth;
@@ -44,7 +41,8 @@ public class HealthPool : MonoBehaviour, IDamageable
         hb.value = maxHealth;
 
         var healthBarScript = healthBarInstance.GetComponent<HealthBar>();
-        healthBarScript.fill.color = owner.team.color;
+        if(owner.team != null)
+            healthBarScript.fill.color = owner.team.color;
         healthBarScript.owner = owner;
 
         healthBarInstance.SetActive(true);

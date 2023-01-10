@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fireMode: 1
   delayEnum: 0
-  fireRate: 0.3
+  fireRate: 0.1
+  deviation: 5
   delay: 3
   projectiles:
-  - {fileID: 3391465257193194957, guid: 984d3357314e6a84f901cc638b58f501, type: 3}
+  - {fileID: 5407442406904804247, guid: 386e350d2cd99784583eb698e6e82e20, type: 3}
+  - {fileID: 5407442406904804247, guid: 386e350d2cd99784583eb698e6e82e20, type: 3}
+  - {fileID: 5407442406904804247, guid: 386e350d2cd99784583eb698e6e82e20, type: 3}
   trail: {fileID: 1176897698941563224, guid: d003387c4d82bd14bbb4d09199e41d71, type: 3}

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b294fb4ed0df00f4d8211f4228b25444, type: 3}
+  m_Name: Job_Blue
+  m_EditorClassIdentifier: 
+  jobName: 
+  maxHP: 3000
+  characterWidth: 1
+  movementSpeed: 1.5
+  climbAngle: 45
+  longJumpForce: 5
+  backFlipJumpForceX: -2
+  backFlipJumpForceY: 10
+  sweetSpotAngleMax: 90
+  sweetSpotAngleMin: 15
+  weapons:
+  - {fileID: 2184260397529806674, guid: 15276f6e7aa267643b60199bd946dcd2, type: 3}
+  sprite: {fileID: 21300000, guid: a737f23851bb2484ebf15d4d42f75d87, type: 3}
+  artOffset: {x: 0, y: 0.075}

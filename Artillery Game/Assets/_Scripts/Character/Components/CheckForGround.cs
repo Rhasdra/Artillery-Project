@@ -5,8 +5,8 @@ using UnityEngine.Events;
 
 public class CheckForGround : MonoBehaviour
 {
-    [Header("Broadcasting to:")]
-    [SerializeField] CharRaycastEventsChannelSO rayEvents;
+    // [Header("Broadcasting to:")]
+    // [SerializeField] CharRaycastEventsChannelSO rayEvents;
 
     [SerializeField] protected Vector3 lastPos;
     float lastPosTime;

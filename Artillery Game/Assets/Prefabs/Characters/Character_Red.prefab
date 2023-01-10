@@ -217,6 +217,7 @@ MonoBehaviour:
   healthEvents: {fileID: 11400000, guid: ad48e78d1d1521e40b29eb3e0fa1153e, type: 2}
   charManagerEvents: {fileID: 11400000, guid: d301404e377897445acbbae71f33efd6, type: 2}
   charactersRuntimeSet: {fileID: 11400000, guid: d372b31d2006e8f4787b24f369d3918e, type: 2}
+  projectilesRuntimeSet: {fileID: 11400000, guid: 7f84aa3411604de4784bed95ae129b8f, type: 2}
   aimReticle: {fileID: 788594370262337450}
   health: 0
   power: 0
@@ -252,7 +253,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5eb1a407dc205c4e9bae99e10dbbf1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rayEvents: {fileID: 11400000, guid: fdd901b6f498c674db19f90d6cc7dad6, type: 2}
   lastPos: {x: 0, y: 0, z: 0}
   col: {fileID: 0}
   isOn: 0
@@ -291,8 +291,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputReader: {fileID: 11400000, guid: 83dd3ab174bac9647be70ccf60d4d076, type: 2}
-  rayEvents: {fileID: 11400000, guid: fdd901b6f498c674db19f90d6cc7dad6, type: 2}
   movementEvents: {fileID: 11400000, guid: 35658f02b6ab49d469b6928178fb1c32, type: 2}
+  headsUp: {fileID: 0}
   canMove: 0
   isGrounded: 0
   moveDelay: 2
@@ -336,7 +336,7 @@ MonoBehaviour:
   weaponEvents: {fileID: 11400000, guid: 5e2910cb98071624088dcaa0a03fb388, type: 2}
   spawnOffset: 0.75
   weapons: []
-  currentWeapon: {fileID: 11400000, guid: 17ac1a6d5505ad84ba970d02079baab2, type: 2}
+  currentWeapon: {fileID: 0}
   index: 0
   fireMode: {fileID: 0}
   trailPrefab: {fileID: 1176897698941563224, guid: d003387c4d82bd14bbb4d09199e41d71, type: 3}

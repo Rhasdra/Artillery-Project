@@ -9,6 +9,7 @@ public class WeaponSO : ScriptableObject
     public FireMode fireMode;
     public Delay delayEnum;
     public float fireRate = 0.3f;
+    public float deviation = 0f;
     [HideInInspector] public int delay = 3;
     
     public enum FireMode{ None, Missile }

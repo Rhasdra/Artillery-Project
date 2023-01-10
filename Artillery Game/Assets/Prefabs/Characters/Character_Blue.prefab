@@ -208,15 +208,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: {fileID: 0}
-  charInfo: {fileID: 11400000, guid: 567386854f0fe844cbe5e29d9dffcc4f, type: 2}
+  charData: {fileID: 0}
+  jobInfo: {fileID: 0}
   turnsManagerEvents: {fileID: 11400000, guid: 64cf3b8764240194195ab927b547189a, type: 2}
   battleManagerEvents: {fileID: 11400000, guid: a4650526850b54343928532e8491ffb7, type: 2}
   movementEvents: {fileID: 11400000, guid: 35658f02b6ab49d469b6928178fb1c32, type: 2}
   aimingEvents: {fileID: 11400000, guid: d6f45b56830da3f4c8e7eca276c92eea, type: 2}
   weaponEvents: {fileID: 11400000, guid: 5e2910cb98071624088dcaa0a03fb388, type: 2}
-  healthEvents: {fileID: 11400000, guid: ad48e78d1d1521e40b29eb3e0fa1153e, type: 2}
   charManagerEvents: {fileID: 11400000, guid: d301404e377897445acbbae71f33efd6, type: 2}
   charactersRuntimeSet: {fileID: 11400000, guid: d372b31d2006e8f4787b24f369d3918e, type: 2}
+  projectilesRuntimeSet: {fileID: 11400000, guid: 7f84aa3411604de4784bed95ae129b8f, type: 2}
   aimReticle: {fileID: 788594370262337450}
   health: 0
   power: 0
@@ -252,25 +253,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5eb1a407dc205c4e9bae99e10dbbf1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rayEvents: {fileID: 11400000, guid: fdd901b6f498c674db19f90d6cc7dad6, type: 2}
   lastPos: {x: 0, y: 0, z: 0}
   col: {fileID: 0}
   isOn: 0
   IsGroundedEvent:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 788594370757262397}
-        m_TargetAssemblyTypeName: Movement, Assembly-CSharp
-        m_MethodName: GetCanMove
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   raycastsPos: {fileID: 5429387992022757609}
   rb: {fileID: 0}
   isStunned: 0
@@ -291,8 +279,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputReader: {fileID: 11400000, guid: 83dd3ab174bac9647be70ccf60d4d076, type: 2}
-  rayEvents: {fileID: 11400000, guid: fdd901b6f498c674db19f90d6cc7dad6, type: 2}
   movementEvents: {fileID: 11400000, guid: 35658f02b6ab49d469b6928178fb1c32, type: 2}
+  headsUp: {fileID: 0}
   canMove: 0
   isGrounded: 0
   moveDelay: 2
@@ -336,7 +324,7 @@ MonoBehaviour:
   weaponEvents: {fileID: 11400000, guid: 5e2910cb98071624088dcaa0a03fb388, type: 2}
   spawnOffset: 0.75
   weapons: []
-  currentWeapon: {fileID: 11400000, guid: 17ac1a6d5505ad84ba970d02079baab2, type: 2}
+  currentWeapon: {fileID: 0}
   index: 0
   fireMode: {fileID: 0}
   trailPrefab: {fileID: 1176897698941563224, guid: d003387c4d82bd14bbb4d09199e41d71, type: 3}
@@ -381,6 +369,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1426711651597508776}
   - component: {fileID: 1424423902022218670}
+  - component: {fileID: 3232740876827556546}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -455,6 +444,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &3232740876827556546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4900497783523874777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd875950437c914bb3b7e1d1d451eb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5519301699949885261
 GameObject:
   m_ObjectHideFlags: 0
@@ -596,7 +597,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3dcde0610ac98d469a481db7ffea7dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthEvents: {fileID: 11400000, guid: ad48e78d1d1521e40b29eb3e0fa1153e, type: 2}
   maxHealth: 1000
   currentHealth: 1500
   offset: 1

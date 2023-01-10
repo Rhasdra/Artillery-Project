@@ -42,6 +42,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 2352215967
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Explosions
+    uniqueID: 2697902735
+    locked: 0
+  - name: Projectiles
+    uniqueID: 3833375767
+    locked: 0
+  - name: DamageNumbers
+    uniqueID: 2901427421
     locked: 0

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d504036872eac2439174d00e1002d62, type: 3}
+  m_Name: Projectiles_RuntimeSet
+  m_EditorClassIdentifier: 
+  Items: []
+  OnItemAdd: {fileID: 11400000, guid: 95aaf71f26937c44cb033c6135ab2952, type: 2}
+  OnItemRemove: {fileID: 11400000, guid: e2779cdfc75fc4d4a80fd38f3e56b1df, type: 2}
+  OnEmptyList: {fileID: 11400000, guid: 3eaa3477029952c4abebc20aa73abdf0, type: 2}

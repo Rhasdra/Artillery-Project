@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(CharManager))]
 public class Aiming : MonoBehaviour
@@ -11,8 +12,10 @@ public class Aiming : MonoBehaviour
 
     [Header("Broadcasting To")]
     [SerializeField] AimingEventsChannelSO aimingEvents;
+    public UnityAction<int> AngleChangeEvent = delegate {};
+    public UnityAction<int> PowerChangeEvent = delegate {};
 
-    CharSO charInfo;
+    JobSO charInfo;
     
     [Header("References")]
     public Transform shootingAxis;
@@ -42,9 +45,9 @@ public class Aiming : MonoBehaviour
     [Header("Debug")]
     [SerializeField] bool debug = false;
 
-    private void Awake() 
+    public void Initialize() 
     {
-        charInfo = GetComponent<CharManager>().charInfo;
+        charInfo = GetComponent<CharManager>().jobInfo;
         
         sweetSpotMax = charInfo.sweetSpotAngleMax;
         sweetSpotMin = charInfo.sweetSpotAngleMin;
@@ -138,6 +141,7 @@ public class Aiming : MonoBehaviour
         power = Mathf.Clamp(oldPower, 0 , 100);
 
         //Broadcast the event
+        PowerChangeEvent.Invoke((int)power);
         aimingEvents?.PowerChangeEvent.RaiseEvent((int)power);
     }
     #endregion
@@ -185,6 +189,7 @@ public class Aiming : MonoBehaviour
         aim = Mathf.Clamp(oldAim, 0 , 180);
 
         //Broadcast the event
+        AngleChangeEvent.Invoke((int)aim);
         aimingEvents?.AngleChangeEvent.RaiseEvent((int)aim);
     }
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class WeaponsManager : MonoBehaviour
 {
@@ -9,25 +10,29 @@ public class WeaponsManager : MonoBehaviour
 
     [Header("Broadcasting To")]
     [SerializeField] WeaponEventsChannelSO weaponEvents;
-    Aiming aiming;
+    
+    public UnityAction ShootEvent = delegate { };
+    public UnityAction<int> ShootDelayEvent = delegate { };
+    public UnityAction WeaponChangeEvent = delegate { };
 
     [Header("Settings")]
     [SerializeField] float spawnOffset = 0.75f;
 
     [Header("Information")]
-    public WeaponSO[] weapons;
-    public WeaponSO currentWeapon;
+    public GameObject[] weapons;
+    public Weapon currentWeapon;
     public int index;
     [SerializeField] FireModeMissile fireMode;
 
     [Header("Trail")]
     [SerializeField] GameObject trailPrefab;
 
+    Aiming aiming;
 
-    private void Awake() 
+    public void Initialize() 
     {
         aiming = GetComponent<Aiming>();
-        weapons = GetComponent<CharManager>().charInfo.weaponsSO;
+        weapons = GetComponent<CharManager>().jobInfo.weapons;
     }
 
     private void OnEnable() 
@@ -50,8 +55,10 @@ public class WeaponsManager : MonoBehaviour
 
     public void GetWeapon()
     {
-        currentWeapon = weapons[index];
-        GetFireMode();
+        if (currentWeapon != null)
+            Destroy(currentWeapon);
+            
+        currentWeapon = Instantiate(weapons[index], transform.position, Quaternion.identity, this.transform).GetComponent<Weapon>();
     }
 
     void ScrollWeapon(float value)
@@ -66,8 +73,11 @@ public class WeaponsManager : MonoBehaviour
         GetWeapon();
 
         //Broadcast Void and Int events
+        WeaponChangeEvent.Invoke();
+
         weaponEvents.WeaponChangeEvent.OnEventRaised.Invoke();
         weaponEvents.WeaponChangeIndexEvent.OnEventRaised.Invoke(index);
+
     }
 
     public void Shoot()
@@ -82,10 +92,13 @@ public class WeaponsManager : MonoBehaviour
         rotation = Quaternion.Euler(0, 0, rotation.eulerAngles.z + 180f);
         }
 
-        fireMode.Shoot(currentWeapon.projectiles, spawnPosition, rotation, aiming.power, currentWeapon.fireRate);
+        currentWeapon.Shoot(spawnPosition, rotation, aiming.power);
         
         //Broadcast the event
-        weaponEvents.ShootDelayEvent.OnEventRaised(currentWeapon.delay);
+        ShootEvent.Invoke();
+        ShootDelayEvent.Invoke(currentWeapon.weaponSO.delay);
+
+        weaponEvents.ShootDelayEvent.OnEventRaised(currentWeapon.weaponSO.delay);
         weaponEvents.ShootEvent.OnEventRaised();
         
     }
@@ -95,20 +108,5 @@ public class WeaponsManager : MonoBehaviour
         Vector3 pos = new Vector3(transform.position.x + spawnOffset, transform.position.y, transform.position.z);
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(pos, 0.05f);    
-    }
-
-    void GetFireMode()
-    {
-        if(fireMode != null)
-            Destroy(GetComponent(typeof(IShoot)));
-
-        switch (currentWeapon.fireMode)
-        {
-            case WeaponSO.FireMode.Missile:
-                fireMode = this.gameObject.AddComponent<FireModeMissile>();
-                fireMode.weaponEvents = weaponEvents;
-                fireMode.weaponSO = currentWeapon;
-                break;
-        }
     }
 }

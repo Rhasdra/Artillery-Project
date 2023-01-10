@@ -8,5 +8,5 @@ public class TeamSO : ScriptableObject
     public string Name;
     public Color color;
 
-    public List<GameObject> characters;
+    public List<CharDataSO> charDatas;
 }

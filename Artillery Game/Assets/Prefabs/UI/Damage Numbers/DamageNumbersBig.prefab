@@ -59,8 +59,8 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1393539875
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &1170649261472237661
 MonoBehaviour:
@@ -114,9 +114,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: caa36919bb0981c40bc9de482b62b53e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentDamage: 0
   TimerSeconds: 3
-  Timer: 1
+  speed: 1
+  currentDamage: 0
   text: {fileID: 0}
   dmgSmall: {fileID: 1753014845959435348, guid: 4984a6348bcb23c4bae51ab7d53df7c7, type: 3}
   offset: 0.5
@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 4644652776977788832}
   - component: {fileID: 529878140816632914}
   - component: {fileID: 9078012552570979233}
-  m_Layer: 5
+  m_Layer: 9
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

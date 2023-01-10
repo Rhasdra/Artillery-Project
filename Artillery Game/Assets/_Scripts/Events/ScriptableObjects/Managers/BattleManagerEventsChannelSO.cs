@@ -9,8 +9,4 @@ public class BattleManagerEventsChannelSO : ScriptableObject
     // public GameObjectEventChannelSO CharacterDespawnEvent;
     public VoidEventChannelSO SetupFinishEvent;
     public VoidEventChannelSO EndBattleEvent;
-
-    // public List<GameObject> Characters;
-    public List<GameObject> Projectiles;
-    public VoidEventChannelSO EmptyProjectileList;
 }

@@ -18,3 +18,6 @@ MonoBehaviour:
   - {fileID: 788594370757262398, guid: 5767dfa320c139d45bad57019c3bf3c5, type: 3}
   - {fileID: 788594370757262398, guid: 5767dfa320c139d45bad57019c3bf3c5, type: 3}
   - {fileID: 788594370757262398, guid: 5767dfa320c139d45bad57019c3bf3c5, type: 3}
+  charDatas:
+  - {fileID: 11400000, guid: 67f4d3702e07696449f7e51efdddd8e6, type: 2}
+  - {fileID: 11400000, guid: 67f4d3702e07696449f7e51efdddd8e6, type: 2}

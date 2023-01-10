@@ -7,15 +7,17 @@ public class BattleManager : MonoBehaviour
 {
     [Header("Listening to:")]
     [SerializeField] ProjectileEventsChannelSO projectileEvents;
-    [SerializeField] HealthEventsChannelSO healthEvents;
+    [SerializeField] CharManagerEventsChannelSO charEvents;
 
     [Header("Broadcasting to")]
     [SerializeField] BattleManagerEventsChannelSO battleManagerEvents;
 
     [Header("Runtime Sets")]
     [SerializeField] GameObjectRuntimeSet charactersRuntimeSet;
+    [SerializeField] GameObjectRuntimeSet projectilesRuntimeSet;
 
     [SerializeField] List<TeamSO> teams;
+    [SerializeField] GameObject charPrefab;
     [SerializeField] GameObject charLabel = null;
     [SerializeField] GameObject projLabel = null;
 
@@ -24,23 +26,22 @@ public class BattleManager : MonoBehaviour
     [SerializeField] float height = 5f;
 
     [SerializeField] GameObject winScreenPrefab;
+
     private void OnEnable() 
     {
+        //Clear RuntimeSets
+        charactersRuntimeSet.Clear();
+        projectilesRuntimeSet.Clear();
+
+        
         width = terrain.GetComponentInChildren<SpriteRenderer>().bounds.size.x * 0.8f;
 
-        projectileEvents.SpawnEvent.OnEventRaised += AddProjectile;
-        projectileEvents.DespawnEvent.OnEventRaised += RemoveProjectile;
-        healthEvents.CharacterDeath.OnEventRaised += CheckTeams;
+        charEvents.CharacterDeath.OnEventRaised += CheckTeams;
     }
 
     void OnDisable()
     {
-        projectileEvents.SpawnEvent.OnEventRaised -= AddProjectile;
-        projectileEvents.DespawnEvent.OnEventRaised -= RemoveProjectile;
-        healthEvents.CharacterDeath.OnEventRaised -= CheckTeams;
-
-        //Clean itself
-        battleManagerEvents.Projectiles.Clear();
+        charEvents.CharacterDeath.OnEventRaised -= CheckTeams;
     }
 
     private void Start() 
@@ -51,12 +52,10 @@ public class BattleManager : MonoBehaviour
         projLabel.name = "------- PROJECTILES -------";
 
         SpawnTeams();
-        battleManagerEvents.Projectiles.Clear();
     }
 
     void SpawnTeams()
     {
-        //battleManagerEvents.Characters.Clear();
         charactersRuntimeSet.Clear();
 
         StartCoroutine(SpawnTeamsCoroutine());          
@@ -86,11 +85,12 @@ public class BattleManager : MonoBehaviour
     {
         foreach (var team in teams)
         {
-            foreach (var character in team.characters)
+            foreach (CharDataSO data in team.charDatas)
             {
-                var instance = Instantiate(character, RandomLocation(), Quaternion.identity);
+                var instance = Instantiate(charPrefab, RandomLocation(), Quaternion.identity);
                 instance.transform.parent = charLabel.transform;
                 var instManager = instance.GetComponent<CharManager>();
+                instManager.charData = data;
                 instManager.team = team;
                 
                 if(instance.transform.position.x > 0)
@@ -104,21 +104,29 @@ public class BattleManager : MonoBehaviour
 
         battleManagerEvents.SetupFinishEvent.OnEventRaised.Invoke();
     }
+    
+    // IEnumerator SpawnTeamsCoroutine()
+    // {
+    //     foreach (var team in teams)
+    //     {
+    //         foreach (var character in team.characters)
+    //         {
+    //             var instance = Instantiate(character, RandomLocation(), Quaternion.identity);
+    //             instance.transform.parent = charLabel.transform;
+    //             var instManager = instance.GetComponent<CharManager>();
+    //             instManager.team = team;
+                
+    //             if(instance.transform.position.x > 0)
+    //                 instance.transform.localScale = new Vector3(-instance.transform.localScale.x, instance.transform.localScale.y, instance.transform.localScale.z);
 
-    void AddProjectile (GameObject proj)
-    {
-        battleManagerEvents.Projectiles.Add(proj);
-        proj.transform.parent = projLabel.transform;
-    }
+    //             yield return new WaitForSeconds(0.1f);
+    //         }
+    //     }
 
-    void RemoveProjectile (GameObject proj)
-    {
-        battleManagerEvents.Projectiles.Remove(proj);
+    //     yield return new WaitForSeconds(1f);
 
-        if(battleManagerEvents.Projectiles.Count == 0)
-            battleManagerEvents.EmptyProjectileList.OnEventRaised.Invoke();
-    }
-
+    //     battleManagerEvents.SetupFinishEvent.OnEventRaised.Invoke();
+    // }
 
     void CheckTeams(GameObject go = null)
     {

@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: CharManagerEvents_Channel
   m_EditorClassIdentifier: 
   EndTurn: {fileID: 11400000, guid: d642df590610f1b449bd86dbeec2f54e, type: 2}
+  CharacterDeath: {fileID: 11400000, guid: 73d62be0103faee47b2f8f2a014cd4e3, type: 2}
