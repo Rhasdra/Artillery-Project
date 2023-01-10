@@ -16,6 +16,7 @@ MonoBehaviour:
   baseDamage: 500
   forgiveness: 50
   components:
+  - {fileID: 8377719524705264756, guid: 399bbdb7052da7849b43d6dd3541d08a, type: 3}
   - {fileID: -7026135918119031613, guid: db4ebb2be1eaba248b323e7179093f51, type: 3}
   - {fileID: 493571051435411364, guid: 2d3a56b5834961c4580ef625dfb9f334, type: 3}
   - {fileID: 3442963004963263723, guid: 813845a92cf435c43adde39f9523ded5, type: 3}

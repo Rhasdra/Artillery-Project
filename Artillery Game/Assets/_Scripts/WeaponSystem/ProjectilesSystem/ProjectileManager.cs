@@ -16,20 +16,24 @@ public class ProjectileManager : MonoBehaviour
     [Header("Data")]
     public ProjectileSO projectileSO;
 
-    // public List<SpawnComponent> spawnComponents;
+    public List<ProjectileComponent> components = new List<ProjectileComponent>();
+
+    public List<SpawnComponent> spawnComponents;
     public List<LaunchComponent> launchComponents;
     public List<TrajectoryComponent> trajectoryComponents;
     public List<HitComponent> hitComponents;
     public List<DespawnComponent> despawnComponents;
 
+    public UnityAction OnSpawnProjectile = delegate { };
     public UnityAction<float, float> OnLaunch = delegate { };
     public UnityAction OnTrajectoryTick = delegate { };
     public UnityAction<Collider2D> OnProjectileHit = delegate { };
     public UnityAction OnDespawnProjectile = delegate { };
 
+    public bool isParent = true;
     bool onTrajectory = false;
     int bounces = 0;
-    float power = 0;
+    public float power = 0;
     public Collider2D victim = null;
 
     private void OnEnable() 
@@ -44,11 +48,18 @@ public class ProjectileManager : MonoBehaviour
 
     void Start() 
     {
-        foreach (ProjectileComponent item in projectileSO.components)
+        if(isParent == true)
         {
-            this.gameObject.AddComponent(item.GetType());
+            foreach (ProjectileComponent item in projectileSO.components)
+            {
+                var newComponent = this.gameObject.AddComponent(item.GetType());
+                components.Add(newComponent as ProjectileComponent);
+            }
+
+            isParent = false;
         }
 
+        OnSpawnProjectile.Invoke();
         projectileEvents.SpawnEvent.RaiseEvent(this.gameObject);
 
         LaunchProjectile(power);

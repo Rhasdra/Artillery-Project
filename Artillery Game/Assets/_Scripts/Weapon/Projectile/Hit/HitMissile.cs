@@ -8,7 +8,7 @@ public class HitMissile : MonoBehaviour, IHit
     Collider2D col;
     Projectile projBase;
 
-    IExplosive explosive;
+    // IExplosive explosive;
 
     float hitAngle;
     Vector3 hitPosition;
@@ -21,7 +21,7 @@ public class HitMissile : MonoBehaviour, IHit
     {
         col = GetComponent<Collider2D>();
         projBase = GetComponent<Projectile>();
-        explosive = GetComponent<IExplosive>();
+        // explosive = GetComponent<IExplosive>();
 
         layerMask =~ LayerMask.GetMask("Wind");
     }
@@ -60,7 +60,7 @@ public class HitMissile : MonoBehaviour, IHit
         if(damageable != null)
         {
             Hit(other, Damage(other));
-            explosive?.Explode(other);
+            // explosive?.Explode(other);
         }
     }
 

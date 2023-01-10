@@ -4,19 +4,27 @@ using UnityEngine;
 
 public interface IProjectileSpawn
 {
-    void Spawn();
+    void OnSpawn();
 }
 
 public interface IHit
 {
-    // void GetDamage();
-    //void Hit(Collider2D col, float damage);
     void Hit(Collider2D col);
+}
+
+public interface ILaunch
+{
+    void Launch(float impulse, float power);
+}
+
+public interface ITrajectory
+{
+    void UpdateTrajectory();
 }
 
 public interface IProjectileDespawn
 {
-    void Despawn();
+    void OnDespawn();
 }
 
 

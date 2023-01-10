@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Explosive : MonoBehaviour, IExplosive
+public class Explosive : MonoBehaviour
 {
     Collider2D col;
     GameObject explosion;
