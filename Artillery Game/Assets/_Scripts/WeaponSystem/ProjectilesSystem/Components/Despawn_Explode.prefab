@@ -44,4 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 110d79aee28c32a4fac1cce67dd05616, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: Despawn_Explode
   priority: 50

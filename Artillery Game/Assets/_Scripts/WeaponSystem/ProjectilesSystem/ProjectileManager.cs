@@ -50,9 +50,9 @@ public class ProjectileManager : MonoBehaviour
     {
         if(isParent == true)
         {
-            foreach (ProjectileComponent item in projectileSO.components)
+            foreach (ProjectileComponentSlot slot in projectileSO.componentSlots)
             {
-                var newComponent = this.gameObject.AddComponent(item.GetType());
+                var newComponent = this.gameObject.AddComponent(slot.component.GetType());
                 components.Add(newComponent as ProjectileComponent);
             }
 

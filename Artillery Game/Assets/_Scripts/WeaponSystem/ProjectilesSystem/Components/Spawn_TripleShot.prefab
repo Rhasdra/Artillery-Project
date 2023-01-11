@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: badb09aa63f1e82438fba9a50f044f7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: Spawn_TripleShot
   priority: 50
   clones: 15
   offset: 0.5

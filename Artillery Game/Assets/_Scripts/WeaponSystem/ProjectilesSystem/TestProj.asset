@@ -12,15 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85568626b9595c340a5f56fc14018888, type: 3}
   m_Name: TestProj
   m_EditorClassIdentifier: 
+  database: {fileID: 11400000, guid: c0f6a1745f1707c4290db2852b4a5143, type: 2}
   impulse: 1000
   baseDamage: 500
   forgiveness: 50
-  components:
-  - {fileID: 8377719524705264756, guid: 399bbdb7052da7849b43d6dd3541d08a, type: 3}
-  - {fileID: -7026135918119031613, guid: db4ebb2be1eaba248b323e7179093f51, type: 3}
-  - {fileID: 493571051435411364, guid: 2d3a56b5834961c4580ef625dfb9f334, type: 3}
-  - {fileID: 3442963004963263723, guid: 813845a92cf435c43adde39f9523ded5, type: 3}
-  - {fileID: 6506110754737928190, guid: 4e54ecc54c301ff4cb0a9db886cff35f, type: 3}
+  componentSlots:
+  - ID: 2
+    component: {fileID: 493571051435411364, guid: 2d3a56b5834961c4580ef625dfb9f334, type: 3}
   trailPrefab: {fileID: 0}
   explosions:
   - {fileID: 4518881370631371733, guid: 807288eda0e118c4a827b6b2c8d7ea39, type: 3}

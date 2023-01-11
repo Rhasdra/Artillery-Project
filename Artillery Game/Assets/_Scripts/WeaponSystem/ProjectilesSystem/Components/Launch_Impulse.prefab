@@ -44,5 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa8398a86c50852438e9eaab8055807b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ID: Launch_Impulse
   priority: 50
-  rb: {fileID: 0}

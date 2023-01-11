@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ce02fc4b1f1ed44fa19641b8b1e093a, type: 3}
   m_Name: NewInventory
   m_EditorClassIdentifier: 
-  Slots: 3
-  itemHolders: []
+  database: {fileID: 11400000, guid: 517a3d445adacb942babb397c71225d2, type: 2}
+  maxSlots: 3
+  slots:
+  - ID: 0
+    item: {fileID: 11400000, guid: d891acb1f4798874ab466879ed6a47c7, type: 2}
+    amount: 0
